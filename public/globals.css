@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+@theme {
+  --color-so-sky: #E0F2F7;
+  --color-so-sage: #E8F0E8;
+  --color-so-text: #2F3E46;
+  --color-so-accent: #1B4965;
+  --font-so-sans: "Inter", "system-ui", "sans-serif";
+  --font-so-logo: "Optima", "Candara", "Calibri", "sans-serif";
+}
+
+@layer base {
+  body {
+    @apply font-so-sans text-so-text;
+  }
+}

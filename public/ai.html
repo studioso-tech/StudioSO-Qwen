@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Consulting | STUDIO S.O</title>
+  <meta name="description" content="生成AI導入・業務自動化・DXロードマップ。現場を知り尽くしたAIコンサルタントが、あなたのビジネスに「ゆとり」をもたらします。" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NX0Z93B9FB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NX0Z93B9FB');
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'so-sky':    '#E0F2F7',
+            'so-sage':   '#E8F0E8',
+            'so-text':   '#2F3E46',
+            'so-accent': '#1B4965',
+          },
+          fontFamily: {
+            'so-logo': ['Optima', 'Candara', 'sans-serif'],
+            'so-sans': ['Inter', 'Noto Sans JP', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { scroll-behavior: smooth; }
+
+    #nav.scrolled {
+      background: rgba(255,255,255,0.92) !important;
+      backdrop-filter: blur(14px);
+      border-bottom: 0.5px solid rgba(27,73,101,0.12);
+    }
+    #nav.scrolled .nav-link { color: #6B8290; }
+    #nav.scrolled .nav-logo { color: #1B4965; }
+    #nav.scrolled .ham-line { background: #1B4965; }
+    #nav.scrolled .nav-cta  { background: #1B4965; color: #fff; border-color: #1B4965; }
+
+    .ham-line { display:block; width:22px; height:1.5px; background:#fff; transition:all 0.3s; transform-origin:center; }
+    #hamburger.open .ham-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    #hamburger.open .ham-line:nth-child(2) { opacity: 0; }
+    #hamburger.open .ham-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    #mobile-menu { max-height:0; overflow:hidden; transition:max-height 0.4s ease; }
+    #mobile-menu.open { max-height:400px; }
+
+    .fade-in { opacity:0; transform:translateY(20px); transition:opacity 0.8s ease, transform 0.8s ease; }
+    .fade-in.visible { opacity:1; transform:translateY(0); }
+
+    .service-card { transition:transform 0.35s ease, box-shadow 0.35s ease, border-top-color 0.35s ease; border-top:2px solid transparent; }
+    .service-card:hover { transform:translateY(-6px); box-shadow:0 20px 48px rgba(27,73,101,0.10); border-top-color:#1B4965; }
+
+    .plan-row { transition: background 0.2s ease; }
+    .plan-row:hover { background: rgba(224,242,247,0.4); }
+
+    .scroll-line { width:1px; height:48px; background:linear-gradient(to bottom, rgba(27,73,101,0.6), transparent); animation:scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse {
+      0%   { transform:scaleY(0); transform-origin:top; opacity:1; }
+      50%  { transform:scaleY(1); transform-origin:top; opacity:1; }
+      100% { transform:scaleY(1); transform-origin:bottom; opacity:0; }
+    }
+
+    /* 5要素図 */
+    .element-ring { transition: transform 0.3s ease; }
+    .element-ring:hover { transform: scale(1.06); }
+  </style>
+</head>
+
+<body class="antialiased font-so-sans text-so-text bg-[#FAFBFC]">
+
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6 lg:px-12">
+      <a href="index.html" class="nav-logo font-so-logo text-lg tracking-[0.22em] text-white font-semibold transition-colors duration-300">
+        STUDIO S.O
+      </a>
+      <div class="hidden md:flex items-center gap-7">
+        <a href="index.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">Top</a>
+        <a href="ai.html"       class="nav-link font-so-sans text-xs tracking-[0.14em] text-white font-medium border-b border-white/40 pb-0.5">AI</a>
+        <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">Travel</a>
+        <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">Culinary</a>
+        <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">About</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300">
+          相談する →
+        </a>
+      </div>
+      <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
+        <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-white/96 backdrop-blur-md border-t border-so-accent/10">
+      <div class="flex flex-col px-6 py-4 gap-0.5">
+        <a href="index.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Top</a>
+        <a href="ai.html"       class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-accent font-medium border-b border-so-accent/08">AI Consulting</a>
+        <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Travel Design</a>
+        <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Culinary Lab</a>
+        <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">About</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ══════════════════════════════
+       画面1: HERO（書斎写真維持）
+  ══════════════════════════════ -->
+  <section class="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[url('./images/refined-study.jpg')] bg-cover bg-center bg-no-repeat"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-so-accent/85 via-so-accent/60 to-so-accent/75 backdrop-blur-[1px]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,0.15)_0%,rgba(0,0,0,0.45)_100%)]"></div>
+
+    <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-5 px-6 text-center" style="text-shadow:0 2px 12px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.5);">
+      <p class="font-so-sans text-xs tracking-[0.4em] uppercase text-so-sky font-medium">AI Consulting / Digital Transformation</p>
+
+      <h1 class="font-so-logo text-4xl font-light tracking-wide text-white sm:text-5xl lg:text-6xl leading-tight">
+        AIで、あなたのビジネスに<br />「ゆとり」を。
+      </h1>
+
+      <p class="font-so-logo italic text-lg font-normal text-white sm:text-xl">
+        〜 スマートなステキを、あなたの現場に 〜
+      </p>
+
+      <p class="font-so-sans text-base leading-loose text-white sm:text-lg max-w-xl font-medium">
+        AIは難しいものでも特別なものでもありません。<br />
+        使いこなせば、煩雑な業務が自動化され、<br class="sm:hidden" />あなたには「ゆとり」が生まれます。
+      </p>
+
+      <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 mt-2">
+        <a href="#plans" class="bg-white text-so-accent px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] hover:bg-so-sky hover:-translate-y-0.5 transition-all duration-300">
+          料金・プランを見る →
+        </a>
+        <a href="contact.html" class="border border-white/45 px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] text-white hover:bg-white/10 transition-all duration-300">
+          まずは相談する
+        </a>
+      </div>
+    </div>
+
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-35">
+      <span class="font-so-sans text-[9px] tracking-[0.35em] text-white">SCROLL</span>
+      <div class="scroll-line" style="background:linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);"></div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════
+       画面2: 哲学 + サービス4カード
+  ══════════════════════════════ -->
+
+  <!-- 2-A: 情報システム哲学 -->
+  <section class="bg-[#FAFBFC] px-6 py-20 lg:py-24">
+    <div class="mx-auto max-w-6xl">
+
+      <div class="mb-14 text-center fade-in">
+        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Philosophy</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">
+          情報システムとは何か。
+        </h2>
+        <p class="mt-4 mx-auto max-w-2xl font-so-sans text-sm leading-loose text-so-text/60 sm:text-base">
+          AIは、5つの要素のうちの「ひとつ」に過ぎません。<br />
+          Studio S.Oが提供するのは、残りの「プロセス」と「人間」を含めた仕組み全体のデザインです。
+        </p>
+      </div>
+
+      <!-- 5要素: Web=横5列 / Mobile=2列+1 -->
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-5 sm:gap-3 mb-12 fade-in">
+        <div class="element-ring bg-so-accent text-center px-4 py-6 border border-so-accent">
+          <p class="font-so-logo text-2xl text-white mb-2">①</p>
+          <p class="font-so-logo text-sm tracking-wide text-white mb-1">Hardware</p>
+          <p class="font-so-sans text-[10px] text-white/55">ハードウェア</p>
+        </div>
+        <div class="element-ring bg-white text-center px-4 py-6 border border-so-accent/15">
+          <p class="font-so-logo text-2xl text-so-accent/30 mb-2">②</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-1">Software</p>
+          <p class="font-so-sans text-[10px] text-so-text/45">ソフトウェア</p>
+          <p class="mt-2 font-so-sans text-[9px] text-so-accent/50 bg-so-sky/40 px-1 py-0.5">← AI はここ</p>
+        </div>
+        <div class="element-ring bg-white text-center px-4 py-6 border border-so-accent/15">
+          <p class="font-so-logo text-2xl text-so-accent/30 mb-2">③</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-1">Data</p>
+          <p class="font-so-sans text-[10px] text-so-text/45">データ</p>
+        </div>
+        <div class="element-ring bg-so-sky/30 text-center px-4 py-6 border border-so-accent/20">
+          <p class="font-so-logo text-2xl text-so-accent/40 mb-2">④</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-1">Process</p>
+          <p class="font-so-sans text-[10px] text-so-text/55">プロセス</p>
+          <p class="mt-2 font-so-sans text-[9px] text-so-accent/60">← S.O が設計</p>
+        </div>
+        <div class="element-ring bg-so-sky/30 text-center px-4 py-6 border border-so-accent/20 col-span-2 sm:col-span-1">
+          <p class="font-so-logo text-2xl text-so-accent/40 mb-2">⑤</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-1">Human</p>
+          <p class="font-so-sans text-[10px] text-so-text/55">人間</p>
+          <p class="mt-2 font-so-sans text-[9px] text-so-accent/60">← S.O が伴走</p>
+        </div>
+      </div>
+
+      <blockquote class="fade-in text-center border-y border-so-accent/10 py-8 mx-auto max-w-2xl">
+        <p class="font-so-logo italic text-xl font-light text-so-accent/65 sm:text-2xl leading-relaxed">
+          「AIという現代の杖を、あなたのビジネスに合った<br />
+          『ステッキ』に変えること。それが私たちの仕事です。」
+        </p>
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- 2-B: サービス4カード -->
+  <section class="bg-so-sage/20 px-6 py-20 lg:py-24">
+    <div class="mx-auto max-w-6xl">
+      <div class="mb-12 text-center fade-in">
+        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Services</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">サービス内容</h2>
+      </div>
+
+      <!-- Web=横2列 / Mobile=縦1列 -->
+      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:gap-7">
+
+        <div class="service-card fade-in bg-white/70 p-8 backdrop-blur-sm">
+          <div class="mb-4 flex h-10 w-10 items-center justify-center bg-so-sky/60 border border-so-accent/12 text-lg">🎓</div>
+          <h3 class="mb-2 font-so-logo text-lg tracking-widest text-so-accent">生成AI導入研修</h3>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/40 border-b border-so-accent/08 pb-4">
+            ChatGPT / Claude / Gemini を業務に活かすための社内研修・ワークショップ
+          </p>
+          <p class="font-so-sans text-sm leading-loose text-so-text/65">
+            現場の実態に合わせたカスタム研修。「何から始めればいい？」という方こそ、まずここから。
+          </p>
+        </div>
+
+        <div class="service-card fade-in bg-white/70 p-8 backdrop-blur-sm" style="transition-delay:.08s">
+          <div class="mb-4 flex h-10 w-10 items-center justify-center bg-so-sky/60 border border-so-accent/12 text-lg">⚙️</div>
+          <h3 class="mb-2 font-so-logo text-lg tracking-widest text-so-accent">業務自動化開発</h3>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/40 border-b border-so-accent/08 pb-4">
+            繰り返し作業をAIで自動化。メール処理・資料作成・データ集計など
+          </p>
+          <p class="font-so-sans text-sm leading-loose text-so-text/65">
+            ルーティンをAIに任せ、あなたは本質的な仕事と「ゆとり」に集中できる環境を構築します。
+          </p>
+        </div>
+
+        <div class="service-card fade-in bg-white/70 p-8 backdrop-blur-sm" style="transition-delay:.16s">
+          <div class="mb-4 flex h-10 w-10 items-center justify-center bg-so-sky/60 border border-so-accent/12 text-lg">🗺️</div>
+          <h3 class="mb-2 font-so-logo text-lg tracking-widest text-so-accent">DXロードマップ策定</h3>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/40 border-b border-so-accent/08 pb-4">
+            「どこから手をつければいいか」を整理し、優先順位をつけた導入計画を策定
+          </p>
+          <p class="font-so-sans text-sm leading-loose text-so-text/65">
+            現状診断→課題整理→ロードマップ提案まで、体系的に整理した診断レポートを提供します。
+          </p>
+        </div>
+
+        <div class="service-card fade-in bg-white/70 p-8 backdrop-blur-sm" style="transition-delay:.24s">
+          <div class="mb-4 flex h-10 w-10 items-center justify-center bg-so-sky/60 border border-so-accent/12 text-lg">📊</div>
+          <h3 class="mb-2 font-so-logo text-lg tracking-widest text-so-accent">AI活用ケーススタディ</h3>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/40 border-b border-so-accent/08 pb-4">
+            旅行・料理分野での自社AI活用事例を公開。コンサルの「動く実績」として提示
+          </p>
+          <p class="font-so-sans text-sm leading-loose text-so-text/65">
+            「机上の空論」ではなく、自ら実践しているからこそ語れる、血の通ったAI活用事例をご紹介。
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ══════════════════════════════
+       画面3: 料金プラン + CTA
+  ══════════════════════════════ -->
+  <section id="plans" class="bg-[#FAFBFC] px-6 py-20 lg:py-24">
+    <div class="mx-auto max-w-4xl">
+
+      <div class="mb-12 text-center fade-in">
+        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Pricing</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">料金プラン</h2>
+        <p class="mt-4 font-so-sans text-sm text-so-text/55 leading-loose">すべて税込表示</p>
+      </div>
+
+      <!-- 料金テーブル: Mobile=横スクロール対応 -->
+      <div class="fade-in overflow-x-auto mb-8">
+        <table class="w-full min-w-[560px] border-collapse">
+          <thead>
+            <tr class="border-b border-so-accent/12">
+              <th class="text-left py-4 px-5 font-so-sans text-[10px] tracking-[0.25em] uppercase text-so-text/40 font-normal w-2/5">プラン</th>
+              <th class="text-right py-4 px-5 font-so-sans text-[10px] tracking-[0.25em] uppercase text-so-text/40 font-normal w-1/5">料金（税込）</th>
+              <th class="text-left py-4 px-5 font-so-sans text-[10px] tracking-[0.25em] uppercase text-so-text/40 font-normal w-2/5">内容</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="plan-row border-b border-so-accent/06">
+              <td class="py-5 px-5">
+                <p class="font-so-logo text-base text-so-accent">相談・レクチャー</p>
+                <p class="font-so-sans text-[10px] text-so-text/42 mt-0.5">AI活用の入り口に</p>
+              </td>
+              <td class="py-5 px-5 text-right font-so-logo text-base text-so-accent">¥11,000</td>
+              <td class="py-5 px-5 font-so-sans text-xs text-so-text/60 leading-relaxed">気軽に相談。 / 1回</td>
+            </tr>
+            <tr class="plan-row border-b border-so-accent/06 bg-so-sky/15">
+              <td class="py-5 px-5">
+                <div class="flex items-center gap-2">
+                  <p class="font-so-logo text-base text-so-accent">専門家による診断</p>
+                  <span class="font-so-sans text-[9px] tracking-[0.12em] px-2 py-0.5 bg-so-accent text-white">推奨</span>
+                </div>
+                <p class="font-so-sans text-[10px] text-so-text/42 mt-0.5">現状診断＋ロードマップ</p>
+              </td>
+              <td class="py-5 px-5 text-right font-so-logo text-base text-so-accent">¥33,000</td>
+              <td class="py-5 px-5 font-so-sans text-xs text-so-text/60 leading-relaxed">診断レポート付 / 60分<br />※本契約時に全額充当</td>
+            </tr>
+            <tr class="plan-row border-b border-so-accent/06">
+              <td class="py-5 px-5">
+                <p class="font-so-logo text-base text-so-accent">エグゼクティブ向け</p>
+                <p class="font-so-sans text-[10px] text-so-text/42 mt-0.5">経営層向け・戦略的AI導入</p>
+              </td>
+              <td class="py-5 px-5 text-right font-so-logo text-base text-so-accent">¥55,000</td>
+              <td class="py-5 px-5 font-so-sans text-xs text-so-text/60 leading-relaxed">/ 90分</td>
+            </tr>
+            <tr class="plan-row border-b border-so-accent/06">
+              <td class="py-5 px-5">
+                <p class="font-so-logo text-base text-so-accent">月額顧問</p>
+                <p class="font-so-sans text-[10px] text-so-text/42 mt-0.5">継続的なAI活用支援</p>
+              </td>
+              <td class="py-5 px-5 text-right font-so-logo text-base text-so-accent">¥100,000〜</td>
+              <td class="py-5 px-5 font-so-sans text-xs text-so-text/60 leading-relaxed">/ 月額</td>
+            </tr>
+            <tr class="plan-row">
+              <td class="py-5 px-5">
+                <p class="font-so-logo text-base text-so-accent">初期導入プロジェクト</p>
+                <p class="font-so-sans text-[10px] text-so-text/42 mt-0.5">システム構築・業務自動化</p>
+              </td>
+              <td class="py-5 px-5 text-right font-so-logo text-base text-so-accent">¥500,000〜</td>
+              <td class="py-5 px-5 font-so-sans text-xs text-so-text/60 leading-relaxed">/ 1件</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- キャッシュバック注記 -->
+      <div class="fade-in mb-12 border-l-2 border-so-accent/25 pl-5 bg-so-sky/20 py-4 pr-5">
+        <p class="font-so-sans text-[10px] tracking-[0.2em] uppercase text-so-accent/55 mb-1">💡 キャッシュバック制度</p>
+        <p class="font-so-sans text-sm text-so-text/65 leading-loose">
+          初回相談後1ヶ月以内に継続契約（¥200,000〜）を締結された場合、初回相談料¥33,000を全額充当します。
+        </p>
+      </div>
+
+      <!-- CTA -->
+      <div class="fade-in text-center">
+        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl">まずは、お気軽にご相談ください。</h3>
+        <p class="mb-8 font-so-sans text-sm text-so-text/55 leading-loose">
+          「何から始めればいい？」という方こそ、ぜひご相談ください。<br />
+          平日 10:00〜18:00 · ビデオ通話（Google Meet / Zoom）対応
+        </p>
+        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
+          初回相談を予約する →
+        </a>
+        <p class="mt-3 font-so-sans text-xs text-so-text/38 tracking-[0.08em]">¥33,000 / 60分 · 診断レポート付 · 継続契約時に全額充当</p>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- 他事業・トップへの導線 -->
+  <section class="bg-so-sky/25 px-6 py-14">
+    <div class="mx-auto max-w-4xl">
+      <p class="mb-6 text-center font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/48 fade-in">Other Services</p>
+      <!-- Web=横3列 / Mobile=縦3列 -->
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 fade-in">
+        <a href="index.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3">
+            <span class="text-base">🏠</span>
+            <div>
+              <p class="font-so-logo text-sm tracking-widest text-so-accent">Top</p>
+              <p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">トップページ</p>
+            </div>
+          </div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
+        </a>
+        <a href="travel.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3">
+            <span class="text-base">✈️</span>
+            <div>
+              <p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p>
+              <p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">旅行プランニング</p>
+            </div>
+          </div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
+        </a>
+        <a href="culinary.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3">
+            <span class="text-base">🍳</span>
+            <div>
+              <p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p>
+              <p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">料理研究</p>
+            </div>
+          </div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
+  <footer class="bg-so-accent px-6 py-10">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div>
+          <p class="font-so-logo text-base tracking-[0.22em] text-white font-semibold">STUDIO S.O</p>
+          <p class="mt-1 font-so-sans text-[9px] tracking-[0.18em] text-so-sky/70">Suteki Oojisan · sutekioojisan-so.com</p>
+        </div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-2.5 sm:flex sm:gap-8">
+          <a href="index.html"    class="font-so-sans text-[10px] tracking-[0.14em] text-white/32 hover:text-white/62 transition-colors">Top</a>
+          <a href="ai.html"       class="font-so-sans text-[10px] tracking-[0.14em] text-white/62">AI Consulting</a>
+          <a href="travel.html"   class="font-so-sans text-[10px] tracking-[0.14em] text-white/32 hover:text-white/62 transition-colors">Travel Design</a>
+          <a href="culinary.html" class="font-so-sans text-[10px] tracking-[0.14em] text-white/32 hover:text-white/62 transition-colors">Culinary Lab</a>
+          <a href="about.html"    class="font-so-sans text-[10px] tracking-[0.14em] text-white/32 hover:text-white/62 transition-colors">About</a>
+          <a href="contact.html"  class="font-so-sans text-[10px] tracking-[0.14em] text-white/32 hover:text-white/62 transition-colors">Contact</a>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-white/10 pt-6 text-center">
+        <p class="font-so-sans text-[9px] tracking-[0.12em] text-white/50">© 2026 津江久幸（Hisayuki Tsue） | STUDIO S.O</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const nav = document.getElementById('nav');
+    const navLinks = nav.querySelectorAll('.nav-link');
+    function updateNav() {
+      if (window.scrollY > 40) {
+        nav.classList.add('scrolled');
+        navLinks.forEach(l => { l.classList.remove('text-white/75','text-white'); l.classList.add('text-so-text/58'); });
+      } else {
+        nav.classList.remove('scrolled');
+        navLinks.forEach(l => {
+          l.classList.remove('text-so-text/58');
+          if (!l.classList.contains('font-medium')) l.classList.add('text-white/75');
+        });
+      }
+    }
+    window.addEventListener('scroll', updateNav, { passive: true });
+    updateNav();
+
+    const hamburger  = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => { hamburger.classList.toggle('open'); mobileMenu.classList.toggle('open'); });
+    mobileMenu.querySelectorAll('.mob-link').forEach(l => {
+      l.addEventListener('click', () => { hamburger.classList.remove('open'); mobileMenu.classList.remove('open'); });
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.10 });
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>

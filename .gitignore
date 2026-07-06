@@ -1,0 +1,6 @@
+.firebase/
+.claude/
+node_modules/
+
+# APIキー（露出しないよう管理）
+public/consultation/config.js

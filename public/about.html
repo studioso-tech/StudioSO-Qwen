@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>About | STUDIO S.O</title>
+  <meta name="description" content="Studio S.O代表・津江久幸のプロフィール。ENEOS麻里布製油所でのRIS開発経験を原点に、AI・旅・食の3軸で独立。" />
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NX0Z93B9FB"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-NX0Z93B9FB');</script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config={theme:{extend:{
+      colors:{'so-sky':'#E0F2F7','so-sage':'#E8F0E8','so-text':'#2F3E46','so-accent':'#1B4965'},
+      fontFamily:{'so-logo':['Optima','Candara','sans-serif'],'so-sans':['Inter','Noto Sans JP','sans-serif']}
+    }}}
+  </script>
+  <style>
+    html{scroll-behavior:smooth;}
+    #nav.scrolled{background:rgba(255,255,255,0.92)!important;backdrop-filter:blur(14px);border-bottom:0.5px solid rgba(27,73,101,0.12);}
+    #nav.scrolled .nav-link{color:#6B8290;} #nav.scrolled .nav-logo{color:#1B4965;} #nav.scrolled .ham-line{background:#1B4965;} #nav.scrolled .nav-cta{background:#1B4965;color:#fff;border-color:#1B4965;}
+    .ham-line{display:block;width:22px;height:1.5px;background:#fff;transition:all 0.3s;transform-origin:center;}
+    #hamburger.open .ham-line:nth-child(1){transform:translateY(7px) rotate(45deg);}
+    #hamburger.open .ham-line:nth-child(2){opacity:0;}
+    #hamburger.open .ham-line:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+    #mobile-menu{max-height:0;overflow:hidden;transition:max-height 0.4s ease;}
+    #mobile-menu.open{max-height:400px;}
+    .fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.8s ease,transform 0.8s ease;}
+    .fade-in.visible{opacity:1;transform:translateY(0);}
+    .scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(255,255,255,0.6),transparent);animation:scrollPulse 2s ease-in-out infinite;}
+    @keyframes scrollPulse{0%{transform:scaleY(0);transform-origin:top;opacity:1;}50%{transform:scaleY(1);transform-origin:top;opacity:1;}100%{transform:scaleY(1);transform-origin:bottom;opacity:0;}}
+  </style>
+</head>
+<body class="antialiased font-so-sans text-so-text bg-[#FAFBFC]">
+
+  <!-- NAV -->
+  <nav id="nav" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+    <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-6 lg:px-12">
+      <a href="index.html" class="nav-logo font-so-logo text-lg tracking-[0.22em] text-white font-semibold transition-colors duration-300">STUDIO S.O</a>
+      <div class="hidden md:flex items-center gap-7">
+        <a href="index.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">Top</a>
+        <a href="ai.html"       class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">AI</a>
+        <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">Travel</a>
+        <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">Culinary</a>
+        <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white font-medium border-b border-white/40 pb-0.5">About</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300">相談する →</a>
+      </div>
+      <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
+        <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
+      </button>
+    </div>
+    <div id="mobile-menu" class="md:hidden bg-white/96 backdrop-blur-md border-t border-so-accent/10">
+      <div class="flex flex-col px-6 py-4 gap-0.5">
+        <a href="index.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Top</a>
+        <a href="ai.html"       class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">AI Consulting</a>
+        <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Travel Design</a>
+        <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Culinary Lab</a>
+        <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-accent font-medium border-b border-so-accent/08">About</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="relative flex min-h-[70svh] flex-col items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 bg-[url('./images/refined-study.jpg')] bg-cover bg-center bg-no-repeat"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-so-accent/70 via-so-accent/50 to-so-sky/30 backdrop-blur-[1px]"></div>
+    <div class="relative z-10 text-center px-6" style="text-shadow:0 2px 12px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.45);">
+      <p class="mb-3 font-so-sans text-xs tracking-[0.4em] uppercase text-so-sky font-semibold">About</p>
+      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-white sm:text-5xl lg:text-6xl mb-4">津江 久幸</h1>
+      <p class="font-so-sans text-sm tracking-[0.3em] text-white font-medium mb-6">HISAYUKI TSUE · Studio S.O 代表</p>
+      <div class="flex flex-wrap justify-center gap-2">
+        <span class="font-so-sans text-[11px] tracking-[0.12em] px-3 py-1.5 border border-white/70 bg-white/15 backdrop-blur-sm text-white font-medium">AI Consultant / DX</span>
+        <span class="font-so-sans text-[11px] tracking-[0.12em] px-3 py-1.5 border border-white/70 bg-white/15 backdrop-blur-sm text-white font-medium">Curated Travel Planner</span>
+        <span class="font-so-sans text-[11px] tracking-[0.12em] px-3 py-1.5 border border-white/70 bg-white/15 backdrop-blur-sm text-white font-medium">Culinary Research & Science</span>
+      </div>
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-35">
+      <span class="font-so-sans text-[9px] tracking-[0.35em] text-white">SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- プロフィール本文 -->
+  <section class="bg-[#FAFBFC] px-6 py-20 lg:py-24">
+    <div class="mx-auto max-w-6xl">
+      <!-- Web=左右2分割 / Mobile=縦積み -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
+        <!-- 左: 本文 -->
+        <div class="fade-in">
+          <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Profile</p>
+          <h2 class="mb-8 font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">
+            現場を知るからこそ、<br />血の通った提案ができる。
+          </h2>
+          <div class="space-y-5 font-so-sans text-sm leading-loose text-so-text/70 sm:text-base">
+            <p>かつてDXという言葉すらなかった時代——。</p>
+            <p>
+              興亜石油株式会社（現・ENEOS）麻里布製油所にて、製油所という巨大プラントの基幹システム（RIS：Refinery Information System）の開発・運用立ち上げに、ユーザー代表として富士通・ITエンジニアリングと協働で取り組みました。
+            </p>
+            <p>
+              RISとは、単なるソフトウェアではありません。ハード・ソフト・データ・プロセス・人間——5つの要素が有機的に連携して初めて機能する「製油所の神経系」です。現場の泥臭さとシステムの冷徹さを両立させながら、データを情報に、情報を知識に、知識を現場の知恵へと昇華させる仕組みを作り上げた経験が、私の根底にあります。
+            </p>
+            <p>
+              それから約15年。最新の生成AIは、かつて大規模システムでしか実現できなかった「最適化」を、個人や中小企業にも届けられる時代を作りました。現場を知り尽くしているからこそ、ツールありきではない、血の通った業務改善を提案できるのです。
+            </p>
+            <p>
+              そのキャリアで培った論理的思考と、旅・食への深い愛情を掛け合わせ、「AIコンサルティング」「旅行プランニング」「料理研究」という3つの軸で独立。Studio S.Oを立ち上げました。
+            </p>
+            <p>
+              AIは手段であり、目的ではありません。その先にある「ゆとりある豊かな日常＝ステキ」を実現するために、クライアントの皆さんと一緒に考え、一緒に作っていきます。
+            </p>
+          </div>
+        </div>
+
+        <!-- 右: 経歴カード -->
+        <div class="fade-in">
+          <p class="mb-6 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Career</p>
+          <div class="space-y-0 border border-so-accent/10">
+            <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">前職</p>
+              <p class="font-so-logo text-base text-so-accent mb-1">興亜石油（現・ENEOS）</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">麻里布製油所 · RIS（Refinery Information System）開発・運用立ち上げ（富士通・ITエンジニアリングと協働）</p>
+            </div>
+            <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">現在</p>
+              <p class="font-so-logo text-base text-so-accent mb-1">Studio S.O 代表</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">AIコンサルタント / 旅行プランナー / 料理研究家</p>
+            </div>
+            <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">拠点</p>
+              <p class="font-so-logo text-base text-so-accent mb-1">山口県岩国市</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">名所：錦帯橋 · オンライン対応：全国・海外</p>
+            </div>
+            <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">得意領域</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">生成AI導入支援・業務自動化・DX戦略・発酵料理・オーダーメイド旅行</p>
+            </div>
+            <div class="px-6 py-5 bg-white">
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-2">使用技術</p>
+              <div class="flex flex-wrap gap-1.5">
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Google Cloud</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Firebase</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Vertex AI</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Claude</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Gemini</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">GA4</span>
+                <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Cursor</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ブランドストーリー -->
+  <section id="brand" class="bg-so-accent px-6 py-20 lg:py-24">
+    <div class="mx-auto max-w-4xl">
+      <div class="fade-in text-center mb-12">
+        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-sky/35">Brand Story</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-white sm:text-4xl">「Studio S.O」という名前の秘密</h2>
+      </div>
+
+      <!-- Web=左右 / Mobile=縦積み -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 fade-in">
+        <div>
+          <div class="space-y-6">
+            <div class="border-l-2 border-white/15 pl-6">
+              <p class="font-so-logo text-lg text-white mb-3">杖 → ステッキ → ステキ</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose">
+                私の苗字「津江（Tsue）」は、「杖（つえ）」と同じ読みです。杖は「ステッキ」、そして「ステッキ」は「ステキ」へ。
+              </p>
+            </div>
+            <div class="border-l-2 border-white/15 pl-6">
+              <p class="font-so-logo text-lg text-white mb-3">おじさんの中の王子</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose">
+                さらに、おじさんの中に眠る「王子（おうじ）」。S.O とは、Suteki Oojisan の頭文字。そして Studio S.O は、「ステキな王子のスタジオ」です。
+              </p>
+            </div>
+            <div class="border-l-2 border-white/15 pl-6">
+              <p class="font-so-logo text-lg text-white mb-3">AIという現代の杖</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose">
+                AIという現代の杖を手に、世界をもっとステキに変えていく——そんな想いをこの名前に込めました。
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <blockquote class="text-center">
+            <div class="relative inline-block">
+              <span class="pointer-events-none select-none absolute -top-8 -left-4 font-so-logo text-[100px] leading-none text-white/[0.04]">"</span>
+              <p class="font-so-logo italic text-xl font-light leading-relaxed text-white/70 sm:text-2xl">
+                「杖をステッキに持ち替えて、<br />世界を素敵に変えていく。<br />心にはいつも王子様のような<br />好奇心を。」
+              </p>
+            </div>
+            <footer class="mt-6 font-so-sans text-xs tracking-[0.2em] text-so-sky/35">
+              — 津江久幸 / Hisayuki Tsue
+            </footer>
+          </blockquote>
+
+          <!-- S.O の大文字デコ -->
+          <div class="mt-10 text-center">
+            <p class="font-so-logo text-[80px] font-semibold leading-none text-white/[0.06] tracking-[0.1em]">S.O</p>
+            <p class="font-so-sans text-[9px] tracking-[0.3em] text-so-sky/25 mt-1">Suteki Oojisan</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA + 他事業への導線 -->
+  <section class="bg-so-sky/28 px-6 py-16">
+    <div class="mx-auto max-w-4xl">
+      <div class="text-center mb-10 fade-in">
+        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl">あなたの「ステキ」を一緒に考えます。</h3>
+        <p class="mb-6 font-so-sans text-sm text-so-text/55 leading-loose">
+          AI・旅・食、いずれのご相談もお気軽にどうぞ。
+        </p>
+        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
+          お問い合わせする →
+        </a>
+      </div>
+
+      <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 fade-in">
+        <a href="ai.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ａ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42">AIコンサルティング</p></div></div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
+        </a>
+        <a href="travel.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｔ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p><p class="font-so-sans text-[9px] text-so-text/42">旅行プランニング</p></div></div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
+        </a>
+        <a href="culinary.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｃ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p><p class="font-so-sans text-[9px] text-so-text/42">料理研究</p></div></div>
+          <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-so-accent px-6 py-10">
+    <div class="mx-auto max-w-6xl">
+      <div class="flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div><p class="font-so-logo text-base tracking-[0.22em] text-white font-semibold">STUDIO S.O</p><p class="mt-1 font-so-sans text-[9px] tracking-[0.18em] text-so-sky/70">Suteki Oojisan · sutekioojisan-so.com</p></div>
+        <div class="grid grid-cols-2 gap-x-8 gap-y-2.5 sm:flex sm:gap-8">
+          <a href="index.html"    class="font-so-sans text-[10px] tracking-[0.14em] text-white/70 hover:text-white transition-colors">Top</a>
+          <a href="ai.html"       class="font-so-sans text-[10px] tracking-[0.14em] text-white/70 hover:text-white transition-colors">AI Consulting</a>
+          <a href="travel.html"   class="font-so-sans text-[10px] tracking-[0.14em] text-white/70 hover:text-white transition-colors">Travel Design</a>
+          <a href="culinary.html" class="font-so-sans text-[10px] tracking-[0.14em] text-white/70 hover:text-white transition-colors">Culinary Lab</a>
+          <a href="about.html"    class="font-so-sans text-[10px] tracking-[0.14em] text-white/62">About</a>
+          <a href="contact.html"  class="font-so-sans text-[10px] tracking-[0.14em] text-white/70 hover:text-white transition-colors">Contact</a>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-white/10 pt-6 text-center"><p class="font-so-sans text-[9px] tracking-[0.12em] text-white/50">© 2026 津江久幸（Hisayuki Tsue） | STUDIO S.O | S.O = Suteki Oojisan</p></div>
+    </div>
+  </footer>
+
+  <script>
+    const nav=document.getElementById('nav'),navLinks=nav.querySelectorAll('.nav-link');
+    function updateNav(){if(window.scrollY>40){nav.classList.add('scrolled');navLinks.forEach(l=>{l.classList.remove('text-white/75','text-white');l.classList.add('text-so-text/58');});}else{nav.classList.remove('scrolled');navLinks.forEach(l=>{l.classList.remove('text-so-text/58');if(!l.classList.contains('font-medium'))l.classList.add('text-white/75');});}}
+    window.addEventListener('scroll',updateNav,{passive:true});updateNav();
+    const hamburger=document.getElementById('hamburger'),mobileMenu=document.getElementById('mobile-menu');
+    hamburger.addEventListener('click',()=>{hamburger.classList.toggle('open');mobileMenu.classList.toggle('open');});
+    mobileMenu.querySelectorAll('.mob-link').forEach(l=>{l.addEventListener('click',()=>{hamburger.classList.remove('open');mobileMenu.classList.remove('open');});});
+    const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.10});
+    document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>
