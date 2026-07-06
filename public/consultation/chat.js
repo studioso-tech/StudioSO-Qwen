@@ -67,10 +67,10 @@ async function handleSend() {
     // 応答後、20秒無入力Nudgeを再武装
     if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
 
-    /* 分析はまだなら実行、既に済んでいても summary が生成できるターン数
-       (messages.length >= 6) に達したら再度呼んで summary を追加 */
+    /* 分析はまだなら実行。summary 生成条件 (messages.length >= 6) を満たして
+       からは、会話が続くたびに最新内容で再生成・準備シートを更新し続ける */
     if (isSummaryTiming(userTurnCount) &&
-        (!analysisResult || (!analysisResult.summaryMessage && messages.length >= 6))) {
+        (!analysisResult || messages.length >= 6)) {
       await runAnalysis();
     }
   } catch (err) {
@@ -132,9 +132,26 @@ function appendMessage(role, text) {
   }
 }
 
+let summaryBubbleEl = null;
+
 function appendSummaryBubble(analysis) {
   const container = document.getElementById('chat-messages');
   if (!container) return;
+
+  const bubbleHtml = `
+    <div class="summary-header">
+      <span class="summary-badge">カテゴリ ${escHtml(analysis.category)}</span>
+      <span class="summary-meta">${escHtml(analysis.industryLabel)} / ${escHtml(analysis.levelLabel)}</span>
+    </div>
+    <p>${escHtml(analysis.summaryMessage)}</p>
+    <button class="show-sheet-link" onclick="showPreparationSheet()">準備シートを見る →</button>
+  `;
+
+  // 既存の要約バブルがあれば新規追加せず内容だけ更新（会話継続で内容が育つ）
+  if (summaryBubbleEl && summaryBubbleEl.isConnected) {
+    summaryBubbleEl.innerHTML = bubbleHtml;
+    return;
+  }
 
   const wrapper = document.createElement('div');
   wrapper.className = 'msg msg--ai animate-fadein';
@@ -146,17 +163,11 @@ function appendSummaryBubble(analysis) {
 
   const bubble = document.createElement('div');
   bubble.className = 'msg__tx summary-bubble';
-  bubble.innerHTML = `
-    <div class="summary-header">
-      <span class="summary-badge">カテゴリ ${escHtml(analysis.category)}</span>
-      <span class="summary-meta">${escHtml(analysis.industryLabel)} / ${escHtml(analysis.levelLabel)}</span>
-    </div>
-    <p>${escHtml(analysis.summaryMessage)}</p>
-    <button class="show-sheet-link" onclick="showPreparationSheet()">準備シートを見る →</button>
-  `;
+  bubble.innerHTML = bubbleHtml;
   wrapper.appendChild(bubble);
   container.appendChild(wrapper);
   container.scrollTop = container.scrollHeight;
+  summaryBubbleEl = bubble;
 }
 
 function appendError(msg) {
