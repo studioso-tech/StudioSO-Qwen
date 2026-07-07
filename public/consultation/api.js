@@ -16,7 +16,7 @@ export const CLAUDE_MODEL = QWEN_MODEL;
 
 export function buildChatSystemPrompt(dictionaryText = '') {
   const dictSection = dictionaryText
-    ? `\n\n【業界別ローカル翻訳辞書（要約提示時に使用）】\n${dictionaryText}`
+    ? `\n\n【業界・カテゴリ別ローカル表現ガイド（要約提示時に使用）】\n${dictionaryText}`
     : '';
 
   return `あなたはStudio S.O の統合相談窓口のアシスタントです。

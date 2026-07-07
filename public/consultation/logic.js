@@ -3,7 +3,7 @@
  */
 
 import { classifyConversation, generateSummaryMessage } from './api.js';
-import { INDUSTRIES, INDUSTRY_LABELS, quickEstimateIndustry, dictionaryToPromptText } from './dictionary.js';
+import { INDUSTRIES, INDUSTRY_LABELS, quickEstimateIndustry, dictionaryToPromptText, categoryDictionaryToPromptText } from './dictionary.js';
 
 export const CATEGORIES = {
   AI_CONSULTING: 'A',
@@ -59,7 +59,7 @@ function quickEstimateCategory(text) {
   return first[1] > 0 ? first[0] : CATEGORIES.AI_CONSULTING;
 }
 
-export async function analyzeConversation(messages, apiKey) {
+export async function analyzeConversation(messages, apiKey, { forceSummary = false } = {}) {
   const text = getConversationText(messages);
   const quickCategory = quickEstimateCategory(text);
   const quickIndustry = quickEstimateIndustry(text);
@@ -74,10 +74,14 @@ export async function analyzeConversation(messages, apiKey) {
   const category = classification?.category || quickCategory;
   const industry  = classification?.industry  || quickIndustry;
   const level     = classification?.level ?? 0;
-  const dictText  = dictionaryToPromptText(industry);
+
+  // トラベル／カリナリーはB2C向けの別軸ガイドを使用、それ以外は従来の業種辞書
+  const dictText = (category === CATEGORIES.TRAVEL || category === CATEGORIES.CULINARY)
+    ? categoryDictionaryToPromptText(category)
+    : dictionaryToPromptText(industry);
 
   let summaryMessage = null;
-  if (messages.length >= 6) {
+  if (forceSummary) {
     try {
       summaryMessage = await generateSummaryMessage(
         { category, industry, level, main_concern: classification?.main_concern || '' },
@@ -105,6 +109,12 @@ export async function analyzeConversation(messages, apiKey) {
   };
 }
 
+/* ボタン（準備シートを作成する）を表示してよいタイミング（2往復以降） */
 export function isSummaryTiming(userTurnCount) {
   return userTurnCount >= 2;
+}
+
+/* 確信度による自律提案の監視を開始するタイミング（3往復以降） */
+export function isConfidenceSuggestTiming(userTurnCount) {
+  return userTurnCount >= 3;
 }

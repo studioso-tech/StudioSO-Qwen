@@ -3,7 +3,7 @@
  */
 
 import { CATEGORY_LABELS, LEVEL_LABELS } from './logic.js';
-import { INDUSTRY_LABELS, getIndustryDictionary } from './dictionary.js';
+import { INDUSTRY_LABELS, getIndustryDictionary, getCategoryDictionary } from './dictionary.js';
 
 export function generatePreparationSheet(analysis, messages) {
   const now = new Date();
@@ -17,7 +17,11 @@ export function generatePreparationSheet(analysis, messages) {
     .map(m => `<li style="padding:4px 0;border-bottom:1px solid #f0f4f6;">${escapeHtml(m.content)}</li>`)
     .join('');
 
-  const dict = getIndustryDictionary(analysis.industry);
+  const isCategoryDict = analysis.category === 'T' || analysis.category === 'C';
+  const dict = isCategoryDict
+    ? (getCategoryDictionary(analysis.category) || {})
+    : getIndustryDictionary(analysis.industry);
+  const dictLabel = isCategoryDict ? analysis.categoryLabel : analysis.industryLabel;
   const dictItems = Object.entries(dict)
     .slice(0, 6)
     .map(([term, local]) =>
@@ -61,7 +65,7 @@ export function generatePreparationSheet(analysis, messages) {
     </ul>
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
-    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px;">業界別ローカル翻訳辞書（${escapeHtml(analysis.industryLabel || analysis.industry)} 向け抜粋）</p>
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px;">業界・カテゴリ別ローカル表現（${escapeHtml(dictLabel || analysis.industry)} 向け抜粋）</p>
     <table style="width:100%;border:1px solid #E0F2F7;border-radius:6px;border-collapse:collapse;overflow:hidden;">
       <thead><tr style="background:#E0F2F7;">
         <th style="padding:4px 8px;text-align:left;font-size:11px;color:#6b7280;font-weight:500;">ＩＴ用語</th>

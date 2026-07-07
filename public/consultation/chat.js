@@ -4,7 +4,7 @@
  */
 
 import { buildChatSystemPrompt, sendChatMessage } from './api.js';
-import { analyzeConversation, isSummaryTiming } from './logic.js';
+import { analyzeConversation, isSummaryTiming, isConfidenceSuggestTiming } from './logic.js';
 import { generatePreparationSheet, generatePreparationSheetText } from './output.js';
 
 let apiKey = '';
@@ -12,6 +12,7 @@ let messages = [];
 let userTurnCount = 0;
 let analysisResult = null;
 let currentSystemPrompt = '';
+let hearingComplete = false;
 
 export function initChat(key) {
   apiKey = key;
@@ -67,11 +68,18 @@ async function handleSend() {
     // 応答後、20秒無入力Nudgeを再武装
     if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
 
-    /* 分析はまだなら実行。summary 生成条件 (messages.length >= 6) を満たして
-       からは、会話が続くたびに最新内容で再生成・準備シートを更新し続ける */
-    if (isSummaryTiming(userTurnCount) &&
-        (!analysisResult || messages.length >= 6)) {
-      await runAnalysis();
+    /* ハイブリッド完了フロー：
+       2往復以降「準備シートを作成する」ボタンを表示（手動トリガー）。
+       3往復以降は確信度を監視し、0.8以上ならボタン自体で提案する（自律トリガー）。
+       実際の要約生成（summaryMessage）はボタン押下時のみ発火する。 */
+    if (isSummaryTiming(userTurnCount) && !hearingComplete) {
+      showCreateSheetButton();
+      await runAnalysis({ forceSummary: false });
+      if (isConfidenceSuggestTiming(userTurnCount) && (analysisResult?.confidence ?? 0) >= 0.8) {
+        suggestCreateSheet();
+      } else {
+        unsuggestCreateSheet();
+      }
     }
   } catch (err) {
     appendError(err.message || 'エラーが発生しました。');
@@ -84,15 +92,16 @@ async function handleSend() {
 
 // ── 分析・要約 ────────────────────────────────────────────────────────
 
-async function runAnalysis() {
+async function runAnalysis({ forceSummary = false } = {}) {
   try {
-    analysisResult = await analyzeConversation(messages, apiKey);
+    analysisResult = await analyzeConversation(messages, apiKey, { forceSummary });
 
     // ローカル翻訳辞書でシステムプロンプト更新
     currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText);
 
-    if (analysisResult.summaryMessage) {
+    if (forceSummary && analysisResult.summaryMessage) {
       appendSummaryBubble(analysisResult);
+      markHearingComplete();
     }
 
     updateAnalysisPanel(analysisResult);
@@ -100,6 +109,44 @@ async function runAnalysis() {
     console.warn('分析失敗:', e.message);
   }
 }
+
+// ── 準備シート作成ボタン（ハイブリッド完了フロー） ──────────────────────
+
+function getCreateSheetButtons() {
+  return [
+    document.getElementById('create-sheet-btn'),
+    document.getElementById('m-create-sheet-btn'),
+  ].filter(Boolean);
+}
+
+function showCreateSheetButton() {
+  getCreateSheetButtons().forEach(btn => btn.classList.remove('hidden'));
+}
+
+function suggestCreateSheet() {
+  getCreateSheetButtons().forEach(btn => {
+    btn.classList.add('suggest');
+    btn.textContent = '準備シートを作成できます →';
+  });
+}
+
+function unsuggestCreateSheet() {
+  if (hearingComplete) return;
+  getCreateSheetButtons().forEach(btn => {
+    btn.classList.remove('suggest');
+    btn.textContent = '準備シートを作成する';
+  });
+}
+
+function markHearingComplete() {
+  hearingComplete = true;
+  getCreateSheetButtons().forEach(btn => btn.classList.add('hidden'));
+}
+
+window.onCreateSheetClick = async function () {
+  if (hearingComplete) return;
+  await runAnalysis({ forceSummary: true });
+};
 
 // ── DOM 操作 ─────────────────────────────────────────────────────────
 

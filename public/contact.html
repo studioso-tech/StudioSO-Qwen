@@ -126,6 +126,19 @@
     @keyframes fadein { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
     .animate-fadein { animation: fadein 250ms ease both; }
 
+    /* 準備シート作成ボタン（ハイブリッド完了フロー） */
+    .create-sheet-btn {
+      display: block; margin: 0 auto 10px; padding: 10px 20px; border-radius: 999px;
+      border: 1.5px solid rgba(27,73,101,0.35); background: rgba(255,255,255,0.85);
+      color: #1B4965; font-family: 'Noto Sans JP', sans-serif; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background 200ms, border-color 200ms, transform 200ms;
+    }
+    .create-sheet-btn:hover { background: rgba(27,73,101,0.10); }
+    .create-sheet-btn.suggest {
+      background: #1B4965; color: #fff; border-color: #1B4965;
+      animation: soPulse 1.4s ease-in-out infinite;
+    }
+
     /* モバイル */
     @media (max-width: 639px) {
       .content { padding: 88px 20px 24px; }
@@ -231,6 +244,7 @@
       </div>
       <div id="m-input-area" class="m-input-area hidden">
         <div class="p-chat__msgs" id="m-chat-messages"></div>
+        <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">準備シートを作成する</button>
         <div class="m-input-row">
           <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。"></textarea>
           <button id="m-voice-btn" class="m-voice-btn" type="button" aria-label="音声入力">
@@ -254,6 +268,7 @@
           <span class="msg__av">S.O</span>
           <div class="msg__tx"><em>入力中…</em></div>
         </div>
+        <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">準備シートを作成する</button>
         <form id="chat-form" class="p-chat__bar">
           <textarea id="chat-input" placeholder="お書き物をご自由にお書きください…" rows="1"></textarea>
           <button type="button" id="voice-btn" aria-label="音声入力" title="音声で入力">

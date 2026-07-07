@@ -197,3 +197,49 @@ export function quickEstimateIndustry(text) {
   const best = Object.entries(scores).sort((a, b) => b[1] - a[1])[0];
   return best && best[1] > 0 ? best[0] : INDUSTRIES.OTHER;
 }
+
+/**
+ * カテゴリ別（トラベルデザイン／カリナリーアート）ローカル表現ガイド
+ * AI/DXコンサルティング（業種辞書対象）とは別軸の、B2C向け対話ルール
+ */
+export const CATEGORY_TERM_DICTIONARIES = {
+  T: { // トラベルデザイン
+    'キュレーション': 'プロが厳選したおすすめ',
+    'テーラーメイド': 'あなただけの特別なプラン',
+    '余白の創出': 'ゆとりを感じられる時間づくり',
+    '体験設計': '忘れられない思い出のデザイン',
+    'パーソナライズ': 'お客様に合わせた調整',
+    'コンシェルジュ対応': '何でも相談できる心強い伴走',
+    'リトリート': '心と体を休める旅',
+    'ウェルネストラベル': '心身が整う旅',
+  },
+  C: { // カリナリーアート
+    '分子ガストロノミー': '科学の視点を取り入れた新しい味わい方',
+    'フードプロトタイピング': '試作を重ねて理想の味に近づける工程',
+    'ペアリング': '相性の良い組み合わせ探し',
+    'マリアージュ': '料理と飲み物の理想的な組み合わせ',
+    'フレーバーデザイン': '香りと味の組み立て',
+    'テクスチャー分析': '食感の工夫',
+    'ガストロノミー研究': '味と食体験の探求',
+    'レシピ開発': '新しいおいしさのアイデア作り',
+  },
+};
+
+export const CATEGORY_DIALOGUE_POLICY = {
+  T: '効率化やデータ活用ではなく、相談者の感性・理想の雰囲気・過ごし方を掘り下げる、温かい対話を行ってください。',
+  C: '「新しい味への興味」「再現したい味」「食へのこだわり」を引き出す対話を行ってください。',
+};
+
+export function getCategoryDictionary(category) {
+  return CATEGORY_TERM_DICTIONARIES[category] || null;
+}
+
+export function categoryDictionaryToPromptText(category) {
+  const dict = getCategoryDictionary(category);
+  const policy = CATEGORY_DIALOGUE_POLICY[category];
+  if (!dict && !policy) return '';
+  const dictLines = dict
+    ? Object.entries(dict).map(([term, local]) => `「${term}」→「${local}」`).join('\n')
+    : '';
+  return [policy, dictLines].filter(Boolean).join('\n');
+}
