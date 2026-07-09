@@ -3,7 +3,7 @@
  * .msg / .msg--user / .msg--ai / .msg__av / .msg__tx クラスを使用
  */
 
-import { buildChatSystemPrompt, sendChatMessage } from './api.js';
+import { buildChatSystemPrompt, sendChatMessage, sendCheatSheetNotification } from './api.js';
 import { analyzeConversation, isSummaryTiming, isConfidenceSuggestTiming } from './logic.js';
 import { generatePreparationSheet, generatePreparationSheetText } from './output.js';
 
@@ -102,6 +102,7 @@ async function runAnalysis({ forceSummary = false } = {}) {
     if (forceSummary && analysisResult.summaryMessage) {
       appendSummaryBubble(analysisResult);
       markHearingComplete();
+      notifyAdmin(analysisResult);
     }
 
     updateAnalysisPanel(analysisResult);
@@ -141,6 +142,20 @@ function unsuggestCreateSheet() {
 function markHearingComplete() {
   hearingComplete = true;
   getCreateSheetButtons().forEach(btn => btn.classList.add('hidden'));
+}
+
+/* Autopilot Agent のアクション段：シート確定と同時に管理人へ自動配信する。
+   （Workspace Studio + Gemini + Gmail の代わりに Cloudflare Worker + Qwen が担う） */
+async function notifyAdmin(analysis) {
+  try {
+    const subject = `【至急対応】アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
+    const text = generatePreparationSheetText(analysis, messages);
+    await sendCheatSheetNotification(subject, text);
+    showVoiceToast('カンニングシートを管理人へ自動送信しました ✓', 3500, 'info');
+  } catch (e) {
+    console.warn('管理人への自動通知に失敗:', e.message);
+    showVoiceToast('自動送信に失敗しました。「テキストをコピー」から手動で共有してください。', 4500);
+  }
 }
 
 window.onCreateSheetClick = async function () {
@@ -319,7 +334,7 @@ function bindVoice(btn, input) {
   const rec = new SpeechRecognition();
   rec.lang = 'ja-JP';
   rec.interimResults = true;
-  rec.continuous = false;
+  rec.continuous = true;
   rec.maxAlternatives = 1;
 
   let isRecording = false;
@@ -344,8 +359,10 @@ function bindVoice(btn, input) {
     isRecording = true;
     btn.classList.add('recording');
     showVoiceToast('マイクに向かってお話しください…', 2000, 'info');
+    if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
   };
   rec.onresult = e => {
+    if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
     let interim = '';
     for (let i = e.resultIndex; i < e.results.length; i++) {
       const t = e.results[i][0].transcript;
@@ -366,6 +383,7 @@ function bindVoice(btn, input) {
   rec.onend = () => {
     isRecording = false;
     btn.classList.remove('recording');
+    if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
   };
 }
 
