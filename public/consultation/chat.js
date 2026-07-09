@@ -89,7 +89,7 @@ async function handleSend() {
   } finally {
     showTyping(false);
     input.disabled = false;
-    input.focus();
+    input.focus({ preventScroll: true });
   }
 }
 

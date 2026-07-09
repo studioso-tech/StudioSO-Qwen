@@ -1050,6 +1050,22 @@
         sessionStorage.setItem('so_avatar_shown', '1');
         // 右下の浮遊バルーンが表示されていれば確実に消す
         hideNudgeHint();
+
+        // 入力欄に自動フォーカスを当てる（表示処理が完了してからフォーカスするようにずらし、スクロールを防ぐ）
+        setTimeout(function() {
+          try {
+            var chatInput = document.getElementById('chat-input');
+            var mInp = document.getElementById('m-inp');
+            if (chatInput && window.getComputedStyle(chatInput).display !== 'none') {
+              chatInput.focus({ preventScroll: true });
+            } else if (mInp && window.getComputedStyle(mInp).display !== 'none') {
+              mInp.focus({ preventScroll: true });
+            }
+          } catch (e) {
+            console.error("Failed to auto-focus:", e);
+          }
+        }, 100);
+
         vid.loop = false;
         vid.muted = true;
         vid.src = IDLE_SRC;
