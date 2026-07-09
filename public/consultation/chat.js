@@ -488,7 +488,6 @@ function bindVoice(btn, input) {
   rec.maxAlternatives = 1;
 
   let isRecording = false;
-  let finalText = '';
   let baseText = '';
 
   btn.addEventListener('click', () => {
@@ -497,7 +496,6 @@ function bindVoice(btn, input) {
       return;
     }
     baseText = input ? input.value : '';
-    finalText = '';
     try {
       rec.start();
     } catch (e) {
@@ -513,15 +511,16 @@ function bindVoice(btn, input) {
   };
   rec.onresult = e => {
     if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+    let final = '';
     let interim = '';
-    for (let i = e.resultIndex; i < e.results.length; i++) {
+    for (let i = 0; i < e.results.length; i++) {
       const t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalText += t;
+      if (e.results[i].isFinal) final += t;
       else interim += t;
     }
     if (input) {
       const glue = baseText && !/[\s、。！？]$/.test(baseText) ? ' ' : '';
-      input.value = baseText + glue + finalText + interim;
+      input.value = baseText + glue + final + interim;
     }
   };
   rec.onerror = e => {
