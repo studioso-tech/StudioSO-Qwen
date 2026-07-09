@@ -490,6 +490,19 @@ function bindVoice(btn, input) {
   let isRecording = false;
   let baseText = '';
 
+  // continuousモードは自分では終了しないため、無音が一定時間続いたら自動で
+  // rec.stop() する（＝入力の終わりを判定する）。新しい結果が来るたびに延長する。
+  let silenceTimer = null;
+  function armSilenceTimer() {
+    if (silenceTimer) clearTimeout(silenceTimer);
+    silenceTimer = setTimeout(() => {
+      try { rec.stop(); } catch (e) {}
+    }, 2500);
+  }
+  function disarmSilenceTimer() {
+    if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
+  }
+
   btn.addEventListener('click', () => {
     if (isRecording) {
       try { rec.stop(); } catch (e) {}
@@ -508,9 +521,11 @@ function bindVoice(btn, input) {
     btn.classList.add('recording');
     showVoiceToast('マイクに向かってお話しください…', 2000, 'info');
     if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+    armSilenceTimer();
   };
   rec.onresult = e => {
     if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+    armSilenceTimer();
     let final = '';
     let interim = '';
     for (let i = 0; i < e.results.length; i++) {
@@ -526,12 +541,14 @@ function bindVoice(btn, input) {
   rec.onerror = e => {
     isRecording = false;
     btn.classList.remove('recording');
+    disarmSilenceTimer();
     const msg = voiceErrorMessage(e.error);
     if (msg) showVoiceToast(msg);
   };
   rec.onend = () => {
     isRecording = false;
     btn.classList.remove('recording');
+    disarmSilenceTimer();
     if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
   };
 }

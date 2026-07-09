@@ -400,35 +400,56 @@
       var rec = new SR();
       rec.lang = 'ja-JP';
       rec.interimResults = true;
-      rec.continuous = false;
+      rec.continuous = true;
       rec.maxAlternatives = 1;
       var isRecording = false;
-      var finalText = '';
       var baseText = '';
+
+      var silenceTimer = null;
+      function armSilenceTimer() {
+        if (silenceTimer) clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(function() {
+          try { rec.stop(); } catch (e) {}
+        }, 2500);
+      }
+      function disarmSilenceTimer() {
+        if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
+      }
+
       btn.addEventListener('click', function() {
         if (isRecording) { try { rec.stop(); } catch (e) {} return; }
-        baseText = ta.value || ''; finalText = '';
+        baseText = ta.value || '';
         try { rec.start(); } catch (e) { showMobileVoiceToast('音声認識を開始できませんでした：' + (e.message || e.name)); }
       });
       rec.onstart = function() {
         isRecording = true; btn.classList.add('recording');
         showMobileVoiceToast('マイクに向かってお話しください…', 2000, 'info');
+        if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+        armSilenceTimer();
       };
       rec.onresult = function(e) {
+        if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+        armSilenceTimer();
+        var final = '';
         var interim = '';
-        for (var i = e.resultIndex; i < e.results.length; i++) {
+        for (var i = 0; i < e.results.length; i++) {
           var t = e.results[i][0].transcript;
-          if (e.results[i].isFinal) finalText += t; else interim += t;
+          if (e.results[i].isFinal) final += t; else interim += t;
         }
         var glue = baseText && !/[\s、。！？]$/.test(baseText) ? ' ' : '';
-        ta.value = baseText + glue + finalText + interim;
+        ta.value = baseText + glue + final + interim;
       };
       rec.onerror = function(e) {
         isRecording = false; btn.classList.remove('recording');
+        disarmSilenceTimer();
         var msg = mVoiceErrorMessage(e.error);
         if (msg) showMobileVoiceToast(msg);
       };
-      rec.onend = function() { isRecording = false; btn.classList.remove('recording'); };
+      rec.onend = function() {
+        isRecording = false; btn.classList.remove('recording');
+        disarmSilenceTimer();
+        if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
+      };
       mVoiceBound = true;
     }
     function mVoiceErrorMessage(code) {

@@ -781,6 +781,17 @@
       var isRecording = false;
       var baseText = '';
 
+      var silenceTimer = null;
+      function armSilenceTimer() {
+        if (silenceTimer) clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(function() {
+          try { rec.stop(); } catch (e) {}
+        }, 2500);
+      }
+      function disarmSilenceTimer() {
+        if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
+      }
+
       btn.addEventListener('click', function() {
         if (isRecording) {
           try { rec.stop(); } catch (e) {}
@@ -799,9 +810,11 @@
         btn.classList.add('recording');
         showMobileVoiceToast('マイクに向かってお話しください…', 2000, 'info');
         if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+        armSilenceTimer();
       };
       rec.onresult = function(e) {
         if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+        armSilenceTimer();
         var final = '';
         var interim = '';
         for (var i = 0; i < e.results.length; i++) {
@@ -815,12 +828,14 @@
       rec.onerror = function(e) {
         isRecording = false;
         btn.classList.remove('recording');
+        disarmSilenceTimer();
         var msg = mVoiceErrorMessage(e.error);
         if (msg) showMobileVoiceToast(msg);
       };
       rec.onend = function() {
         isRecording = false;
         btn.classList.remove('recording');
+        disarmSilenceTimer();
         if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
       };
       mVoiceBound = true;
