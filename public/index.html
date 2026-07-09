@@ -270,7 +270,9 @@
     #hero.go .scroll-hint { animation: fi .6s 1.2s both; }
 
     .hide { display: none !important; }
-    .hidden { display: none !important; }
+    /* 汎用の .hidden!important は削除。Tailwindの.hiddenユーティリティ（md:flex等の
+       レスポンシブ切り替えに使用）を無条件に上書きしてしまい、デスクトップのnavリンクが
+       常に非表示になるバグの原因だった。m-invite/m-input-area用の個別ルールは下に残す。 */
 
     /* アニメーション */
     @keyframes fadein { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
@@ -335,6 +337,10 @@
     }
 
     /* ══════════ コーナーアバター（丸型・常時表示） ══════════ */
+    /* ナビゲーションは常にクリックできる状態を保証する（アバターの丸い吹き出しが
+       右上のnavリンクの上に重なり、ページから移動できなくなる不具合の対策） */
+    #nav { z-index: 8600; }
+
     #avatar-corner {
       position: fixed; top: 60px; right: 100px; z-index: 8000;
       width: 320px; height: 320px; border-radius: 999px; overflow: hidden;

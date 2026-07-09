@@ -121,7 +121,9 @@
     #sheet-modal .sheet-actions button:last-child { background: rgba(27,73,101,0.08); color: #1B4965; }
 
     .hide { display: none !important; }
-    .hidden { display: none !important; }
+    /* 汎用の .hidden!important は削除。Tailwindの.hiddenユーティリティ（md:flex等の
+       レスポンシブ切り替えに使用）を無条件に上書きしてしまい、デスクトップのnavリンクが
+       常に非表示になるバグの原因だった。m-invite/m-input-area用の個別ルールは下に残す。 */
 
     @keyframes fadein { from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);} }
     .animate-fadein { animation: fadein 250ms ease both; }
@@ -174,6 +176,10 @@
     }
 
     /* コーナーアバター */
+    /* ナビゲーションは常にクリックできる状態を保証する（アバターの丸い吹き出しが
+       右上のnavリンクの上に重なり、ページから移動できなくなる不具合の対策） */
+    #nav { z-index: 8600; }
+
     #avatar-corner { position: fixed; top: 60px; right: 100px; z-index: 8000; width: 320px; height: 320px; border-radius: 999px; overflow: hidden; box-shadow: 0 10px 40px rgba(27,73,101,0.40); cursor: pointer; display: none; background: #0A121A; transition: transform 200ms ease, box-shadow 200ms ease; }
     #avatar-corner.av-corner-in { animation: fi 0.6s ease both; }
     #avatar-corner:hover { transform: scale(1.03); box-shadow: 0 12px 46px rgba(27,73,101,0.52); }
