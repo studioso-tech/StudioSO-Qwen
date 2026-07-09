@@ -193,6 +193,7 @@ function appendMessage(role, text) {
     container.scrollTop = container.scrollHeight;
   }
 }
+window.appendMessage = appendMessage;
 
 let summaryBubbleEl = null;
 
@@ -263,18 +264,160 @@ function showTyping(visible) {
 }
 
 function showWelcome() {
-  const msg = 'こんにちは。Studio S.O の相談窓口です。どのようなことでもお気軽にお話しください。';
-  appendMessage('ai', msg);
-  /* アバターがあれば挨拶を音声・動作で伝える（初回ロード時のオートプレイポリシー
-     によりブラウザ内では即発話できないケースがあるため、ユーザー操作後にも
-     再度合図が届くよう avatarNod → avatarSpeak の順で呼び出す） */
-  setTimeout(function() {
-    try {
-      if (typeof window.avatarNod === 'function') window.avatarNod();
-      if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
-    } catch (e) {}
-  }, 200);
+  // 総合受付（index.html）はヒーロー画面のアバターがクリック起動時に
+  // startWelcomeGreeting() で6ステップ挨拶を担当するため、ここでは何もしない。
+  // 簡易版チャット窓口（contact.html等）だけ、この場で挨拶する。
+  const isContactPage = window.location.pathname.includes('contact.html');
+  if (isContactPage) {
+    const msg = 'こんにちは。Studio S.O の相談窓口です。\nどのようなことでもお気軽にお話しください。';
+    appendMessage('ai', msg);
+    setTimeout(function() {
+      try {
+        if (typeof window.avatarNod === 'function') window.avatarNod();
+        if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
+      } catch (e) {}
+    }, 200);
+  }
 }
+
+// 独自音声ファイルの再生（アバター動画の動きと連動・自動再生ブロック回避設計）
+export function playAvatarAudio(audioUrl, onEnded) {
+  const corner = document.getElementById('avatar-corner');
+  if (corner) {
+    corner.classList.remove('av-listen', 'av-speak', 'av-nudge');
+    corner.classList.add('av-speak');
+  }
+
+  // ユーザー操作と同期したグローバルAudioオブジェクトの使い回しでアンロック状態を継承
+  if (!window.avatarAudio) {
+    window.avatarAudio = new Audio();
+  }
+  const audio = window.avatarAudio;
+  audio.src = audioUrl;
+  audio.play().catch(function(e) {
+    console.error("Audio play failed:", e);
+    // 再生エラー時もフォールバックとして次に進めるようにする
+    if (onEnded) setTimeout(onEnded, 2000);
+  });
+
+  const vid = document.getElementById('avatar-video');
+  if (vid) {
+    vid.loop = false; // 発話中はループさせず動画自体のタイムラインを再生
+    vid.playbackRate = 1.0; // 音声のテンポに合わせて等倍速（1.0）にする
+    vid.play().catch(function() {});
+  }
+
+  audio.onended = function() {
+    if (corner) corner.classList.remove('av-speak');
+    if (vid) {
+      vid.pause();
+      vid.loop = false;
+      vid.playbackRate = 1.0;
+    }
+    if (onEnded) onEnded();
+  };
+}
+window.playAvatarAudio = playAvatarAudio;
+
+// アニメーション付き音声のみ再生（Nudge等用・自動再生ブロック回避設計）
+export function playAvatarAudioOnly(audioUrl) {
+  const corner = document.getElementById('avatar-corner');
+  if (corner) {
+    corner.classList.remove('av-listen', 'av-speak', 'av-nudge');
+    corner.classList.add('av-speak');
+  }
+
+  if (!window.avatarAudio) {
+    window.avatarAudio = new Audio();
+  }
+  const audio = window.avatarAudio;
+  audio.src = audioUrl;
+  audio.play().catch(function(e) {
+    console.error("Nudge audio play failed:", e);
+  });
+
+  const vid = document.getElementById('avatar-video');
+  if (vid) {
+    vid.loop = false;
+    vid.playbackRate = 1.0;
+    vid.play().catch(function() {});
+  }
+
+  audio.onended = function() {
+    if (corner) corner.classList.remove('av-speak');
+    if (vid) {
+      vid.pause();
+      vid.loop = false;
+      vid.playbackRate = 1.0;
+    }
+  };
+}
+window.playAvatarAudioOnly = playAvatarAudioOnly;
+
+let welcomeGreetingCanceled = false;
+// 総合受付（トップページ）用の6ステップ挨拶シークエンス（ローカル音声ファイル連動）
+export function startWelcomeGreeting() {
+  welcomeGreetingCanceled = false;
+  // チャットログをリセットして初期クリーンな状態から開始
+  const containers = [
+    document.getElementById('chat-messages'),
+    document.getElementById('m-chat-messages'),
+  ].filter(Boolean);
+  containers.forEach(c => c.innerHTML = '');
+
+  const GREETING_STEPS = [
+    {
+      text: "こんにちは！毎日のお仕事お疲れ様です。スタジオ エスオーでの業務の改善や旅行・料理の相談をお伺いするコンサルタントです。",
+      audio: "avatar/Cut_1_voice.wav"
+    },
+    {
+      text: "これまでに多くの業務の相談や旅行・料理相談をお受けして来た経験を活かして、あなたの業務や楽しい旅行・料理をお手伝いを全力でさせていただきます。",
+      audio: "avatar/Cut_2_voice.wav"
+    },
+    {
+      text: "", // 2秒の完全な沈黙（タメ）および頷き
+      audio: "avatar/Cut_3_voice.wav"
+    },
+    {
+      text: "具体的なご相談の内容をお聞きします。まずは、ご希望をお聞かせください。その後に、ついていくつか質問させてください。",
+      audio: "avatar/Cut_4_voice.wav"
+    },
+    {
+      text: "皆様が普段使われている言葉でやりたいことを『いつもの言葉』でお話下さい。どうぞお気軽に、今困っていることや、旅行や料理の相談について、やりたいことをそのまま私に教えてくださいね。",
+      audio: "avatar/Cut_5_voice.wav"
+    },
+    {
+      text: "チャット形式の入力エリアが稼働いたします。キーボードでの入力はもちろん、音声ボタンを使って声でお話しい頂き、入力頂くことも出来ます。\nそれでは、ヒアリングに移行いたします。入力どうぞ。順番にお伺いしますね。",
+      audio: "avatar/Cut_6_voice.wav"
+    }
+  ];
+
+  let currentStep = 0;
+  function playNextStep() {
+    if (welcomeGreetingCanceled) return;
+    if (currentStep >= GREETING_STEPS.length) {
+      // 挨拶終了後にヒヤリング入力を促す状態にする
+      if (typeof window.skipAvatar === 'function') {
+        window.skipAvatar();
+      }
+      return;
+    }
+    const step = GREETING_STEPS[currentStep];
+    playAvatarAudio(step.audio, function() {
+      if (welcomeGreetingCanceled) return;
+      currentStep++;
+      playNextStep();
+    });
+  }
+  playNextStep();
+}
+window.startWelcomeGreeting = startWelcomeGreeting;
+window.cancelWelcomeGreeting = function() {
+  welcomeGreetingCanceled = true;
+  if (window.avatarAudio) {
+    try { window.avatarAudio.pause(); } catch(e) {}
+  }
+};
 
 // ── 分析パネル更新 ────────────────────────────────────────────────────
 

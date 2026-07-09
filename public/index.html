@@ -713,6 +713,33 @@
         if (id === 'g') openMobileInput();
         else closeMobileInput();
       }
+
+      // タブ切り替え時のアバター制御連動
+      if (id === 'e') {
+        // 「お急ぎの方」タブ：音声を停止し、アバターを静止状態へ
+        if (typeof window.cancelWelcomeGreeting === 'function') {
+          window.cancelWelcomeGreeting();
+        }
+        if (typeof window.launchAvatar === 'function') {
+          document.removeEventListener('pointerdown', window.launchAvatar);
+        }
+        if (typeof window.markAvatarPlayed === 'function') window.markAvatarPlayed();
+
+        var vid = document.getElementById('avatar-video');
+        if (vid) {
+          vid.muted = true;
+          vid.src = 'avatar/Cut_9_jp_final.mp4';
+          vid.loop = false;
+          vid.play().then(function() {
+            setTimeout(function() { try { vid.pause(); } catch(e){} }, 300);
+          }).catch(function() {});
+        }
+      } else if (id === 'g') {
+        // 「総合受付」タブ：まだ対話（ヒヤリング）が始まっていないなら起動する
+        if (typeof window.isAvatarInHearingMode === 'function' && !window.isAvatarInHearingMode()) {
+          if (typeof window.launchAvatar === 'function') window.launchAvatar();
+        }
+      }
     }
     window.switchTab = switchTab;
 
@@ -956,20 +983,38 @@
         '思い浮かんだキーワードだけでも構いません。'
       ];
       function showNudgeHint() {
-        var hint = document.getElementById('nudge-hint');
-        if (!hint) {
-          hint = document.createElement('div');
-          hint.id = 'nudge-hint';
-          document.body.appendChild(hint);
+        var msg = '大体の目安で構いませんので、どのような業務か・旅行や料理のご相談かをお教えていただけますでしょうか？';
+        var chatMessages = document.getElementById('chat-messages');
+        var isStarted = chatMessages && chatMessages.children.length > 0;
+
+        if (inHearingMode) {
+          if (isStarted) {
+            // すでに会話が進行中の場合は、初期問いかけではなく優しいヒントを出し分ける
+            msg = NUDGE_MESSAGES[Math.floor(Math.random() * NUDGE_MESSAGES.length)];
+          }
+          // チャット画面内に追加する（右下の浮遊バルーンは出さない）
+          if (typeof window.appendMessage === 'function') {
+            window.appendMessage('ai', msg);
+          }
+        } else {
+          var hint = document.getElementById('nudge-hint');
+          if (!hint) {
+            hint = document.createElement('div');
+            hint.id = 'nudge-hint';
+            document.body.appendChild(hint);
+          }
+          hint.textContent = msg;
+          hint.style.display = 'block';
+          hint.style.animation = 'none';
+          void hint.offsetWidth;
+          hint.style.animation = '';
         }
-        var msg = NUDGE_MESSAGES[Math.floor(Math.random() * NUDGE_MESSAGES.length)];
-        hint.textContent = msg;
-        hint.style.display = 'block';
-        hint.style.animation = 'none';
-        void hint.offsetWidth;
-        hint.style.animation = '';
-        /* テキストだけでなくアバターが実際に話しかける */
-        try { if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg); } catch (e) {}
+        /* 15秒間入力がない場合のカスタム音声問いかけ（初回のみ案内音声を流す） */
+        try {
+          if (!isStarted && typeof window.playAvatarAudioOnly === 'function') {
+            window.playAvatarAudioOnly('avatar/Cut_7_voice.wav');
+          }
+        } catch (e) {}
       }
       function hideNudgeHint() {
         var hint = document.getElementById('nudge-hint');
@@ -995,6 +1040,9 @@
       function enterHearingMode() {
         if (inHearingMode) return;
         inHearingMode = true;
+        if (typeof window.cancelWelcomeGreeting === 'function') {
+          window.cancelWelcomeGreeting();
+        }
         sessionStorage.setItem('so_avatar_shown', '1');
         vid.loop = false;
         vid.muted = true;
@@ -1017,16 +1065,34 @@
         if (played) return;
         played = true;
         hint.classList.remove('av-hint-show');
-        vid.muted = false;
+
+        // 音声自動再生ブロックを回避するため、顧客のクリックアクションに同期してプレイヤーをアンロック
+        try {
+          if (!window.avatarAudio) {
+            window.avatarAudio = new Audio();
+          }
+          window.avatarAudio.play().then(function() {
+            window.avatarAudio.pause();
+          }).catch(function() {});
+        } catch (e) {}
+
+        vid.muted = true; // アバター動画トラック自身は常に無音（発話音声はWAVファイル側が担当）
         vid.currentTime = 0;
-        vid.play().catch(function() {
-          vid.muted = true;
-          vid.play().catch(function() {});
-        });
+        vid.play().catch(function() {});
+
+        // 挨拶音声＋チャット表示シーケンスを即時開始
+        if (typeof window.startWelcomeGreeting === 'function') {
+          window.startWelcomeGreeting();
+        }
       }
 
       /* アバター案内をスキップ（案内不要な顧客への配慮） */
       window.skipAvatar = enterHearingMode;
+
+      /* switchTab（このIIFEの外で定義）からアバターの起動状態を参照・操作するための橋渡し */
+      window.launchAvatar = launchAvatar;
+      window.isAvatarInHearingMode = function() { return inHearingMode; };
+      window.markAvatarPlayed = function() { played = true; };
 
       /* 常にイントロ状態から開始（訪問済みでもヒーロー画面を表示） */
       window.addEventListener('load', function() {

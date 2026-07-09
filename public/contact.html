@@ -602,12 +602,16 @@
       function showNudgeHint() {
         var hint = document.getElementById('nudge-hint');
         if (!hint) { hint = document.createElement('div'); hint.id = 'nudge-hint'; document.body.appendChild(hint); }
-        var msg = NUDGE_MESSAGES[Math.floor(Math.random() * NUDGE_MESSAGES.length)];
+        var msg = '大体の目安で構いませんので、どのような業務か・旅行や料理のご相談かをお教えていただけますでしょうか？';
         hint.textContent = msg;
         hint.style.display = 'block';
         hint.style.animation = 'none'; void hint.offsetWidth; hint.style.animation = '';
-        /* テキストだけでなくアバターが実際に話しかける */
-        try { if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg); } catch (e) {}
+        /* 15秒間入力がない場合のカスタム音声問いかけ */
+        try {
+          if (typeof window.playAvatarAudioOnly === 'function') {
+            window.playAvatarAudioOnly('avatar/Cut_7_voice.wav');
+          }
+        } catch (e) {}
       }
       function hideNudgeHint() { var hint = document.getElementById('nudge-hint'); if (hint) hint.style.display = 'none'; }
       function armNudgeTimer() {
