@@ -53,3 +53,55 @@ Live response confirming Alibaba Cloud (qwen-max) is the backend:
   "usage": { "prompt_tokens": 28, "completion_tokens": 1, "total_tokens": 29 }
 }
 ```
+
+## POST /notify — cheat-sheet auto-delivery (Autopilot Agent action step)
+
+A second route on the same Worker. When the frontend's Qwen-Max-powered
+analysis reaches `confidence >= 0.8` and the cheat sheet is finalized
+(`public/consultation/chat.js` → `notifyAdmin()`), the browser posts the
+finished text here and this Worker emails it to the human admin via
+[Resend](https://resend.com). This is the Qwen-Cloud-only replacement for
+production's Workspace Studio + Gemini + Gmail hand-off — same
+trigger→action shape, but the AI step and the delivery step both stay in
+this repo's own stack.
+
+```
+Browser --(subject, text, x-notify-secret)--> qwen-proxy /notify
+qwen-proxy --(Bearer RESEND_API_KEY)--> Resend
+Resend --(email)--> ADMIN_EMAIL
+```
+
+**Setup (one-time):**
+
+1. Create a free [Resend](https://resend.com) account and generate an API key.
+   The sandbox sender `onboarding@resend.dev` works with no domain
+   verification — fine for a hackathon demo. Swap in a verified domain later
+   for production use.
+2. Set three secrets on the **same** Worker that already serves the root
+   endpoint (via the Cloudflare dashboard → Workers → qwen-proxy → Settings →
+   Variables, or via Wrangler if you manage this Worker with a `wrangler.toml`):
+   ```
+   wrangler secret put RESEND_API_KEY
+   wrangler secret put ADMIN_EMAIL
+   wrangler secret put NOTIFY_SECRET
+   ```
+   - `RESEND_API_KEY` — from step 1
+   - `ADMIN_EMAIL` — where the cheat sheet should land
+   - `NOTIFY_SECRET` — any random string; must exactly match
+     `NOTIFY_SECRET` in `public/consultation/config.js` (defaults to the
+     placeholder `CHANGE_ME_so-notify-2026` — change both sides together)
+   - `NOTIFY_FROM_EMAIL` (optional) — defaults to `Studio S.O <onboarding@resend.dev>`
+3. Redeploy `qwen-proxy.js` (paste the updated source into the dashboard's
+   editor, or `wrangler deploy` if using the CLI).
+
+**Verification**, once configured:
+
+```powershell
+Invoke-RestMethod -Uri "https://qwen-proxy.studioso.workers.dev/notify" -Method POST `
+  -Headers @{ "x-notify-secret" = "<same value as config.js>" } `
+  -Body (@{ subject = "Test"; text = "Hello from the notify endpoint" } | ConvertTo-Json)
+```
+
+A `401` means the secret doesn't match on both sides; a `500` means
+`RESEND_API_KEY`/`ADMIN_EMAIL` aren't set yet; `{"ok":true,"id":"..."}` means
+the email was accepted by Resend.
