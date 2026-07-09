@@ -192,12 +192,8 @@
     #nudge-hint { position: fixed; right: 24px; bottom: 116px; z-index: 8500; background: rgba(27,73,101,0.96); color: #fff; padding: 12px 18px; border-radius: 14px; font-family: 'Noto Sans JP', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.5; letter-spacing: 0.02em; box-shadow: 0 8px 28px rgba(0,0,0,0.28); max-width: 260px; animation: soNudgeIn 0.35s ease both; display: none; }
     #nudge-hint::after { content: ''; position: absolute; right: 24px; bottom: -10px; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 10px solid rgba(27,73,101,0.96); }
     @media (max-width: 720px) { #nudge-hint { right: 16px; bottom: 92px; font-size: 13px; max-width: 220px; padding: 10px 14px; } }
-    #tts-toggle { position: fixed; top: 84px; right: 20px; z-index: 8100; font-family: 'Noto Sans JP', sans-serif; font-size: 11px; font-weight: 600; background: rgba(255,255,255,0.92); border: 1.5px solid rgba(27,73,101,0.25); color: #1B4965; padding: 8px 14px; border-radius: 999px; cursor: pointer; box-shadow: 0 2px 8px rgba(27,73,101,0.12); transition: background 200ms; }
-    #tts-toggle:hover { background: #fff; border-color: #1B4965; }
-    #tts-toggle.off { color: rgba(47,62,70,0.55); }
     @keyframes fi { from{opacity:0;}to{opacity:1;} }
     @media (max-width: 639px) {
-      #tts-toggle { top: 12px; right: 12px; font-size: 10px; padding: 6px 10px; }
       #avatar-corner { top: 52px; right: 16px; width: 96px; height: 96px; }
     }
   </style>
@@ -357,7 +353,6 @@
   <div id="avatar-corner" title="ヒヤリング中">
     <video id="avatar-video" muted playsinline preload="metadata" src="avatar/Cut_9_jp_final.mp4"></video>
   </div>
-  <button id="tts-toggle" type="button" title="AI応答の音声読み上げをON/OFF">🔊 読み上げON</button>
 
   <script type="module">
     import { initChat } from './consultation/chat.js';
@@ -506,29 +501,6 @@
 
     /* チャット即時起動 */
     initChat('');
-
-    /* TTSオンオフ */
-    (function() {
-      var btn = document.getElementById('tts-toggle');
-      if (!btn) return;
-      function apply(disabled) {
-        window.__soTtsDisabled = disabled;
-        if (disabled) {
-          btn.textContent = '🔇 読み上げOFF';
-          btn.classList.add('off');
-          if (window.speechSynthesis) try { window.speechSynthesis.cancel(); } catch (e) {}
-        } else {
-          btn.textContent = '🔊 読み上げON';
-          btn.classList.remove('off');
-        }
-      }
-      apply(sessionStorage.getItem('so_tts_disabled') === '1');
-      btn.addEventListener('click', function() {
-        var newState = !window.__soTtsDisabled;
-        sessionStorage.setItem('so_tts_disabled', newState ? '1' : '0');
-        apply(newState);
-      });
-    })();
 
     /* ══ アバター制御（イントロ無し・常にヒヤリングモード） ══ */
     (function() {
