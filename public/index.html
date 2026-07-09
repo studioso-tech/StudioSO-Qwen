@@ -775,11 +775,10 @@
       var rec = new SR();
       rec.lang = 'ja-JP';
       rec.interimResults = true;
-      rec.continuous = false;
+      rec.continuous = true;
       rec.maxAlternatives = 1;
 
       var isRecording = false;
-      var finalText = '';
       var baseText = '';
 
       btn.addEventListener('click', function() {
@@ -788,7 +787,6 @@
           return;
         }
         baseText = ta.value || '';
-        finalText = '';
         try {
           rec.start();
         } catch (e) {
@@ -800,16 +798,19 @@
         isRecording = true;
         btn.classList.add('recording');
         showMobileVoiceToast('マイクに向かってお話しください…', 2000, 'info');
+        if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
       };
       rec.onresult = function(e) {
+        if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+        var final = '';
         var interim = '';
-        for (var i = e.resultIndex; i < e.results.length; i++) {
+        for (var i = 0; i < e.results.length; i++) {
           var t = e.results[i][0].transcript;
-          if (e.results[i].isFinal) finalText += t;
+          if (e.results[i].isFinal) final += t;
           else interim += t;
         }
         var glue = baseText && !/[\s、。！？]$/.test(baseText) ? ' ' : '';
-        ta.value = baseText + glue + finalText + interim;
+        ta.value = baseText + glue + final + interim;
       };
       rec.onerror = function(e) {
         isRecording = false;
@@ -820,6 +821,7 @@
       rec.onend = function() {
         isRecording = false;
         btn.classList.remove('recording');
+        if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
       };
       mVoiceBound = true;
     }
