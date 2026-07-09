@@ -56,6 +56,9 @@ async function handleSend() {
   // アバター：ユーザー送信直後の視覚フィードバック（受け止め） & Nudgeタイマー解除
   if (typeof window.avatarNod === 'function') window.avatarNod();
   if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+  if (window.avatarAudio) {
+    try { window.avatarAudio.pause(); } catch(e) {}
+  }
 
   showTyping(true);
 
@@ -63,10 +66,10 @@ async function handleSend() {
     const reply = await sendChatMessage(messages, apiKey, currentSystemPrompt);
     messages.push({ role: 'assistant', content: reply });
     // アバター：AI応答テキストを読み上げ＆話す動作（視覚）
+    // Nudgeの再武装は読み上げ完了後（index.html側のavatarSpeakラッパー）に行う。
+    // ここで即座に再武装すると、読み上げ中にNudge音声が重なって再生されてしまう。
     if (typeof window.avatarSpeak === 'function') window.avatarSpeak(reply);
     appendMessage('ai', reply);
-    // 応答後、20秒無入力Nudgeを再武装
-    if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
 
     /* ハイブリッド完了フロー：
        2往復以降「準備シートを作成する」ボタンを表示（手動トリガー）。
@@ -160,6 +163,10 @@ async function notifyAdmin(analysis) {
 
 window.onCreateSheetClick = async function () {
   if (hearingComplete) return;
+  if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+  if (window.avatarAudio) {
+    try { window.avatarAudio.pause(); } catch(e) {}
+  }
   await runAnalysis({ forceSummary: true });
 };
 

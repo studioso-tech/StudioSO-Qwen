@@ -1032,6 +1032,9 @@
         if (nudgeTimer) { clearTimeout(nudgeTimer); nudgeTimer = null; }
         corner.classList.remove('av-nudge');
         hideNudgeHint();
+        if (window.avatarAudio) {
+          try { window.avatarAudio.pause(); } catch(e) {}
+        }
       }
       window.avatarArmNudge = armNudgeTimer;
       window.avatarDisarmNudge = disarmNudge;
@@ -1044,6 +1047,8 @@
           window.cancelWelcomeGreeting();
         }
         sessionStorage.setItem('so_avatar_shown', '1');
+        // 右下の浮遊バルーンが表示されていれば確実に消す
+        hideNudgeHint();
         vid.loop = false;
         vid.muted = true;
         vid.src = IDLE_SRC;
@@ -1138,6 +1143,12 @@
       };
       var origAvatarSpeak = window.avatarSpeak;
       window.avatarSpeak = function(text) {
+        // 発話開始時にNudgeタイマーを一時停止（クリア）し、音声も停止する
+        disarmNudge();
+        if (window.avatarAudio) {
+          try { window.avatarAudio.pause(); } catch(e) {}
+        }
+
         if (origAvatarSpeak) origAvatarSpeak(text);
         if (inHearingMode) {
           try {
@@ -1147,6 +1158,8 @@
             /* 読み上げ中は動きあり、読み上げ終了 or 4秒で静止に戻す */
             var stopMotion = function() {
               try { vid.pause(); vid.loop = false; vid.playbackRate = 1.0; } catch (e) {}
+              // 音声読み上げが完全に終了したタイミングでNudgeタイマーを再始動する
+              if (inHearingMode) armNudgeTimer();
             };
             if (window.speechSynthesis && !window.__soTtsDisabled && text) {
               /* 読み上げ完了イベントを待つ（フォールバックとして最大10秒） */
@@ -1164,21 +1177,6 @@
         }
       };
 
-      /* コーナークリック → 起動 or イントロ再表示 */
-      corner.addEventListener('click', function() {
-        if (!played) { launchAvatar(); return; }
-        /* ヒヤリング中にコーナーをクリックしたら、イントロを再生し直す */
-        inHearingMode = false;
-        disarmNudge();
-        vid.loop = false;
-        vid.src = INTRO_SRC;
-        vid.muted = false;
-        vid.currentTime = 0;
-        vid.play().catch(function() {
-          vid.muted = true;
-          vid.play().catch(function() {});
-        });
-      });
     })();
   </script>
 
