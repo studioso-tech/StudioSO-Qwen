@@ -3,7 +3,7 @@
  */
 
 import { CATEGORY_LABELS, LEVEL_LABELS } from './logic.js';
-import { INDUSTRY_LABELS, getIndustryDictionary, getCategoryDictionary } from './dictionary.js';
+import { INDUSTRY_LABELS, getIndustryDictionary } from './dictionary.js';
 
 export function generatePreparationSheet(analysis, messages) {
   const now = new Date();
@@ -17,11 +17,7 @@ export function generatePreparationSheet(analysis, messages) {
     .map(m => `<li style="padding:4px 0;border-bottom:1px solid #f0f4f6;">${escapeHtml(m.content)}</li>`)
     .join('');
 
-  const isCategoryDict = analysis.category === 'T' || analysis.category === 'C';
-  const dict = isCategoryDict
-    ? (getCategoryDictionary(analysis.category) || {})
-    : getIndustryDictionary(analysis.industry);
-  const dictLabel = isCategoryDict ? analysis.categoryLabel : analysis.industryLabel;
+  const dict = getIndustryDictionary(analysis.industry);
   const dictItems = Object.entries(dict)
     .slice(0, 6)
     .map(([term, local]) =>
@@ -38,7 +34,7 @@ export function generatePreparationSheet(analysis, messages) {
   <div style="padding:16px 20px;background:${categoryColor};display:flex;justify-content:space-between;align-items:center;">
     <div>
       <p style="color:rgba(255,255,255,0.75);font-size:11px;margin-bottom:4px;">Studio S.O 相談窓口</p>
-      <h2 style="color:#fff;font-size:16px;font-weight:700;">対話下準備シート</h2>
+      <h2 style="color:#fff;font-size:16px;font-weight:700;">対話下準備シート（カンニングシート）</h2>
     </div>
     <div style="text-align:right;">
       <p style="color:rgba(255,255,255,0.75);font-size:11px;">${escapeHtml(dateStr)}</p>
@@ -51,11 +47,15 @@ export function generatePreparationSheet(analysis, messages) {
     ${sheetCell('課題レベル', analysis.levelLabel || `レベル${analysis.level}`)}
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
-    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">主要な悩み（ユーザー原文）</p>
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">顧客のプロファイル（主要な悩み）</p>
     <p style="color:#2F3E46;font-weight:500;">${escapeHtml(analysis.mainConcern || '（分析中）')}</p>
   </div>
+  <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;background:#FDF8F5;">
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">今回のアバターとの会話要約</p>
+    <p style="color:#2F3E46;font-weight:500;">${escapeHtml(analysis.summaryMessage || '主要な悩み：' + (analysis.mainConcern || '（分析中）'))}</p>
+  </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;background:#f0f9ff;">
-    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">推奨する初回対応方針</p>
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">人間の管理人へのアドバイス（対応のツボ）</p>
     <p style="color:#1B4965;font-weight:600;">${escapeHtml(analysis.recommendedApproach || '（対話を深めて確認してください）')}</p>
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
@@ -65,7 +65,7 @@ export function generatePreparationSheet(analysis, messages) {
     </ul>
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
-    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px;">業界・カテゴリ別ローカル表現（${escapeHtml(dictLabel || analysis.industry)} 向け抜粋）</p>
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px;">業界別ローカル翻訳辞書（${escapeHtml(analysis.industryLabel || analysis.industry)} 向け抜粋）</p>
     <table style="width:100%;border:1px solid #E0F2F7;border-radius:6px;border-collapse:collapse;overflow:hidden;">
       <thead><tr style="background:#E0F2F7;">
         <th style="padding:4px 8px;text-align:left;font-size:11px;color:#6b7280;font-weight:500;">ＩＴ用語</th>
@@ -88,19 +88,23 @@ export function generatePreparationSheetText(analysis, messages) {
   const now = new Date();
   const dateStr = now.toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
   const userMessages = messages.filter(m => m.role === 'user').map((m, i) => ` ${i+1}. ${m.content}`).join('\n');
-  return `━━━ Studio S.O 対話下準備シート ━━━
+  return `ーーー 🤖 Qwen作成：カンニングシート ーーー
 生成日時：${dateStr}
 
-■ 事業カテゴリ  ：${analysis.categoryLabel}（${analysis.category}）
-■ 推定業界     ：${analysis.industryLabel}
-■ 課題レベル   ：${analysis.levelLabel}
-■ 主要な悩み   ：${analysis.mainConcern}
-■ 判定確信度   ：${Math.round((analysis.confidence || 0.5)*100)}%
+■ 顧客のプロファイル：
+・事業カテゴリ　　　：${analysis.categoryLabel}（${analysis.category}）
+・推定業界　　　　　：${analysis.industryLabel}
+・ＩＴ習熟レベル　　：${analysis.levelLabel}
+・主要な悩み（原文）：${analysis.mainConcern}
+・分析判定確信度　　：${Math.round((analysis.confidence || 0.5)*100)}%
 
-■ 推奨する初回対応方針
+■ 今回のアバターとの会話要約：
+${analysis.summaryMessage || '主要な悩み：' + (analysis.mainConcern || '（分析中）')}
+
+■ 人間の管理人へのアドバイス（対応のツボ）：
 ${analysis.recommendedApproach}
 
-■ ユーザー発言（全件）
+■ ユーザー発言（対話ログ）：
 ${userMessages}
 ━━━━━━━━━━━━━━━━━━━━━━━━`;
 }

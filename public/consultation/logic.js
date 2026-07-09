@@ -3,7 +3,7 @@
  */
 
 import { classifyConversation, generateSummaryMessage } from './api.js';
-import { INDUSTRIES, INDUSTRY_LABELS, quickEstimateIndustry, dictionaryToPromptText, categoryDictionaryToPromptText } from './dictionary.js';
+import { INDUSTRIES, INDUSTRY_LABELS, quickEstimateIndustry, dictionaryToPromptText } from './dictionary.js';
 
 export const CATEGORIES = {
   AI_CONSULTING: 'A',
@@ -15,7 +15,7 @@ export const CATEGORIES = {
 export const CATEGORY_LABELS = {
   [CATEGORIES.AI_CONSULTING]: 'ＡＩコンサルティング',
   [CATEGORIES.TRAVEL]:        'トラベルデザイン',
-  [CATEGORIES.CULINARY]:      'カリナリーアート',
+  [CATEGORIES.CULINARY]:      'カリナリーラボ',
   [CATEGORIES.MIXED]:         '複合（複数事業）',
 };
 
@@ -75,10 +75,7 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
   const industry  = classification?.industry  || quickIndustry;
   const level     = classification?.level ?? 0;
 
-  // トラベル／カリナリーはB2C向けの別軸ガイドを使用、それ以外は従来の業種辞書
-  const dictText = (category === CATEGORIES.TRAVEL || category === CATEGORIES.CULINARY)
-    ? categoryDictionaryToPromptText(category)
-    : dictionaryToPromptText(industry);
+  const dictText = dictionaryToPromptText(industry);
 
   let summaryMessage = null;
   if (forceSummary) {
