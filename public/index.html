@@ -911,6 +911,7 @@
       var hint   = document.getElementById('avatar-hint');
       var played = false;
       var inHearingMode = false;
+      var launchTime = 0;
 
       var INTRO_SRC   = 'avatar/Phase1_Voice_Timeline_Full.mp4';
       var IDLE_SRC    = 'avatar/Cut_9_jp_final.mp4';  /* ヒヤリング中の待機ループ（瞬き・呼吸） */
@@ -1069,15 +1070,19 @@
       function launchAvatar() {
         if (played) return;
         played = true;
+        launchTime = Date.now();
         hint.classList.remove('av-hint-show');
 
         // 音声自動再生ブロックを回避するため、顧客のクリックアクションに同期してプレイヤーをアンロック
+        // （このアンロック用のpause()は、後続のstartWelcomeGreeting()が既に本編の音声を
+        //   再生し始めた後に非同期で発火すると、それを止めてしまうことがあるためガードする）
+        var unlocking = true;
         try {
           if (!window.avatarAudio) {
             window.avatarAudio = new Audio();
           }
           window.avatarAudio.play().then(function() {
-            window.avatarAudio.pause();
+            if (unlocking) window.avatarAudio.pause();
           }).catch(function() {});
         } catch (e) {}
 
@@ -1086,6 +1091,7 @@
         vid.play().catch(function() {});
 
         // 挨拶音声＋チャット表示シーケンスを即時開始
+        unlocking = false;
         if (typeof window.startWelcomeGreeting === 'function') {
           window.startWelcomeGreeting();
         }
@@ -1109,6 +1115,7 @@
          ただしタブ内クリックはタブ自身の switchTab を尊重するため除外 */
       document.addEventListener('click', function(e) {
         if (!played || inHearingMode) return;
+        if (Date.now() - launchTime < 600) return; // 起動のクリックによる誤スキップ防止
         if (vid.ended || vid.paused) return;
         if (corner.contains(e.target)) return;
         if (e.target.closest && e.target.closest('.tabs-wrap')) return;
