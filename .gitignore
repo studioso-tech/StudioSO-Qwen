@@ -1,6 +1,7 @@
 .firebase/
 .claude/
 node_modules/
+cloudflare-worker/.wrangler/
 
 # APIキー（露出しないよう管理）
 public/consultation/config.js
