@@ -250,7 +250,7 @@
       </div>
       <div id="m-input-area" class="m-input-area hidden">
         <div class="p-chat__msgs" id="m-chat-messages"></div>
-        <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">準備シートを作成する</button>
+        <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
         <div class="m-input-row">
           <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。"></textarea>
           <button id="m-voice-btn" class="m-voice-btn" type="button" aria-label="音声入力">
@@ -274,7 +274,7 @@
           <span class="msg__av">S.O</span>
           <div class="msg__tx"><em>入力中…</em></div>
         </div>
-        <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">準備シートを作成する</button>
+        <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
         <form id="chat-form" class="p-chat__bar">
           <textarea id="chat-input" placeholder="お書き物をご自由にお書きください…" rows="1"></textarea>
           <button type="button" id="voice-btn" aria-label="音声入力" title="音声で入力">
@@ -342,9 +342,9 @@
   </footer>
 
   <!-- 準備シートモーダル -->
-  <div id="sheet-modal" class="hidden" role="dialog" aria-label="対話下準備シート">
+  <div id="sheet-modal" class="hidden" role="dialog" aria-label="ご相談内容の確認">
     <div class="sheet-box">
-      <h3>対話下準備シート</h3>
+      <h3>ご相談内容の確認</h3>
       <div id="sheet-content"></div>
       <div class="sheet-actions">
         <button id="sheet-copy-btn" onclick="copySheetToClipboard()">テキストをコピー</button>

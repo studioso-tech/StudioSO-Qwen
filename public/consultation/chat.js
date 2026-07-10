@@ -130,7 +130,7 @@ function showCreateSheetButton() {
 function suggestCreateSheet() {
   getCreateSheetButtons().forEach(btn => {
     btn.classList.add('suggest');
-    btn.textContent = '準備シートを作成できます →';
+    btn.textContent = 'そろそろ相談を終えられますか？ →';
   });
 }
 
@@ -138,7 +138,7 @@ function unsuggestCreateSheet() {
   if (hearingComplete) return;
   getCreateSheetButtons().forEach(btn => {
     btn.classList.remove('suggest');
-    btn.textContent = '準備シートを作成する';
+    btn.textContent = '相談を終える';
   });
 }
 
@@ -155,7 +155,7 @@ async function notifyAdmin(analysis) {
     const subject = `【至急対応】${missingContact ? '⚠️電話番号未取得／' : ''}アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
     const text = generatePreparationSheetText(analysis, messages);
     await sendCheatSheetNotification(subject, text);
-    showVoiceToast('カンニングシートを管理人へ自動送信しました ✓', 3500, 'info');
+    showVoiceToast('ご相談内容を担当者へお送りしました ✓', 3500, 'info');
   } catch (e) {
     console.warn('管理人への自動通知に失敗:', e.message);
     showVoiceToast('自動送信に失敗しました。「テキストをコピー」から手動で共有してください。', 4500);
@@ -215,7 +215,7 @@ function appendSummaryBubble(analysis) {
       <span class="summary-meta">${escHtml(analysis.industryLabel)} / ${escHtml(analysis.levelLabel)}</span>
     </div>
     <p>${escHtml(analysis.summaryMessage)}</p>
-    <button class="show-sheet-link" onclick="showPreparationSheet()">準備シートを見る →</button>
+    <button class="show-sheet-link" onclick="showPreparationSheet()">ご相談内容を確認する →</button>
   `;
 
   // 既存の要約バブルがあれば新規追加せず内容だけ更新（会話継続で内容が育つ）

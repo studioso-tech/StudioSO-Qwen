@@ -40,7 +40,7 @@ export function generatePreparationSheet(analysis, messages) {
   <div style="padding:16px 20px;background:${categoryColor};display:flex;justify-content:space-between;align-items:center;">
     <div>
       <p style="color:rgba(255,255,255,0.75);font-size:11px;margin-bottom:4px;">Studio S.O 相談窓口</p>
-      <h2 style="color:#fff;font-size:16px;font-weight:700;">対話下準備シート（カンニングシート）</h2>
+      <h2 style="color:#fff;font-size:16px;font-weight:700;">ご相談内容のまとめ</h2>
     </div>
     <div style="text-align:right;">
       <p style="color:rgba(255,255,255,0.75);font-size:11px;">${escapeHtml(dateStr)}</p>
@@ -107,7 +107,7 @@ export function generatePreparationSheetText(analysis, messages) {
   const nameLine = nameParts.length ? nameParts.join('　') : '（お名前・御社名は未取得）';
   const phoneLine = hasPhone ? analysis.contactPhone : '⚠️ 未取得（必須）：電話番号を別途ご確認ください';
   const emailLine = analysis.contactEmail ? `\nメール　：${analysis.contactEmail}` : '';
-  return `ーーー 🤖 Qwen作成：カンニングシート ーーー
+  return `ーーー Studio S.O ご相談内容のまとめ ーーー
 生成日時：${dateStr}
 
 ■ ご連絡先：
