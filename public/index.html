@@ -941,7 +941,8 @@
         try {
           var voices = window.speechSynthesis.getVoices();
           if (!voices || !voices.length) return null;
-          var priority = ['Kyoko','Haruka','Nanami','Ayumi','O-Ren','Otoya'];
+          /* 高品質なものから優先（macOS/Neural系→Chrome→旧世代Windows SAPI の順） */
+          var priority = ['Kyoko','O-Ren','Otoya','Nanami','Google 日本語','Sayaka','Haruka','Ayumi'];
           var jp = voices.filter(function(v){ return /ja(-|_)?JP/i.test(v.lang) || v.lang === 'ja'; });
           for (var i = 0; i < priority.length; i++) {
             var m = jp.find(function(v){ return v.name.indexOf(priority[i]) >= 0; });
@@ -968,8 +969,8 @@
             window.speechSynthesis.cancel();
             var utter = new SpeechSynthesisUtterance(text);
             utter.lang  = 'ja-JP';
-            utter.rate  = 0.95;
-            utter.pitch = 1.15;  /* 女性ボイス調 */
+            utter.rate  = 0.92;  /* 挨拶音声（Gemini TTS）の落ち着いたテンポに近づける */
+            utter.pitch = 1.08;  /* 女性ボイス調。上げすぎると旧世代SAPI音声で機械的に聞こえるため抑えめに */
             var v = pickJpFemaleVoice();
             if (v) utter.voice = v;
             window.speechSynthesis.speak(utter);
