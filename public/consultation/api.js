@@ -9,7 +9,7 @@ import { QWEN_API_KEY, NOTIFY_SECRET } from './config.js';
 // Cloudflare Worker プロキシ経由で Qwen Cloud API を呼び出す
 const QWEN_API_URL = 'https://qwen-proxy.studioso.workers.dev/';
 const NOTIFY_URL = 'https://qwen-proxy.studioso.workers.dev/notify';
-export const QWEN_MODEL = 'qwen-max';
+export const QWEN_MODEL = 'qwen3.7-max'; // Thinking Mode対応（Cloudflare Worker側でenable_thinking:trueを付与）
 const ANTHROPIC_VERSION = '2023-06-01';
 
 // 互換性のため既存名も維持
@@ -134,7 +134,7 @@ export async function sendChatMessage(messages, apiKey, systemPrompt = '') {
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 512,
+      max_tokens: 2000, // Thinking Modeの思考トークンもここに含まれるため、512では応答が切れる
       system: systemPrompt || buildChatSystemPrompt(),
       messages,
     },
@@ -154,7 +154,7 @@ export async function classifyConversation(messages, apiKey) {
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 512,
+      max_tokens: 1500, // Thinking Modeの思考トークンもここに含まれるため、512では応答が切れる
       system: CLASSIFICATION_SYSTEM_PROMPT,
       messages: analysisMessages,
     },
@@ -193,7 +193,7 @@ ${dictionaryText}
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 256,
+      max_tokens: 1200, // Thinking Modeの思考トークンもここに含まれるため、256では応答が切れる
       system: summaryPrompt,
       messages: [{ role: 'user', content: formatMessagesForAnalysis(messages) }],
     },
