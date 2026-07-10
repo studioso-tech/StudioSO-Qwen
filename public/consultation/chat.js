@@ -490,14 +490,15 @@ function bindVoice(btn, input) {
   let isRecording = false;
   let baseText = '';
 
-  // continuousモードは自分では終了しないため、無音が一定時間続いたら自動で
-  // rec.stop() する（＝入力の終わりを判定する）。新しい結果が来るたびに延長する。
+  // continuousモードは自分では終了しないため、無音が5秒続いたら自動で
+  // 認識を終了し、そのまま送信する。新しい結果が来るたびに延長する。
   let silenceTimer = null;
   function armSilenceTimer() {
     if (silenceTimer) clearTimeout(silenceTimer);
     silenceTimer = setTimeout(() => {
       try { rec.stop(); } catch (e) {}
-    }, 2500);
+      handleSend();
+    }, 5000);
   }
   function disarmSilenceTimer() {
     if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
@@ -519,7 +520,7 @@ function bindVoice(btn, input) {
   rec.onstart = () => {
     isRecording = true;
     btn.classList.add('recording');
-    showVoiceToast('マイクに向かってお話しください…', 2000, 'info');
+    showVoiceToast('マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
     if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
     armSilenceTimer();
   };

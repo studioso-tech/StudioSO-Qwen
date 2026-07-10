@@ -787,12 +787,25 @@
       var isRecording = false;
       var baseText = '';
 
+      function autoSubmitFromVoice() {
+        var text = ta.value.trim();
+        if (!text) return;
+        var chatInput = document.getElementById('chat-input');
+        var chatForm = document.getElementById('chat-form');
+        if (!chatInput || !chatForm) return;
+        chatInput.value = text;
+        ta.value = '';
+        chatForm.dispatchEvent(new Event('submit', { cancelable: true }));
+      }
+
+      // 無音が5秒続いたら自動で認識を終了し、そのまま送信する。
       var silenceTimer = null;
       function armSilenceTimer() {
         if (silenceTimer) clearTimeout(silenceTimer);
         silenceTimer = setTimeout(function() {
           try { rec.stop(); } catch (e) {}
-        }, 2500);
+          autoSubmitFromVoice();
+        }, 5000);
       }
       function disarmSilenceTimer() {
         if (silenceTimer) { clearTimeout(silenceTimer); silenceTimer = null; }
@@ -814,7 +827,7 @@
       rec.onstart = function() {
         isRecording = true;
         btn.classList.add('recording');
-        showMobileVoiceToast('マイクに向かってお話しください…', 2000, 'info');
+        showMobileVoiceToast('マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
         if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
         armSilenceTimer();
       };
