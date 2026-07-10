@@ -300,6 +300,20 @@ function askForContactInfo() {
       if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
     } catch (e) {}
   }, 200);
+  setTimeout(explainHowToEnd, 4200);
+}
+
+/* ヒヤリングの終わり方も、開始時点であらかじめ案内しておく。
+   （終了ボタンの存在に気づかず、話し終えた後も迷わせてしまうのを防ぐため） */
+function explainHowToEnd() {
+  const msg = 'ご相談内容がひと通り伺えましたら、画面に「相談を終える」ボタンが表示されます。よろしければそちらを押していただくと、ここまでの内容を担当者へお送りしてご相談を終了できます。';
+  appendMessage('ai', msg);
+  setTimeout(function() {
+    try {
+      if (typeof window.avatarNod === 'function') window.avatarNod();
+      if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
+    } catch (e) {}
+  }, 200);
 }
 window.askForContactInfo = askForContactInfo;
 
