@@ -102,7 +102,9 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     confidence:         classification?.confidence ?? 0.5,
     recommendedApproach: classification?.recommended_approach || '',
     contactName:        classification?.contact_name || '',
-    contactMethod:      classification?.contact_method || '',
+    contactPerson:      classification?.contact_person || '',
+    contactPhone:       classification?.contact_phone || '',
+    contactEmail:       classification?.contact_email || '',
     summaryMessage,
     dictionaryText:     dictText,
   };

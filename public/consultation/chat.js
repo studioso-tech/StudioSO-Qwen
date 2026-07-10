@@ -151,8 +151,8 @@ function markHearingComplete() {
    （Workspace Studio + Gemini + Gmail の代わりに Cloudflare Worker + Qwen が担う） */
 async function notifyAdmin(analysis) {
   try {
-    const missingContact = !(analysis.contactName || analysis.contactMethod);
-    const subject = `【至急対応】${missingContact ? '⚠️連絡先未取得／' : ''}アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
+    const missingContact = !analysis.contactPhone;
+    const subject = `【至急対応】${missingContact ? '⚠️電話番号未取得／' : ''}アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
     const text = generatePreparationSheetText(analysis, messages);
     await sendCheatSheetNotification(subject, text);
     showVoiceToast('カンニングシートを管理人へ自動送信しました ✓', 3500, 'info');
@@ -285,8 +285,23 @@ function showWelcome() {
         if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
       } catch (e) {}
     }, 200);
+    setTimeout(askForContactInfo, 1600);
   }
 }
+
+/* 管理人が折り返し連絡できるよう、会話の最初に一度だけご連絡先をお伺いする。
+   （3〜4往復後の要約直前だと、途中で離脱した顧客の連絡先が一切取れないため） */
+function askForContactInfo() {
+  const msg = 'まず、担当者からご連絡できるよう、御社名・ご担当者様のお名前（個人のお客様はお名前のみで結構です）と、お電話番号を教えていただけますか。お電話番号は必須でお願いしております。メールアドレスもございましたら、合わせてお願いいたします。';
+  appendMessage('ai', msg);
+  setTimeout(function() {
+    try {
+      if (typeof window.avatarNod === 'function') window.avatarNod();
+      if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
+    } catch (e) {}
+  }, 200);
+}
+window.askForContactInfo = askForContactInfo;
 
 // 独自音声ファイルの再生（アバター動画の動きと連動・自動再生ブロック回避設計）
 export function playAvatarAudio(audioUrl, onEnded) {

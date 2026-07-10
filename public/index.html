@@ -1116,6 +1116,11 @@
         if (typeof switchTab === 'function') switchTab('g');
         hint.classList.remove('av-hint-show');
         armNudgeTimer(); /* ヒヤリング開始と同時に15秒タイマー起動 */
+
+        // ヒヤリング開始の最初の一言として、必ず一度だけご連絡先をお伺いする
+        setTimeout(function() {
+          if (typeof window.askForContactInfo === 'function') window.askForContactInfo();
+        }, 500);
       }
 
       /* イントロ動画終了 → ヒヤリングモードへ */
