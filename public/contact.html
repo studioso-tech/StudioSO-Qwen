@@ -578,6 +578,32 @@
       };
       window.avatarSpeak = function(text) {
         flashFeedback('av-speak', 1400);
+
+        var motionStopped = false;
+        var stopMotion = function() {
+          if (motionStopped) return;
+          motionStopped = true;
+          try {
+            vid.pause();
+            vid.loop = false;
+            vid.playbackRate = 1.0;
+            // 静止画（待機・呼吸状態のCut_9）に戻して300ms再生した位置で一時停止
+            vid.src = IDLE_SRC;
+            vid.play().then(function() {
+              setTimeout(function() { try { vid.pause(); } catch (e) {} }, 300);
+            }).catch(function() {});
+          } catch(e){}
+        };
+
+        try {
+          // 話す動き（口パク・手振り）のある動画に切り替えてループ再生（ヒーロー画面と同じ演出）
+          vid.src = 'avatar/Cut_10_jp_final.mp4';
+          vid.loop = true;
+          vid.playbackRate = 0.85;  /* 自然な話し方の速度に調整 */
+          vid.muted = true;
+          vid.play().catch(function() {});
+        } catch (e) {}
+
         if (text && window.speechSynthesis && !window.__soTtsDisabled) {
           try {
             window.speechSynthesis.cancel();
@@ -587,43 +613,28 @@
             utter.pitch = 1.08;  /* 女性ボイス調。上げすぎると旧世代SAPI音声で機械的に聞こえるため抑えめに */
             var v = pickJpFemaleVoice();
             if (v) utter.voice = v;
+            // 読み上げの実際の終了（onend/onerror）に合わせて動きを止める。
+            // Thinking Mode導入後は応答文が長く、読み上げも10秒を超えることが
+            // 珍しくないため、固定タイムアウトではなく実イベントを使う。
+            utter.onend = stopMotion;
+            utter.onerror = stopMotion;
             window.speechSynthesis.speak(utter);
-          } catch (e) {}
-        }
-        try {
-          // 話す動き（口パク・手振り）のある動画に切り替えてループ再生（ヒーロー画面と同じ演出）
-          vid.src = 'avatar/Cut_10_jp_final.mp4';
-          vid.loop = true;
-          vid.playbackRate = 0.85;  /* 自然な話し方の速度に調整 */
-          vid.muted = true;
-          vid.play().catch(function() {});
-          var stopMotion = function() {
-            try {
-              vid.pause();
-              vid.loop = false;
-              vid.playbackRate = 1.0;
-              // 静止画（待機・呼吸状態のCut_9）に戻して300ms再生した位置で一時停止
-              vid.src = IDLE_SRC;
-              vid.play().then(function() {
-                setTimeout(function() { try { vid.pause(); } catch (e) {} }, 300);
-              }).catch(function() {});
-            } catch(e){}
-          };
-          if (window.speechSynthesis && !window.__soTtsDisabled && text) {
-            var checkInterval = setInterval(function() {
-              if (!window.speechSynthesis.speaking) { clearInterval(checkInterval); stopMotion(); }
-            }, 500);
-            setTimeout(function() { clearInterval(checkInterval); stopMotion(); }, 10000);
-          } else {
-            setTimeout(stopMotion, 3000);
+          } catch (e) {
+            stopMotion();
           }
-        } catch (e) {}
+        } else {
+          setTimeout(stopMotion, 3000);
+        }
+
+        // onend が万一発火しない場合の保険（文字数から概算、最低15秒）
+        var fallbackMs = Math.max(15000, (text ? text.length : 0) * 220);
+        setTimeout(stopMotion, fallbackMs);
       };
 
       /* 15秒 Nudge：常時起動 */
       var nudgeTimer = null;
       var NUDGE_MESSAGES = [
-        'お困りごとをお聞かせください。',
+        '気になっていることを、そのままお聞かせください。',
         'マイクからの音声入力もできますよ。',
         'どんな些細なことでも大丈夫です。',
         '思い浮かんだキーワードだけでも構いません。'

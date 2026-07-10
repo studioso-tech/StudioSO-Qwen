@@ -41,13 +41,19 @@ function bindEvents() {
 
 // ── 送信処理 ─────────────────────────────────────────────────────────
 
+let sendInFlight = false;
+
 async function handleSend() {
+  if (sendInFlight) return; // 返信待ち中の二重送信（例：モバイル欄からの連続送信）を防ぐ
   const input = document.getElementById('chat-input');
   const text = input?.value.trim();
   if (!text) return;
 
+  sendInFlight = true;
   input.value = '';
   input.disabled = true;
+  const mInp = document.getElementById('m-inp');
+  if (mInp) mInp.disabled = true;
 
   appendMessage('user', text);
   messages.push({ role: 'user', content: text });
@@ -88,7 +94,9 @@ async function handleSend() {
     appendError(err.message || 'エラーが発生しました。');
   } finally {
     showTyping(false);
+    sendInFlight = false;
     input.disabled = false;
+    if (mInp) mInp.disabled = false;
     input.focus({ preventScroll: true });
   }
 }
