@@ -573,11 +573,23 @@
           } catch (e) {}
         }
         try {
+          // 話す動き（口パク・手振り）のある動画に切り替えてループ再生（ヒーロー画面と同じ演出）
+          vid.src = 'avatar/Cut_10_jp_final.mp4';
           vid.loop = true;
-          vid.playbackRate = 0.6;  /* 動きを穏やかに（集中を妨げない） */
+          vid.playbackRate = 0.85;  /* 自然な話し方の速度に調整 */
+          vid.muted = true;
           vid.play().catch(function() {});
           var stopMotion = function() {
-            try { vid.pause(); vid.loop = false; vid.playbackRate = 1.0; } catch(e){}
+            try {
+              vid.pause();
+              vid.loop = false;
+              vid.playbackRate = 1.0;
+              // 静止画（待機・呼吸状態のCut_9）に戻して300ms再生した位置で一時停止
+              vid.src = IDLE_SRC;
+              vid.play().then(function() {
+                setTimeout(function() { try { vid.pause(); } catch (e) {} }, 300);
+              }).catch(function() {});
+            } catch(e){}
           };
           if (window.speechSynthesis && !window.__soTtsDisabled && text) {
             var checkInterval = setInterval(function() {
