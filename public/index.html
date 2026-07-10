@@ -970,7 +970,7 @@
             window.speechSynthesis.cancel();
             var utter = new SpeechSynthesisUtterance(text);
             utter.lang  = 'ja-JP';
-            utter.rate  = 0.92;  /* 挨拶音声（Gemini TTS）の落ち着いたテンポに近づける */
+            utter.rate  = 1.08;  /* 間延びしないよう、やや速めのテンポ */
             utter.pitch = 1.08;  /* 女性ボイス調。上げすぎると旧世代SAPI音声で機械的に聞こえるため抑えめに */
             var v = pickJpFemaleVoice();
             if (v) utter.voice = v;
