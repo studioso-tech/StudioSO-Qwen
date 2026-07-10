@@ -247,6 +247,10 @@
 
     /* 準備シートモーダル */
     #sheet-modal { position: fixed; inset: 0; z-index: 6000; display: flex; align-items: center; justify-content: center; background: rgba(13,34,51,0.55); backdrop-filter: blur(4px); }
+    /* #sheet-modal自身のdisplay:flexはIDセレクタなのでTailwindの.hidden（クラスセレクタ、
+       !important無し）より詳細度が高く、.hiddenを付けても隠れなかった（常時表示バグの原因）。
+       同じ詳細度勝負を避けるため、IDとクラスを組み合わせて確実に上書きする。 */
+    #sheet-modal.hidden { display: none; }
     #sheet-modal .sheet-box { width: 92%; max-width: 560px; max-height: 82vh; overflow-y: auto; background: #fff; border-radius: 10px; padding: 24px; }
     #sheet-modal h3 { font-family: 'Noto Sans JP',sans-serif; font-size: 15px; font-weight: 700; color: #1B4965; margin-bottom: 14px; }
     #sheet-content { font-family: 'Noto Sans JP',sans-serif; font-size: 12px; line-height: 1.9; color: #2F3E46; white-space: pre-wrap; }

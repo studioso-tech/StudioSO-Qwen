@@ -151,7 +151,8 @@ function markHearingComplete() {
    （Workspace Studio + Gemini + Gmail の代わりに Cloudflare Worker + Qwen が担う） */
 async function notifyAdmin(analysis) {
   try {
-    const subject = `【至急対応】アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
+    const missingContact = !(analysis.contactName || analysis.contactMethod);
+    const subject = `【至急対応】${missingContact ? '⚠️連絡先未取得／' : ''}アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
     const text = generatePreparationSheetText(analysis, messages);
     await sendCheatSheetNotification(subject, text);
     showVoiceToast('カンニングシートを管理人へ自動送信しました ✓', 3500, 'info');

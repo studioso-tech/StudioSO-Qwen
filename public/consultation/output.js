@@ -29,6 +29,11 @@ export function generatePreparationSheet(analysis, messages) {
 
   const categoryColor = { A:'#1B4965', T:'#2d6a4f', C:'#b5451b', M:'#6b3fa0' }[analysis.category] || '#1B4965';
 
+  const hasContact = !!(analysis.contactName || analysis.contactMethod);
+  const contactLine = hasContact
+    ? [analysis.contactName, analysis.contactMethod].filter(Boolean).join(' ／ ')
+    : '⚠️ 未取得：会話の中で連絡先を確認できませんでした。折り返し方法を別途ご確認ください。';
+
   return `
 <div style="font-family:'Noto Sans JP',sans-serif;border-radius:12px;overflow:hidden;border:1px solid #E0F2F7;background:#fff;">
   <div style="padding:16px 20px;background:${categoryColor};display:flex;justify-content:space-between;align-items:center;">
@@ -45,6 +50,10 @@ export function generatePreparationSheet(analysis, messages) {
     ${sheetCell('事業カテゴリ', analysis.categoryLabel || analysis.category)}
     ${sheetCell('推定業界', analysis.industryLabel || analysis.industry)}
     ${sheetCell('課題レベル', analysis.levelLabel || `レベル${analysis.level}`)}
+  </div>
+  <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;background:${hasContact ? '#f0fdf4' : '#fef2f2'};">
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">ご連絡先</p>
+    <p style="color:${hasContact ? '#166534' : '#b91c1c'};font-weight:700;">${escapeHtml(contactLine)}</p>
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
     <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">顧客のプロファイル（主要な悩み）</p>
@@ -88,8 +97,15 @@ export function generatePreparationSheetText(analysis, messages) {
   const now = new Date();
   const dateStr = now.toLocaleDateString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
   const userMessages = messages.filter(m => m.role === 'user').map((m, i) => ` ${i+1}. ${m.content}`).join('\n');
+  const hasContact = !!(analysis.contactName || analysis.contactMethod);
+  const contactLine = hasContact
+    ? [analysis.contactName, analysis.contactMethod].filter(Boolean).join(' ／ ')
+    : '⚠️ 未取得：会話の中で連絡先を確認できませんでした。折り返し方法を別途ご確認ください。';
   return `ーーー 🤖 Qwen作成：カンニングシート ーーー
 生成日時：${dateStr}
+
+■ ご連絡先：
+${contactLine}
 
 ■ 顧客のプロファイル：
 ・事業カテゴリ　　　：${analysis.categoryLabel}（${analysis.category}）
