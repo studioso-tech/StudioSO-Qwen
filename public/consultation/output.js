@@ -70,6 +70,10 @@ export function generatePreparationSheet(analysis, messages) {
     <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">人間の管理人へのアドバイス（対応のツボ）</p>
     <p style="color:#1B4965;font-weight:600;">${escapeHtml(analysis.recommendedApproach || '（対話を深めて確認してください）')}</p>
   </div>
+  ${analysis.openItems ? `<div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;background:#fffbeb;">
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">⚠️ 未確認事項（対応時にご確認ください）</p>
+    <p style="color:#92400e;font-weight:600;">${escapeHtml(analysis.openItems)}</p>
+  </div>` : ''}
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
     <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:8px;">ユーザー発言（全件）</p>
     <ul style="list-style:none;padding:0;margin:0;font-size:13px;color:#2F3E46;">
@@ -107,6 +111,9 @@ export function generatePreparationSheetText(analysis, messages) {
   const nameLine = nameParts.length ? nameParts.join('　') : '（お名前・御社名は未取得）';
   const phoneLine = hasPhone ? analysis.contactPhone : '⚠️ 未取得（必須）：電話番号を別途ご確認ください';
   const emailLine = analysis.contactEmail ? `\nメール　：${analysis.contactEmail}` : '';
+  const openItemsBlock = analysis.openItems
+    ? `\n\n⚠️ 未確認事項（対応時にご確認ください）：\n${analysis.openItems}`
+    : '';
   return `ーーー Studio S.O ご相談内容のまとめ ーーー
 生成日時：${dateStr}
 
@@ -121,7 +128,7 @@ ${analysis.customerProfile || analysis.mainConcern || '（分析中）'}
 ${analysis.summaryMessage || '主要な悩み：' + (analysis.mainConcern || '（分析中）')}
 
 ■ 人間の管理人へのアドバイス（対応のツボ）：
-${analysis.recommendedApproach}
+${analysis.recommendedApproach}${openItemsBlock}
 
 ――― 参考情報 ―――
 事業カテゴリ　　　：${analysis.categoryLabel}（${analysis.category}）

@@ -103,6 +103,7 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     confidence:         classification?.confidence ?? 0.5,
     readiness:          classification?.readiness ?? 0,
     recommendedApproach: classification?.recommended_approach || '',
+    openItems:          classification?.open_items || '',
     contactName:        classification?.contact_name || '',
     contactPerson:      classification?.contact_person || '',
     contactPhone:       classification?.contact_phone || '',
