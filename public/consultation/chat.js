@@ -97,13 +97,14 @@ async function handleSend() {
 
   /* ハイブリッド完了フロー（入力欄をブロックしないバックグラウンド処理）：
      3往復以降「相談を終える」ボタンを表示（手動トリガー）。
-     4往復以降は確信度を監視し、0.8以上ならボタン自体で提案する（自律トリガー）。
-     実際の要約生成（summaryMessage）はボタン押下時のみ発火する。 */
+     4往復以降はヒアリングの深まり具合（readiness）を監視し、0.8以上ならボタン自体で提案する（自律トリガー）。
+     categoryやindustryの分類確信度（confidence）とは別物 —— 話題が早々に特定できても、
+     ヒアリングとして浅いままなら提案しない。実際の要約生成（summaryMessage）はボタン押下時のみ発火する。 */
   if (isSummaryTiming(userTurnCount) && !hearingComplete) {
     showCreateSheetButton();
     try {
       await runAnalysis({ forceSummary: false });
-      if (isConfidenceSuggestTiming(userTurnCount) && (analysisResult?.confidence ?? 0) >= 0.8) {
+      if (isConfidenceSuggestTiming(userTurnCount) && (analysisResult?.readiness ?? 0) >= 0.8) {
         suggestCreateSheet();
       } else {
         unsuggestCreateSheet();

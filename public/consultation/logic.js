@@ -101,6 +101,7 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     customerProfile:    classification?.customer_profile || '',
     mainConcern:        classification?.main_concern || '',
     confidence:         classification?.confidence ?? 0.5,
+    readiness:          classification?.readiness ?? 0,
     recommendedApproach: classification?.recommended_approach || '',
     contactName:        classification?.contact_name || '',
     contactPerson:      classification?.contact_person || '',

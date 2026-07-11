@@ -118,21 +118,25 @@ const CLASSIFICATION_SYSTEM_PROMPT = `あなたは会話分析の専門家です
 
 5. main_concern: ユーザーの主要な悩み（原文の言葉をそのまま短くまとめて）
 
-6. confidence: 判定の確信度（0.0〜1.0）
+6. confidence: category・industryの判定そのものへの確信度（0.0〜1.0）。あくまで「分類が合っているか」の確信度であり、後述のreadinessとは別物。
 
-7. recommended_approach: 管理人が会話ログを読み返さずにそのまま動けるレベルの、具体的な初回対応方針（1〜2文、現場の言葉で）。
+7. readiness: ヒアリングとして十分深掘りでき、そろそろ相談を終えてよいと判断できる度合い（0.0〜1.0）。
+   事業カテゴリや業界が分かっただけでは高くしないこと。具体的な悩みの内容・その影響・背景など、人間の管理人がこの後の対応を組み立てられるだけの情報が集まって初めて0.8以上とする。
+   会話がまだ1〜2往復で表面的な話題しか分かっていない場合は0.3〜0.5程度に留める。「運送会社です、配送記録が大変です」のような一言だけの情報でconfidenceが高くても、readinessは低いままにする。
+
+8. recommended_approach: 管理人が会話ログを読み返さずにそのまま動けるレベルの、具体的な初回対応方針（1〜2文、現場の言葉で）。
    「〇〇を分かりやすく説明する」のような一般論ではなく、「まずは資料Aを送付し、価格帯を先に伝える」のように、次に取るべき行動が分かる書き方にする。
 
-8. contact_name: 会話の中で判明した御社名、または個人のお客様のお名前。判明していなければ空文字列 ""
+9. contact_name: 会話の中で判明した御社名、または個人のお客様のお名前。判明していなければ空文字列 ""
 
-9. contact_person: 会話の中で判明したご担当者様のお名前（法人の場合のみ。個人のお客様の場合や不明な場合は空文字列 ""）
+10. contact_person: 会話の中で判明したご担当者様のお名前（法人の場合のみ。個人のお客様の場合や不明な場合は空文字列 ""）
 
-10. contact_phone: 会話の中で判明した電話番号（原文のまま）。判明していなければ空文字列 ""
+11. contact_phone: 会話の中で判明した電話番号（原文のまま）。判明していなければ空文字列 ""
 
-11. contact_email: 会話の中で判明したメールアドレス（原文のまま）。判明していなければ空文字列 ""
+12. contact_email: 会話の中で判明したメールアドレス（原文のまま）。判明していなければ空文字列 ""
 
 必ずJSON形式のみで返してください。説明文は不要です。
-例：{"category":"A","industry":"manufacturing","level":0,"customer_profile":"地方の運送会社の経営者、ITに苦手意識あり。","main_concern":"日報の手書き作業が大変","confidence":0.85,"recommended_approach":"まずは電話で日報の現物を1枚見せてもらい、手書き項目のうち3つに絞ってデジタル化を提案する。","contact_name":"田中運送","contact_person":"田中様","contact_phone":"090-1234-5678","contact_email":"tanaka@example.com"}`;
+例：{"category":"A","industry":"manufacturing","level":0,"customer_profile":"地方の運送会社の経営者、ITに苦手意識あり。","main_concern":"日報の手書き作業が大変","confidence":0.85,"readiness":0.4,"recommended_approach":"まずは電話で日報の現物を1枚見せてもらい、手書き項目のうち3つに絞ってデジタル化を提案する。","contact_name":"田中運送","contact_person":"田中様","contact_phone":"090-1234-5678","contact_email":"tanaka@example.com"}`;
 
 export async function sendChatMessage(messages, apiKey, systemPrompt = '') {
   const response = await fetchClaude(
@@ -191,7 +195,9 @@ ${dictionaryText}
 ・「こういうお悩みということですね」から始める
 ・150字以内
 ・現場の言葉を使い、専門用語は辞書を参照して置き換える
-・最後に「いくつか確認させてください」か「ご紹介できることがあります」で締める
+・これはヒアリング完了後の締めの要約であり、この後AIからの追加質問は行われない。
+  そのため「いくつか確認させてください」のような、まだ質問が続くと誤解される表現は使わないこと。
+  「担当の者からご連絡いたします」「ご紹介できることがあります」のように、対応が引き継がれることが伝わる言葉で締める
 ・専門用語（ＡＩ、DX等）は絶対に使わない`;
 
   const response = await fetchClaude(
