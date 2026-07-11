@@ -9,7 +9,7 @@ import { QWEN_API_KEY, NOTIFY_SECRET } from './config.js';
 // Cloudflare Worker プロキシ経由で Qwen Cloud API を呼び出す
 const QWEN_API_URL = 'https://qwen-proxy.studioso.workers.dev/';
 const NOTIFY_URL = 'https://qwen-proxy.studioso.workers.dev/notify';
-export const QWEN_MODEL = 'qwen3.7-max'; // Thinking Mode対応（Cloudflare Worker側でenable_thinking:trueを付与）
+export const QWEN_MODEL = 'qwen-max'; // Thinking Mode（qwen3.7-max）は応答が10〜15秒以上かかり体感が悪いため、通常モデルに戻した
 const ANTHROPIC_VERSION = '2023-06-01';
 
 // 互換性のため既存名も維持
@@ -113,28 +113,32 @@ const CLASSIFICATION_SYSTEM_PROMPT = `あなたは会話分析の専門家です
 - 2: 具体的な導入を検討中
 - 3: 高度な設計・哲学レベルの議論を求める
 
-4. main_concern: ユーザーの主要な悩み（原文の言葉をそのまま短くまとめて）
+4. customer_profile: 管理人が一目で「どんな人物か」を把握できる一文（15〜30字程度）。役職・立場や、対応上知っておくと良い様子を端的に。
+   例：「地方企業の経営者、ITに苦手意識あり。」「京都旅行を計画中の共働き夫婦。」「家庭用の発酵レシピを探している方。」
 
-5. confidence: 判定の確信度（0.0〜1.0）
+5. main_concern: ユーザーの主要な悩み（原文の言葉をそのまま短くまとめて）
 
-6. recommended_approach: 初回対応方針（1〜2文、現場の言葉で）
+6. confidence: 判定の確信度（0.0〜1.0）
 
-7. contact_name: 会話の中で判明した御社名、または個人のお客様のお名前。判明していなければ空文字列 ""
+7. recommended_approach: 管理人が会話ログを読み返さずにそのまま動けるレベルの、具体的な初回対応方針（1〜2文、現場の言葉で）。
+   「〇〇を分かりやすく説明する」のような一般論ではなく、「まずは資料Aを送付し、価格帯を先に伝える」のように、次に取るべき行動が分かる書き方にする。
 
-8. contact_person: 会話の中で判明したご担当者様のお名前（法人の場合のみ。個人のお客様の場合や不明な場合は空文字列 ""）
+8. contact_name: 会話の中で判明した御社名、または個人のお客様のお名前。判明していなければ空文字列 ""
 
-9. contact_phone: 会話の中で判明した電話番号（原文のまま）。判明していなければ空文字列 ""
+9. contact_person: 会話の中で判明したご担当者様のお名前（法人の場合のみ。個人のお客様の場合や不明な場合は空文字列 ""）
 
-10. contact_email: 会話の中で判明したメールアドレス（原文のまま）。判明していなければ空文字列 ""
+10. contact_phone: 会話の中で判明した電話番号（原文のまま）。判明していなければ空文字列 ""
+
+11. contact_email: 会話の中で判明したメールアドレス（原文のまま）。判明していなければ空文字列 ""
 
 必ずJSON形式のみで返してください。説明文は不要です。
-例：{"category":"A","industry":"manufacturing","level":0,"main_concern":"日報の手書き作業が大変","confidence":0.85,"recommended_approach":"手書き作業のデジタル化から始め、ベテランの経験をデータとして残す方法を提案する。","contact_name":"田中運送","contact_person":"田中様","contact_phone":"090-1234-5678","contact_email":"tanaka@example.com"}`;
+例：{"category":"A","industry":"manufacturing","level":0,"customer_profile":"地方の運送会社の経営者、ITに苦手意識あり。","main_concern":"日報の手書き作業が大変","confidence":0.85,"recommended_approach":"まずは電話で日報の現物を1枚見せてもらい、手書き項目のうち3つに絞ってデジタル化を提案する。","contact_name":"田中運送","contact_person":"田中様","contact_phone":"090-1234-5678","contact_email":"tanaka@example.com"}`;
 
 export async function sendChatMessage(messages, apiKey, systemPrompt = '') {
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 2000, // Thinking Modeの思考トークンもここに含まれるため、512では応答が切れる
+      max_tokens: 512,
       system: systemPrompt || buildChatSystemPrompt(),
       messages,
     },
@@ -154,7 +158,7 @@ export async function classifyConversation(messages, apiKey) {
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 1500, // Thinking Modeの思考トークンもここに含まれるため、512では応答が切れる
+      max_tokens: 512,
       system: CLASSIFICATION_SYSTEM_PROMPT,
       messages: analysisMessages,
     },
@@ -193,7 +197,7 @@ ${dictionaryText}
   const response = await fetchClaude(
     {
       model: CLAUDE_MODEL,
-      max_tokens: 1200, // Thinking Modeの思考トークンもここに含まれるため、256では応答が切れる
+      max_tokens: 256,
       system: summaryPrompt,
       messages: [{ role: 'user', content: formatMessagesForAnalysis(messages) }],
     },

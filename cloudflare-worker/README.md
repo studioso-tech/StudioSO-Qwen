@@ -5,7 +5,7 @@ the Studio S.O consultation frontend to **Alibaba Cloud DashScope (Model Studio)
 
 - **Live endpoint:** https://qwen-proxy.studioso.workers.dev/
 - **Upstream (Alibaba Cloud):** https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
-- **Model:** `qwen3.7-max` with Thinking Mode enabled (`enable_thinking: true`)
+- **Model:** `qwen-max`
 - **Source:** [`qwen-proxy.js`](./qwen-proxy.js)
 
 ## Why this exists
@@ -17,20 +17,18 @@ shape differs from Anthropic's. This Worker is the translation layer:
 
 ```
 Browser --(Anthropic-style request, x-api-key)--> qwen-proxy (Cloudflare)
-qwen-proxy --(OpenAI-compatible request, Bearer)--> Alibaba Cloud DashScope (qwen3.7-max, Thinking Mode)
+qwen-proxy --(OpenAI-compatible request, Bearer)--> Alibaba Cloud DashScope (qwen-max)
 qwen-proxy <--(OpenAI-compatible response)-- Alibaba Cloud DashScope
 Browser <--(Anthropic-style response)-- qwen-proxy
 ```
 
 ## Verification
 
-The request/response contract in `qwen-proxy.js` was first verified against the
-live deployment on 2026-07-08 via a direct PowerShell call (below, from the
-original `qwen-max` setup — kept as a historical record). The Worker was
-upgraded to `qwen3.7-max` with `enable_thinking: true` on 2026-07-11; the same
-`content[0].text` response shape applies, with the model's reasoning now
-arriving separately in DashScope's `reasoning_content` field (discarded by
-the Worker, not surfaced to the browser).
+The request/response contract in `qwen-proxy.js` was verified against the live
+deployment on 2026-07-08 via a direct PowerShell call. On 2026-07-11 the Worker
+was briefly upgraded to `qwen3.7-max` with `enable_thinking: true`, but reverted
+the same day — Thinking Mode added 10-15s of latency per reply, which read as
+sluggish in real conversation. Back on plain `qwen-max`.
 
 ```powershell
 $body = @{

@@ -98,6 +98,7 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     industryLabel:      INDUSTRY_LABELS[industry] || industry,
     level,
     levelLabel:         LEVEL_LABELS[level] || `レベル${level}`,
+    customerProfile:    classification?.customer_profile || '',
     mainConcern:        classification?.main_concern || '',
     confidence:         classification?.confidence ?? 0.5,
     recommendedApproach: classification?.recommended_approach || '',

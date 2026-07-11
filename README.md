@@ -103,9 +103,8 @@ The frontend is organized into four layers, each independently testable:
 
 ## Tech stack
 
-- **AI:** Alibaba Cloud DashScope, model `qwen3.7-max` with Thinking Mode enabled
-  (`enable_thinking: true`), called through an Anthropic-Messages-compatible
-  request shape (see `fetchClaude()` in `api.js`)
+- **AI:** Alibaba Cloud DashScope, model `qwen-max`, called through an
+  Anthropic-Messages-compatible request shape (see `fetchClaude()` in `api.js`)
 - **Edge proxy / automation:** Cloudflare Workers (`cloudflare-worker/qwen-proxy.js`) —
   translates the frontend's request format to DashScope's OpenAI-compatible API,
   and separately handles the confidence-gated admin-notify email via Resend

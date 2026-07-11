@@ -1,6 +1,6 @@
 # Studio S.O — Qwen Cloud ハッカソン提出用デモ動画 制作ガイド（StudioSO-Qwen版）v2
 
-このリポジトリ（StudioSO-Qwen）専用のデモ動画プランです。AIエンジンは **Alibaba Cloud DashScope の `qwen3.7-max`（Thinking Mode有効）** のみを使用します。管理人への自動配信も、本番版のGoogle Workspace Studio + Gemini + Gmailではなく、**Cloudflare Worker + Qwen3.7-Max + Resend** で実装済み・動作確認済みです（`POST /notify`）。
+このリポジトリ（StudioSO-Qwen）専用のデモ動画プランです。AIエンジンは **Alibaba Cloud DashScope の `qwen-max`** のみを使用します。管理人への自動配信も、本番版のGoogle Workspace Studio + Gemini + Gmailではなく、**Cloudflare Worker + Qwen-Max + Resend** で実装済み・動作確認済みです（`POST /notify`）。
 
 **v2の変更点**：前バージョンはカリナリーラボ1業種の深掘りに時間を割いていましたが、今回は「**このAIエージェントはAIコンサルタント専用ではなく、旅行・料理にも同じ仕組みで対応する**」という点を最も強く訴求する構成に変更しました。同じアバター・同じUIが、業種ごとに言葉遣いも掘り下げる観点もまったく変えて対応する様子を、3業種の対話を並べて見せることが今回のシナリオの核です。
 
@@ -10,7 +10,7 @@
 
 | 審査基準 | 配点 | 対応するシーン |
 |---|---|---|
-| 技術的深さ・エンジニアリング | 30% | シーン4（アーキテクチャ／Thinking Mode）、シーン3（確信度ゲート） |
+| 技術的深さ・エンジニアリング | 30% | シーン4（アーキテクチャ）、シーン3（確信度ゲート） |
 | イノベーション・AI創造性 | 30% | **シーン2（1エージェント・3業種の切り替え）**、脱・専門用語ローカル辞書 |
 | 課題の価値・インパクト | 25% | シーン1（オープニングの課題提起）、シーン3の連絡先先取り |
 | プレゼン・ドキュメント | 15% | 全体の構成・字幕・`docs/architecture.png` |
@@ -21,7 +21,6 @@
 * **目標時間**: 2分（120秒）
 * **デモ実演環境**: ローカルテスト環境 (`http://localhost:3001/`) または提出用サイト (`https://studioso-qwen.web.app/`)
 * **クライマックス**: 顧客との対話だけで完結させず、**実際に管理人の受信箱にメールが届く瞬間**を映すこと。ここが「Autopilot Agent（人間監督下の業務自動化）」を体現している証拠。
-* **⚠️ 収録上の注意（Thinking Mode）**: `qwen3.7-max`のThinking Modeにより、AIの1返信あたり実際には10〜15秒程度かかります。ライブでその待ち時間をそのまま流すと間延びするため、**各回答の「考えている間」は編集でタイムラプス（早送り）にする**ことを前提に台本を組んでいます。撮影自体はノーカットで長めに回し、編集で詰めてください。
 
 ---
 
@@ -37,7 +36,7 @@
 ### 2. 【核心】1エージェント・3業種の切り替え（12秒〜70秒）— Innovation 30%
 これが今回のシナリオで最も見せたい部分です。**同じアバター・同じチャットUI**のまま、話しかける内容によってAIの言葉遣いと掘り下げる観点がまったく変わることを、3つの短い対話を並べて見せます。編集では3つの対話を素早くカット割りし、ナレーションで繋ぎます。
 
-* **表示画面**: 同一のアバター画面上で、3つの異なる相談を順番に入力していく（それぞれ2〜3往復程度で十分。長い返信は編集でタイムラプス）
+* **表示画面**: 同一のアバター画面上で、3つの異なる相談を順番に入力していく（それぞれ2〜3往復程度で十分）
 
 * **② -A：AIコンサルティング（12秒〜30秒）**
   * 入力例：「毎日の配送記録を手書きしていて大変です」
@@ -80,9 +79,9 @@
 ### 5. アーキテクチャ（100秒〜113秒）— Technical Depth 30%
 * **表示画面**: スライド2（システム構成図 `docs/architecture.png`）＋ Alibaba Cloud利用証明（`docs/alibaba_cloud_proof.png`）
 * **英語スクリプト**:
-  > "Every reasoning step — dialogue, classification, summarization — runs on Alibaba Cloud's Qwen3.7-Max with Thinking Mode, called through a Cloudflare Worker that also handles the admin hand-off via Resend. One persona layer serves all three business lines, switching its local dictionary and tone by category — not three separate bots stitched together."
+  > "Every reasoning step — dialogue, classification, summarization — runs on Alibaba Cloud's Qwen-Max, called through a Cloudflare Worker that also handles the admin hand-off via Resend. One persona layer serves all three business lines, switching its local dictionary and tone by category — not three separate bots stitched together."
 * **日本語訳**:
-  > 「対話・分類・要約というすべての推論ステップは、Thinking Modeを有効にしたAlibaba CloudのQwen3.7-Maxで動いており、Cloudflare Worker経由で呼び出され、同じWorkerが管理人への配信もResend経由で担っています。1つの人格層が3つの事業すべてに対応し、カテゴリごとにローカル辞書とトーンを切り替えます──3つの別々のボットを繋ぎ合わせたものではありません。」
+  > 「対話・分類・要約というすべての推論ステップは、Alibaba CloudのQwen-Maxで動いており、Cloudflare Worker経由で呼び出され、同じWorkerが管理人への配信もResend経由で担っています。1つの人格層が3つの事業すべてに対応し、カテゴリごとにローカル辞書とトーンを切り替えます──3つの別々のボットを繋ぎ合わせたものではありません。」
 
 ### 6. 結び（113秒〜120秒）
 * **表示画面**: スライド3（まとめ）
@@ -96,7 +95,7 @@
 ## 🛠️ スライドの構成イメージ
 
 * **スライド1（表紙）**: タイトル `Studio S.O` ／サブタイトル `One Agent. Three Businesses. — An Autopilot for the First Contact` ／トラック明記：`Qwen Cloud Hackathon — Autopilot Agent`
-* **スライド2（システム構成）**: `Browser → Qwen3.7-Max Thinking Mode (dialogue/classify/summarize) → Cloudflare Worker → Resend → 管理人の受信箱`。4層構造（人格層/論理層/知識層/出力層）と「1人格層が3業種を横断」を併記。`docs/architecture.png` を使用。
+* **スライド2（システム構成）**: `Browser → Qwen-Max (dialogue/classify/summarize) → Cloudflare Worker → Resend → 管理人の受信箱`。4層構造（人格層/論理層/知識層/出力層）と「1人格層が3業種を横断」を併記。`docs/architecture.png` を使用。
 * **スライド3（Alibaba Cloud利用証明）**: `docs/alibaba_cloud_proof.png` ＋ ライブレスポンス例（`cloudflare-worker/README.md` 参照）
 * **スライド4（まとめ）**: `One Agent. Three Businesses. Zero Missed Leads.` ／ URL: `studioso-qwen.web.app`
 
@@ -109,7 +108,6 @@
    - テイクA：「毎日の配送記録を手書きしていて大変です」→ AI応答1〜2往復
    - テイクB：「妻と京都へ行きたいのですが、何から決めればいいか分かりません」→ AI応答1〜2往復
    - テイクC：「米麹を使った発酵レシピを知りたいです」→ AI応答1〜2往復
-   - ※各テイクの「考え中」表示から返信が出るまでの待ち時間（10〜15秒）は、編集でタイムラプスにする前提でそのまま撮影してよい
 3. **編集で②A/B/Cを短く繋ぎ、ナレーションを被せる**（各18秒前後）
 4. **連絡先確認〜確信度到達→相談を終える (70s〜85s)**: いずれか1テイク（推奨：カリナリーラボ）で、ヒヤリング開始直後の連絡先確認シーンと、`confidence >= 0.8`で「相談を終える」ボタンが出現→クリック→「ご相談内容の確認」表示までを撮影。
 5. **【最重要】実際にメールが届く画面 (85s〜100s)**: 別ウィンドウ／別タブで受信箱（`studioso@sutekioojisan-so.com`）を開いておき、シート生成の直後にメールが届く様子を画面に残す。件名に「⚠️電話番号未取得」が付かない（＝連絡先取得済み）ことも見せられると尚良い。
@@ -119,10 +117,9 @@
 
 ## ✅ 収録前チェックリスト
 - [ ] `public/consultation/config.js` に有効なQwen APIキーが設定されているか
-- [ ] Cloudflare Worker（`qwen-proxy.studioso.workers.dev`）が`qwen3.7-max`＋Thinking Mode有効で正常応答するか
+- [ ] Cloudflare Worker（`qwen-proxy.studioso.workers.dev`）が`qwen-max`で正常応答するか
 - [ ] `/notify`が正常応答するか（`cloudflare-worker/README.md` のPowerShell例で確認）
 - [ ] 受信箱（管理人のメール）をすぐ開ける状態にしておく（シーン4で画面に映すため）
 - [ ] `docs/architecture.png` / `docs/alibaba_cloud_proof.png` が最新か（1人格層3業種の構図を反映しているか）
 - [ ] `firebase deploy` 済みで、提出用サイト (`studioso-qwen.web.app`) にも最新コードが反映されているか（未デプロイなら `firebase login --reauth` → `firebase deploy`）
 - [ ] 3業種（AIコンサル／トラベル／カリナリー）それぞれの素材を別テイクで撮り終えているか
-- [ ] 各AI応答の「考え中」区間を編集でタイムラプスにする前提で、素材は長めに（カットせず）撮っているか

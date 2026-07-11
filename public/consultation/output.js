@@ -59,8 +59,8 @@ export function generatePreparationSheet(analysis, messages) {
     ${analysis.contactEmail ? `<p style="color:#2F3E46;margin-top:2px;">✉️ ${escapeHtml(analysis.contactEmail)}</p>` : ''}
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
-    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">顧客のプロファイル（主要な悩み）</p>
-    <p style="color:#2F3E46;font-weight:500;">${escapeHtml(analysis.mainConcern || '（分析中）')}</p>
+    <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">顧客のプロファイル</p>
+    <p style="color:#2F3E46;font-weight:700;">${escapeHtml(analysis.customerProfile || analysis.mainConcern || '（分析中）')}</p>
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;background:#FDF8F5;">
     <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">今回のアバターとの会話要約</p>
@@ -115,17 +115,20 @@ ${nameLine}
 電話　　：${phoneLine}${emailLine}
 
 ■ 顧客のプロファイル：
-・事業カテゴリ　　　：${analysis.categoryLabel}（${analysis.category}）
-・推定業界　　　　　：${analysis.industryLabel}
-・ＩＴ習熟レベル　　：${analysis.levelLabel}
-・主要な悩み（原文）：${analysis.mainConcern}
-・分析判定確信度　　：${Math.round((analysis.confidence || 0.5)*100)}%
+${analysis.customerProfile || analysis.mainConcern || '（分析中）'}
 
 ■ 今回のアバターとの会話要約：
 ${analysis.summaryMessage || '主要な悩み：' + (analysis.mainConcern || '（分析中）')}
 
 ■ 人間の管理人へのアドバイス（対応のツボ）：
 ${analysis.recommendedApproach}
+
+――― 参考情報 ―――
+事業カテゴリ　　　：${analysis.categoryLabel}（${analysis.category}）
+推定業界　　　　　：${analysis.industryLabel}
+ＩＴ習熟レベル　　：${analysis.levelLabel}
+主要な悩み（原文）：${analysis.mainConcern}
+分析判定確信度　　：${Math.round((analysis.confidence || 0.5)*100)}%
 
 ■ ユーザー発言（対話ログ）：
 ${userMessages}

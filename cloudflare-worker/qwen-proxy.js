@@ -26,7 +26,7 @@
  *
  * Deployed at: https://qwen-proxy.studioso.workers.dev/
  * Upstream:    https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions
- * Model:       qwen3.7-max with Thinking Mode enabled (Alibaba Cloud Model Studio / DashScope)
+ * Model:       qwen-max (Alibaba Cloud Model Studio / DashScope)
  */
 
 const DASHSCOPE_URL = 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions';
@@ -78,12 +78,9 @@ export default {
     }
 
     const dashscopeRequest = {
-      model: model || 'qwen3.7-max',
+      model: model || 'qwen-max',
       messages: openAiMessages,
       max_tokens: max_tokens || 512,
-      // Thinking Mode: qwen3.7-max以降のモデルは思考過程を reasoning_content に分離して返す。
-      // 最終回答は choice.message.content にそのまま入るため、下の応答変換は変更不要。
-      enable_thinking: true,
     };
 
     let dashscopeResponse;
