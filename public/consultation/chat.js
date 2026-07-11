@@ -55,21 +55,24 @@ async function handleSend() {
   const mInp = document.getElementById('m-inp');
   if (mInp) mInp.disabled = true;
 
-  appendMessage('user', text);
-  messages.push({ role: 'user', content: text });
-  userTurnCount++;
-
-  // アバター：ユーザー送信直後の視覚フィードバック（受け止め） & Nudgeタイマー解除
-  if (typeof window.avatarNod === 'function') window.avatarNod();
-  if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
-  if (window.avatarAudio) {
-    try { window.avatarAudio.pause(); } catch(e) {}
-  }
-
-  showTyping(true);
-
+  // sendInFlight〜disabledの解除は必ずfinallyで行う。この中のどこか
+  // （appendMessageやavatarNod等）が予期せず例外を投げても、入力欄が
+  // 永久にブロックされたままにならないよう、ガード解除まるごとtry内に置く。
   let reply = null;
   try {
+    appendMessage('user', text);
+    messages.push({ role: 'user', content: text });
+    userTurnCount++;
+
+    // アバター：ユーザー送信直後の視覚フィードバック（受け止め） & Nudgeタイマー解除
+    if (typeof window.avatarNod === 'function') window.avatarNod();
+    if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+    if (window.avatarAudio) {
+      try { window.avatarAudio.pause(); } catch(e) {}
+    }
+
+    showTyping(true);
+
     reply = await sendChatMessage(messages, apiKey, currentSystemPrompt);
     messages.push({ role: 'assistant', content: reply });
     // アバター：AI応答テキストを読み上げ＆話す動作（視覚）
