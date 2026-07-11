@@ -68,36 +68,46 @@ async function handleSend() {
 
   showTyping(true);
 
+  let reply = null;
   try {
-    const reply = await sendChatMessage(messages, apiKey, currentSystemPrompt);
+    reply = await sendChatMessage(messages, apiKey, currentSystemPrompt);
     messages.push({ role: 'assistant', content: reply });
     // アバター：AI応答テキストを読み上げ＆話す動作（視覚）
     // Nudgeの再武装は読み上げ完了後（index.html側のavatarSpeakラッパー）に行う。
     // ここで即座に再武装すると、読み上げ中にNudge音声が重なって再生されてしまう。
     if (typeof window.avatarSpeak === 'function') window.avatarSpeak(reply);
     appendMessage('ai', reply);
+  } catch (err) {
+    appendError(err.message || 'エラーが発生しました。');
+  } finally {
+    // 入力欄は返信テキストが届いた時点ですぐ再開する。確信度チェック（下記）は
+    // Thinking Modeでさらに10秒前後かかるため、それを待たせると入力欄が
+    // 無効なままの状態が長引き、その間の操作で画面が乱れる原因になっていた。
+    showTyping(false);
+    sendInFlight = false;
+    input.disabled = false;
+    if (mInp) mInp.disabled = false;
+    input.focus({ preventScroll: true });
+  }
 
-    /* ハイブリッド完了フロー：
-       2往復以降「準備シートを作成する」ボタンを表示（手動トリガー）。
-       3往復以降は確信度を監視し、0.8以上ならボタン自体で提案する（自律トリガー）。
-       実際の要約生成（summaryMessage）はボタン押下時のみ発火する。 */
-    if (isSummaryTiming(userTurnCount) && !hearingComplete) {
-      showCreateSheetButton();
+  if (reply === null) return; // 送信自体が失敗した場合は確信度チェックへ進まない
+
+  /* ハイブリッド完了フロー（入力欄をブロックしないバックグラウンド処理）：
+     3往復以降「相談を終える」ボタンを表示（手動トリガー）。
+     4往復以降は確信度を監視し、0.8以上ならボタン自体で提案する（自律トリガー）。
+     実際の要約生成（summaryMessage）はボタン押下時のみ発火する。 */
+  if (isSummaryTiming(userTurnCount) && !hearingComplete) {
+    showCreateSheetButton();
+    try {
       await runAnalysis({ forceSummary: false });
       if (isConfidenceSuggestTiming(userTurnCount) && (analysisResult?.confidence ?? 0) >= 0.8) {
         suggestCreateSheet();
       } else {
         unsuggestCreateSheet();
       }
+    } catch (e) {
+      console.warn('確信度チェック失敗:', e.message);
     }
-  } catch (err) {
-    appendError(err.message || 'エラーが発生しました。');
-  } finally {
-    showTyping(false);
-    sendInFlight = false;
-    input.disabled = false;
-    if (mInp) mInp.disabled = false;
-    input.focus({ preventScroll: true });
   }
 }
 

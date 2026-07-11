@@ -110,12 +110,14 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
   };
 }
 
-/* ボタン（準備シートを作成する）を表示してよいタイミング（2往復以降） */
+/* ボタン（相談を終える）を表示してよいタイミング（実質2往復以降）。
+   1ターン目は連絡先確認への返答でカウントされるため、+1して実際の
+   相談内容が2往復に達してから表示する。 */
 export function isSummaryTiming(userTurnCount) {
-  return userTurnCount >= 2;
+  return userTurnCount >= 3;
 }
 
-/* 確信度による自律提案の監視を開始するタイミング（3往復以降） */
+/* 確信度による自律提案の監視を開始するタイミング（実質3往復以降） */
 export function isConfidenceSuggestTiming(userTurnCount) {
-  return userTurnCount >= 3;
+  return userTurnCount >= 4;
 }
