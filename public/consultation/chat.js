@@ -127,6 +127,12 @@ async function runAnalysis({ forceSummary = false } = {}) {
     if (forceSummary && analysisResult.summaryMessage) {
       appendSummaryBubble(analysisResult);
       markHearingComplete();
+      // 締めの要約もアバターが読み上げる（他のメッセージは全て読み上げるのに
+      // ここだけ無音だと一貫性がないため）。markHearingComplete が先に
+      // soHearingComplete を立てているので、読み上げ後にNudgeは再武装されない。
+      if (typeof window.avatarSpeak === 'function') {
+        window.avatarSpeak(analysisResult.summaryMessage);
+      }
       notifyAdmin(analysisResult);
     }
 
@@ -314,8 +320,11 @@ function appendError(msg) {
 }
 
 function showTyping(visible) {
-  const el = document.getElementById('typing-indicator');
-  if (el) el.classList.toggle('hidden', !visible);
+  // デスクトップ用とモバイル用の両方を切り替える（モバイルにも返信待ちのフィードバックを出す）
+  ['typing-indicator', 'm-typing-indicator'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.toggle('hidden', !visible);
+  });
 }
 
 // 固定ディレイでは、直前のセリフの読み上げが終わる前に次のセリフが
@@ -446,6 +455,37 @@ export function playAvatarAudioOnly(audioUrl) {
 window.playAvatarAudioOnly = playAvatarAudioOnly;
 
 let welcomeGreetingCanceled = false;
+
+// 挨拶の音声に合わせて画面下部に字幕を表示する。
+// （音を出せない環境や聴覚に不安のある方には、挨拶の約60秒が無音の
+//   静止画面に見えてしまうため。チャット欄はまだ「稼働前」という演出を
+//   保つため、チャットバブルではなく独立した字幕オーバーレイにする）
+function showGreetingSubtitle(text) {
+  let el = document.getElementById('greeting-subtitle');
+  if (!text) {
+    if (el) el.style.display = 'none';
+    return;
+  }
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'greeting-subtitle';
+    el.style.cssText =
+      'position:fixed;left:50%;bottom:88px;transform:translateX(-50%);' +
+      'max-width:min(640px,88vw);background:rgba(255,255,255,0.94);color:#2F3E46;' +
+      'padding:12px 20px;border-radius:12px;font-family:"Noto Sans JP",sans-serif;' +
+      'font-size:14px;line-height:1.8;box-shadow:0 8px 28px rgba(27,73,101,0.18);' +
+      'z-index:8500;text-align:center;letter-spacing:0.02em;white-space:pre-wrap;';
+    document.body.appendChild(el);
+  }
+  el.textContent = text;
+  el.style.display = 'block';
+}
+
+function hideGreetingSubtitle() {
+  const el = document.getElementById('greeting-subtitle');
+  if (el) el.remove();
+}
+
 // 総合受付（トップページ）用の6ステップ挨拶シークエンス（ローカル音声ファイル連動）
 export function startWelcomeGreeting() {
   welcomeGreetingCanceled = false;
@@ -487,6 +527,7 @@ export function startWelcomeGreeting() {
   function playNextStep() {
     if (welcomeGreetingCanceled) return;
     if (currentStep >= GREETING_STEPS.length) {
+      hideGreetingSubtitle();
       // 挨拶終了後にヒヤリング入力を促す状態にする
       if (typeof window.skipAvatar === 'function') {
         window.skipAvatar();
@@ -494,6 +535,7 @@ export function startWelcomeGreeting() {
       return;
     }
     const step = GREETING_STEPS[currentStep];
+    showGreetingSubtitle(step.text); // 音声と同時に字幕を表示（無音のタメでは非表示）
     playAvatarAudio(step.audio, function() {
       if (welcomeGreetingCanceled) return;
       currentStep++;
@@ -505,6 +547,7 @@ export function startWelcomeGreeting() {
 window.startWelcomeGreeting = startWelcomeGreeting;
 window.cancelWelcomeGreeting = function() {
   welcomeGreetingCanceled = true;
+  hideGreetingSubtitle();
   if (window.avatarAudio) {
     try { window.avatarAudio.pause(); } catch(e) {}
   }

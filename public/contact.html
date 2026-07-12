@@ -250,6 +250,10 @@
       </div>
       <div id="m-input-area" class="m-input-area hidden">
         <div class="p-chat__msgs" id="m-chat-messages"></div>
+        <div id="m-typing-indicator" class="msg msg--ai hidden">
+          <span class="msg__av">S.O</span>
+          <div class="msg__tx"><em>入力中…</em></div>
+        </div>
         <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
         <div class="m-input-row">
           <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。"></textarea>
@@ -276,7 +280,7 @@
         </div>
         <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
         <form id="chat-form" class="p-chat__bar">
-          <textarea id="chat-input" placeholder="お書き物をご自由にお書きください…" rows="1"></textarea>
+          <textarea id="chat-input" placeholder="ご相談内容をご自由にお書きください…" rows="1"></textarea>
           <button type="button" id="voice-btn" aria-label="音声入力" title="音声で入力">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="11" rx="3"/>
