@@ -195,6 +195,13 @@ window.onCreateSheetClick = async function () {
 
 // ── DOM 操作 ─────────────────────────────────────────────────────────
 
+// 会話が長くなると、ユーザーが読み返すために上にスクロールしている最中に
+// ナッジ等のバックグラウンド発言が追加され、強制的に一番下へ引き戻されて
+// しまうことがあった。既に下端付近にいる場合のみ自動追従する。
+function isNearBottom(container, threshold = 80) {
+  return container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
+}
+
 function appendMessage(role, text) {
   const containers = [
     document.getElementById('chat-messages'),
@@ -204,6 +211,8 @@ function appendMessage(role, text) {
 
   const isUser = role === 'user';
   for (const container of containers) {
+    const shouldStickToBottom = isUser || isNearBottom(container);
+
     const wrapper = document.createElement('div');
     wrapper.className = `msg ${isUser ? 'msg--user' : 'msg--ai'} animate-fadein`;
 
@@ -220,7 +229,9 @@ function appendMessage(role, text) {
     wrapper.appendChild(bubble);
 
     container.appendChild(wrapper);
-    container.scrollTop = container.scrollHeight;
+    if (shouldStickToBottom) {
+      container.scrollTop = container.scrollHeight;
+    }
   }
 }
 window.appendMessage = appendMessage;
