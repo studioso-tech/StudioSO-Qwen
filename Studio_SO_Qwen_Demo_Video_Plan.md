@@ -1,8 +1,10 @@
-# Studio S.O — Qwen Cloud ハッカソン提出用デモ動画 制作ガイド（StudioSO-Qwen版）v2
+# Studio S.O — Qwen Cloud ハッカソン提出用デモ動画 制作ガイド（StudioSO-Qwen版）v3
 
 このリポジトリ（StudioSO-Qwen）専用のデモ動画プランです。AIエンジンは **Alibaba Cloud DashScope の `qwen-max`** のみを使用します。管理人への自動配信も、本番版のGoogle Workspace Studio + Gemini + Gmailではなく、**Cloudflare Worker + Qwen-Max + Resend** で実装済み・動作確認済みです（`POST /notify`）。
 
-**v2の変更点**：前バージョンはカリナリーラボ1業種の深掘りに時間を割いていましたが、今回は「**このAIエージェントはAIコンサルタント専用ではなく、旅行・料理にも同じ仕組みで対応する**」という点を最も強く訴求する構成に変更しました。同じアバター・同じUIが、業種ごとに言葉遣いも掘り下げる観点もまったく変えて対応する様子を、3業種の対話を並べて見せることが今回のシナリオの核です。
+**v2の変更点**：前バージョンはカリナリーラボ1業種の深掘りに時間を割いていましたが、v2では「**このAIエージェントはAIコンサルタント専用ではなく、旅行・料理にも同じ仕組みで対応する**」という点を最も強く訴求する構成に変更しました。同じアバター・同じUIが、業種ごとに言葉遣いも掘り下げる観点もまったく変えて対応する様子を、3業種の対話を並べて見せることがシナリオの核です。
+
+**v3の変更点**：v2は「取りこぼしゼロ（機会損失を防ぐ）」という業務効率の軸で締めていましたが、v3ではそれよりも「**まったく異なる異業種であっても、1つのAIエージェントが、数字やスペックに落とし込みにくいこと（悩み・感性・こだわり）にまで踏み込んで答えを出す**」という推論力そのものを訴求軸に据え直しました。業務の悩みは数値化しやすい一方、旅の「魂」や料理への「こだわり」は本質的に数字にならないもの——その両極を同じ推論エンジンが扱える点が、今回最も見せたい技術的・創造的な差別化ポイントです。
 
 ---
 
@@ -11,7 +13,7 @@
 | 審査基準 | 配点 | 対応するシーン |
 |---|---|---|
 | 技術的深さ・エンジニアリング | 30% | シーン4（アーキテクチャ）、シーン3（確信度ゲート） |
-| イノベーション・AI創造性 | 30% | **シーン2（1エージェント・3業種の切り替え）**、脱・専門用語ローカル辞書 |
+| イノベーション・AI創造性 | 30% | **シーン2（数字にならない悩みにも答える、1エージェント・3業種の推論）**、脱・専門用語ローカル辞書 |
 | 課題の価値・インパクト | 25% | シーン1（オープニングの課題提起）、シーン3の連絡先先取り |
 | プレゼン・ドキュメント | 15% | 全体の構成・字幕・`docs/architecture.png` |
 
@@ -33,34 +35,34 @@
 * **日本語訳**:
   > 「見逃した最初の問い合わせは、中小企業にとって次の顧客を失うことを意味します。しかし個人事業主は、経営相談・旅行相談・料理相談それぞれに窓口を置くことはできません。Studio S.Oは、その3つすべてに対応する、たった1つのAIエージェントです。」
 
-### 2. 【核心】1エージェント・3業種の切り替え（12秒〜70秒）— Innovation 30%
-これが今回のシナリオで最も見せたい部分です。**同じアバター・同じチャットUI**のまま、話しかける内容によってAIの言葉遣いと掘り下げる観点がまったく変わることを、3つの短い対話を並べて見せます。編集では3つの対話を素早くカット割りし、ナレーションで繋ぎます。
+### 2. 【核心】数字にならない悩みにも答える、1エージェント・3業種（12秒〜70秒）— Innovation 30%
+これが今回のシナリオで最も見せたい部分です。業務の悩みは時間・コストといった数字に落とし込みやすい一方、旅への憧れや料理へのこだわりは本質的に数値化できません。**同じアバター・同じチャットUI**のまま、この「数字になるもの」と「数字にならないもの」の両方に、AIが表面的な相槌ではなく踏み込んだ答えを出せることを、3つの短い対話を並べて見せます。編集では3つの対話を素早くカット割りし、ナレーションで繋ぎます。
 
 * **表示画面**: 同一のアバター画面上で、3つの異なる相談を順番に入力していく（それぞれ2〜3往復程度で十分）
 
 * **② -A：AIコンサルティング（12秒〜30秒）**
   * 入力例：「毎日の配送記録を手書きしていて大変です」
-  * AIの反応ポイント：専門用語（ＡＩ・DX等）を一切使わず、「事務作業を楽にする方法」のような現場の言葉で受け止める
+  * AIの反応ポイント：専門用語（ＡＩ・DX等）を一切使わず、「事務作業を楽にする方法」のような現場の言葉で受け止める。時間・人手という数字に落とし込める悩みを、的確に深掘りする
   * **英語スクリプト**:
-    > "Talk business, and it never says 'AI' or 'DX' — it answers in the words of the shop floor."
+    > "Talk business, and it never says 'AI' or 'DX' — it drills into hours and headcount, the parts of your problem that do fit a spreadsheet."
   * **日本語訳**:
-    > 「業務の話をすれば、『ＡＩ』や『ＤＸ』とは言わず、現場の言葉で答えます。」
+    > 「業務の話をすれば、『ＡＩ』や『ＤＸ』とは言わず、時間や人手という、数字に落とし込める部分を的確に掘り下げます。」
 
 * **② -B：トラベルデザイン（30秒〜48秒）**
   * 入力例：「妻と京都へ行きたいのですが、何から決めればいいか分かりません」
-  * AIの反応ポイント：課題解決調ではなく、「旅の魂」「五感」など、感性・体験を引き出す温かい問いかけに切り替わる
+  * AIの反応ポイント：課題解決調ではなく、「旅の魂」「五感」など、本質的に数字にならない感性・体験を引き出す温かい問いかけに切り替わる
   * **英語スクリプト**:
-    > "Talk about a trip, and the same agent stops solving problems — it starts asking what you want to feel."
+    > "Talk about a trip, and the same agent stops counting — it starts asking what you want to feel. There's no spreadsheet for that, and it doesn't try to force one."
   * **日本語訳**:
-    > 「旅行の話をすれば、同じエージェントが『課題解決』をやめ、『何を感じたいか』を尋ねはじめます。」
+    > 「旅行の話をすれば、同じエージェントが『数える』のをやめ、『何を感じたいか』を尋ねはじめます。それは数字にできないもので、無理に数値化しようともしません。」
 
 * **② -C：カリナリーラボ（48秒〜70秒）**
   * 入力例：「米麹を使った発酵レシピを知りたいです」
-  * AIの反応ポイント：科学的アプローチ（低温調理・分子ガストロノミー相当）への関心や、家庭用か業務用かを丁寧に確認
+  * AIの反応ポイント：科学的アプローチ（低温調理・分子ガストロノミー相当）への関心や、家庭用か業務用かを丁寧に確認しつつ、「再現したい味」という言語化しにくい感覚にも踏み込む
   * **英語スクリプト**:
-    > "Talk about food, and it shifts again — probing the science behind the flavor, not just the recipe. Same agent, same underlying Qwen-Max reasoning, three completely different conversations."
+    > "Talk about food, and it shifts again — chasing a taste that's hard to put into words, not just a recipe. Same agent, same underlying Qwen-Max reasoning, handling the measurable and the immeasurable in the same breath."
   * **日本語訳**:
-    > 「料理の話をすれば、また表情を変えます──レシピそのものではなく、味の裏にある科学的な関心を掘り下げます。同じエージェント、同じQwen-Maxの推論エンジンで、まったく異なる3つの対話が生まれます。」
+    > 「料理の話をすれば、また表情を変えます──レシピそのものではなく、言葉にしにくい『再現したい味』を追いかけます。同じエージェント、同じQwen-Maxの推論エンジンが、数字になるものとならないものを、同じように扱います。」
 
 ### 3. 連絡先の先取りと相談の終え方（70秒〜85秒）— Impact 25% ＋ Technical Depth 30%
 * **表示画面**: ヒヤリング開始直後、AIが連絡先（お電話番号は必須・Eメールは任意）を最初にお伺いする場面 → 確信度が上がり「相談を終える」ボタンが出現 → クリック → 「ご相談内容の確認」画面
@@ -86,18 +88,18 @@
 ### 6. 結び（113秒〜120秒）
 * **表示画面**: スライド3（まとめ）
 * **英語スクリプト**:
-  > "One agent. Three businesses. Zero missed leads. Studio S.O, built entirely on Alibaba Cloud's Qwen Cloud. Thank you for watching."
+  > "One agent. Three unrelated industries. Answers for what can't be measured. Studio S.O, built entirely on Alibaba Cloud's Qwen Cloud. Thank you for watching."
 * **日本語訳**:
-  > 「1つのエージェント。3つの事業。取りこぼしゼロ。Alibaba CloudのQwen Cloudだけで作られた、Studio S.O。ご視聴ありがとうございました。」
+  > 「1つのエージェント。まったく異なる3つの業種。数字にできないことにも、答えを出す。Alibaba CloudのQwen Cloudだけで作られた、Studio S.O。ご視聴ありがとうございました。」
 
 ---
 
 ## 🛠️ スライドの構成イメージ
 
-* **スライド1（表紙）**: タイトル `Studio S.O` ／サブタイトル `One Agent. Three Businesses. — An Autopilot for the First Contact` ／トラック明記：`Qwen Cloud Hackathon — Autopilot Agent`
-* **スライド2（システム構成）**: `Browser → Qwen-Max (dialogue/classify/summarize) → Cloudflare Worker → Resend → 管理人の受信箱`。4層構造（人格層/論理層/知識層/出力層）と「1人格層が3業種を横断」を併記。`docs/architecture.png` を使用。
+* **スライド1（表紙）**: タイトル `Studio S.O` ／サブタイトル `One Agent. Three Unrelated Industries. Answers for What Can't Be Measured.` ／トラック明記：`Qwen Cloud Hackathon — Autopilot Agent`
+* **スライド2（システム構成）**: `Browser → Qwen-Max (dialogue/classify/summarize) → Cloudflare Worker → Resend → 管理人の受信箱`。4層構造（人格層/論理層/知識層/出力層）と「1人格層が、数字になる悩みとならない悩みの両方を横断」を併記。`docs/architecture.png` を使用。
 * **スライド3（Alibaba Cloud利用証明）**: `docs/alibaba_cloud_proof.png` ＋ ライブレスポンス例（`cloudflare-worker/README.md` 参照）
-* **スライド4（まとめ）**: `One Agent. Three Businesses. Zero Missed Leads.` ／ URL: `studioso-qwen.web.app`
+* **スライド4（まとめ）**: `One Agent. Three Unrelated Industries. Answers for What Can't Be Measured.` ／ URL: `studioso-qwen.web.app`
 
 ---
 
