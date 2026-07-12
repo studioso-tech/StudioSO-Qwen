@@ -304,6 +304,13 @@ function showTyping(visible) {
   if (el) el.classList.toggle('hidden', !visible);
 }
 
+// 固定ディレイでは、直前のセリフの読み上げが終わる前に次のセリフが
+// speechSynthesis.cancel()で割り込み、途中（電話番号の手前など）で
+// 発話が切れてしまっていた。文字数から概算した時間だけ空けて繋ぐ。
+function estimateSpeechMs(text) {
+  return Math.max(1800, text.length * 180);
+}
+
 function showWelcome() {
   // 総合受付（index.html）はヒーロー画面のアバターがクリック起動時に
   // startWelcomeGreeting() で6ステップ挨拶を担当するため、ここでは何もしない。
@@ -318,7 +325,7 @@ function showWelcome() {
         if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
       } catch (e) {}
     }, 200);
-    setTimeout(askForContactInfo, 1600);
+    setTimeout(askForContactInfo, 200 + estimateSpeechMs(msg));
   }
 }
 
@@ -333,7 +340,7 @@ function askForContactInfo() {
       if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
     } catch (e) {}
   }, 200);
-  setTimeout(explainHowToEnd, 4200);
+  setTimeout(explainHowToEnd, 200 + estimateSpeechMs(msg));
 }
 
 /* ヒヤリングの終わり方も、開始時点であらかじめ案内しておく。
