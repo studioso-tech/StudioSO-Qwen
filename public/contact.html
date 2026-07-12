@@ -655,8 +655,10 @@
       }
       function hideNudgeHint() { var hint = document.getElementById('nudge-hint'); if (hint) hint.style.display = 'none'; }
       function armNudgeTimer() {
+        if (window.soHearingComplete) return; // 相談完了後は促しメッセージを出さない
         if (nudgeTimer) clearTimeout(nudgeTimer);
         nudgeTimer = setTimeout(function() {
+          if (window.soHearingComplete) return;
           corner.classList.add('av-nudge');
           showNudgeHint();
         }, 15000);

@@ -233,7 +233,8 @@ ${dictionaryText}
     },
     apiKey
   );
-  return response.content[0].text;
+  // 要約は画面表示・管理人へのメール本文の両方に使われるため、チャット応答と同様にMarkdownを除去する
+  return stripMarkdown(response.content[0].text);
 }
 
 /**

@@ -166,6 +166,10 @@ function unsuggestCreateSheet() {
 
 function markHearingComplete() {
   hearingComplete = true;
+  // 「ご相談は完了です」の後にNudge（15秒無操作の促し文）が出続けると
+  // 矛盾するため、index/contact側のタイマーを止め、以後の再武装も禁止する
+  window.soHearingComplete = true;
+  if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
   getCreateSheetButtons().forEach(btn => btn.classList.add('hidden'));
 }
 
@@ -236,11 +240,17 @@ function appendMessage(role, text) {
 }
 window.appendMessage = appendMessage;
 
-let summaryBubbleEl = null;
+let summaryBubbleEls = [];
 
 function appendSummaryBubble(analysis) {
-  const container = document.getElementById('chat-messages');
-  if (!container) return;
+  // デスクトップ(chat-messages)とモバイル(m-chat-messages)の両方に出す。
+  // 以前はデスクトップ側のみで、モバイル表示では .p-chat ごと display:none の
+  // ため、スマホの顧客には要約も「ご相談内容を確認する」リンクも見えなかった。
+  const containers = [
+    document.getElementById('chat-messages'),
+    document.getElementById('m-chat-messages'),
+  ].filter(Boolean);
+  if (containers.length === 0) return;
 
   const bubbleHtml = `
     <div class="summary-header">
@@ -252,26 +262,30 @@ function appendSummaryBubble(analysis) {
   `;
 
   // 既存の要約バブルがあれば新規追加せず内容だけ更新（会話継続で内容が育つ）
-  if (summaryBubbleEl && summaryBubbleEl.isConnected) {
-    summaryBubbleEl.innerHTML = bubbleHtml;
+  const connected = summaryBubbleEls.filter(el => el.isConnected);
+  if (connected.length) {
+    connected.forEach(el => { el.innerHTML = bubbleHtml; });
     return;
   }
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'msg msg--ai animate-fadein';
+  summaryBubbleEls = [];
+  for (const container of containers) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'msg msg--ai animate-fadein';
 
-  const av = document.createElement('span');
-  av.className = 'msg__av';
-  av.textContent = 'S.O';
-  wrapper.appendChild(av);
+    const av = document.createElement('span');
+    av.className = 'msg__av';
+    av.textContent = 'S.O';
+    wrapper.appendChild(av);
 
-  const bubble = document.createElement('div');
-  bubble.className = 'msg__tx summary-bubble';
-  bubble.innerHTML = bubbleHtml;
-  wrapper.appendChild(bubble);
-  container.appendChild(wrapper);
-  container.scrollTop = container.scrollHeight;
-  summaryBubbleEl = bubble;
+    const bubble = document.createElement('div');
+    bubble.className = 'msg__tx summary-bubble';
+    bubble.innerHTML = bubbleHtml;
+    wrapper.appendChild(bubble);
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+    summaryBubbleEls.push(bubble);
+  }
 }
 
 function appendError(msg) {
