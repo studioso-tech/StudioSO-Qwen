@@ -44,6 +44,7 @@ export function buildChatSystemPrompt(dictionaryText = '') {
 8. 3〜4往復が目安ですが、単に話題（業種や大まかなテーマ）が分かっただけでは早すぎます。下記の対話方針にある具体的な観点（困りごとの中身・影響・これまでの経緯・今後の見通し等）が、相手の言葉である程度埋まってから「こういうお悩みということですね」と要約を提示してください。悩みが複数出ていた場合は、その全体をまとめて要約すること（最初に深掘りした1つだけに絞らない）。管理人がこの要約だけを見て、改めて聞き直さずに対応を始められるかを基準にしてください。
 9. 要約は、ローカル翻訳辞書を参照し、相手の業界の言葉で表現します。
 10. 応答は200字以内を目安にしてください。長い言葉は、時に相手の言葉を遠ざけます。
+10.5. 【Markdown記法を絶対に使わない（重要）】あなたの応答はチャット画面に表示されると同時に、アバターが声で読み上げます。「**太字**」「# 見出し」「- 箇条書き」・番号付きリスト・表組みなどのMarkdown記法は一切使わず、対面で話しかけるような自然な話し言葉の文章だけで答えてください。新幹線の時刻や選択肢を複数挙げる場合も、箇条書きにせず「〇〇なら△△分、□□なら××分です」のように文章の中で自然に列挙してください。
 11. 【ヒアリングの段階的掘り下げ】相談者が「トラベルデザイン」や「カリナリーラボ」に関する話を始めたら、会話の自然な流れを重視しつつ、下記の対話方針に定められた具体的な問いを、1回につき1〜2個程度、会話のキャッチボールの中で優しく問いかけて段階的に情報を引き出してください。一度にすべての質問を浴びせて相手を疲れさせないように配慮してください。
 12. Studio S.O の3事業が交差する価値を自然に体現してください：
 ・業務の消耗を解くＡＩコンサルティングの視点
@@ -147,6 +148,20 @@ const CLASSIFICATION_SYSTEM_PROMPT = `あなたは会話分析の専門家です
 customer_profile・main_concern・recommended_approach・open_itemsは、下記の例をそのまま使い回さず、必ず実際の会話内容に即して独自に書いてください（例はJSON構造を示すためだけのものです）。
 例：{"category":"C","industry":"food_service","level":1,"customer_profile":"個人店の店主、新メニュー開発に意欲的。","main_concern":"看板メニューの味を再現したい","confidence":0.85,"readiness":0.4,"open_items":"希望時期、予算感","recommended_approach":"次回は実際に使っている調味料の分量を聞き、置き換え案を1つ具体的に提示する。","contact_name":"○○食堂","contact_person":"鈴木様","contact_phone":"090-0000-0000","contact_email":"suzuki@example.com"}`;
 
+/**
+ * チャット画面には表示、アバターには音声読み上げもされる応答のため、
+ * 指示に従わずMarkdown記法が混ざってしまった場合の保険として除去する。
+ */
+function stripMarkdown(text) {
+  return text
+    .replace(/\*\*(.+?)\*\*/g, '$1')      // **太字**
+    .replace(/^#{1,6}\s*/gm, '')          // # 見出し
+    .replace(/^[-*]\s+/gm, '')            // - 箇条書き
+    .replace(/^\d+\.\s+/gm, '')           // 1. 番号付きリスト
+    .replace(/\n{2,}/g, '\n')             // 連続する空行を1つに
+    .trim();
+}
+
 export async function sendChatMessage(messages, apiKey, systemPrompt = '') {
   const response = await fetchClaude(
     {
@@ -157,7 +172,7 @@ export async function sendChatMessage(messages, apiKey, systemPrompt = '') {
     },
     apiKey
   );
-  return response.content[0].text;
+  return stripMarkdown(response.content[0].text);
 }
 
 export async function classifyConversation(messages, apiKey) {

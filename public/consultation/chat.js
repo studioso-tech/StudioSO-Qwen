@@ -524,6 +524,12 @@ window.showPreparationSheet = function () {
 window.closeSheetModal = function () {
   const modal = document.getElementById('sheet-modal');
   if (modal) modal.classList.add('hidden');
+  // 相談完了後にシートを閉じたら、次の顧客のためにヒーロー画面へ戻す
+  if (hearingComplete) {
+    setTimeout(function () {
+      window.location.href = window.location.pathname;
+    }, 200);
+  }
 };
 
 window.copySheetToClipboard = function () {
