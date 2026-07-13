@@ -37,6 +37,22 @@ function bindEvents() {
     }
   });
   if (voiceBtn) bindVoice(voiceBtn, input);
+
+  // 複数行入力時に一番上の行が隠れないよう、内容に合わせて高さを自動調整する
+  // （PC版・モバイル版とも高さ固定のCSSのままだと、ブラウザがカーソル位置を
+  //   追って内部スクロールし、入力中の最初の行が見えなくなっていた）
+  bindAutoResize(input);
+  bindAutoResize(document.getElementById('m-inp'));
+}
+
+function bindAutoResize(textarea) {
+  if (!textarea) return;
+  const resize = () => {
+    textarea.style.height = 'auto';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 160)}px`;
+  };
+  textarea.addEventListener('input', resize);
+  resize();
 }
 
 // ── 送信処理 ─────────────────────────────────────────────────────────
@@ -51,6 +67,7 @@ async function handleSend() {
 
   sendInFlight = true;
   input.value = '';
+  input.dispatchEvent(new Event('input')); // 高さを初期値へ戻す
   input.disabled = true;
   const mInp = document.getElementById('m-inp');
   if (mInp) mInp.disabled = true;
@@ -124,7 +141,17 @@ async function runAnalysis({ forceSummary = false } = {}) {
     // ローカル翻訳辞書でシステムプロンプト更新
     currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText);
 
-    if (forceSummary && analysisResult.summaryMessage) {
+    if (forceSummary) {
+      // /api/summary の呼び出しが失敗すると summaryMessage は null のまま返ってくる
+      // （logic.js側で握りつぶされる）。ここで打ち切ると「相談を終える」を押しても
+      // markHearingComplete() が呼ばれず、Nudge（再質問）ループが止まらなくなるため、
+      // 要約文の生成成否に関わらず、ボタン操作自体は必ず完了させる。
+      if (!analysisResult.summaryMessage) {
+        console.warn('要約生成に失敗したため、簡易フォールバック要約で完了処理を続行します。');
+        analysisResult.summaryMessage = buildFallbackSummary(analysisResult);
+        showVoiceToast('要約の自動生成に失敗しました。簡易内容でご相談を受け付けています。', 4500);
+      }
+
       appendSummaryBubble(analysisResult);
       markHearingComplete();
       // 締めの要約もアバターが読み上げる（他のメッセージは全て読み上げるのに
@@ -139,7 +166,20 @@ async function runAnalysis({ forceSummary = false } = {}) {
     updateAnalysisPanel(analysisResult);
   } catch (e) {
     console.warn('分析失敗:', e.message);
+    if (forceSummary) {
+      // classifyConversation/analyzeConversation自体が例外を投げた最悪のケースでも、
+      // ヒヤリングは必ず終了させ、Nudgeループを止める。
+      markHearingComplete();
+      showVoiceToast('通信エラーが発生しましたが、ご相談は受け付けました。担当者よりご連絡いたします。', 4500);
+    }
   }
+}
+
+// /api/summary が失敗した場合の簡易フォールバック要約文
+function buildFallbackSummary(analysis) {
+  const concern = analysis.mainConcern || 'いただいたお話の内容';
+  const industry = analysis.industryLabel ? `${analysis.industryLabel}の` : '';
+  return `${industry}ご相談として、${concern}について承りました。詳細は担当者が改めてお伺いいたします。`;
 }
 
 // ── 準備シート作成ボタン（ハイブリッド完了フロー） ──────────────────────

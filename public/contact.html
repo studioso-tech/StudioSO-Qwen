@@ -82,7 +82,7 @@
     .msg__tx em { font-style: normal; color: #1B4965; font-weight: 600; }
     .msg__tx--error { background: rgba(183,28,28,0.08); border-color: rgba(183,28,28,0.25); color: #8B1F1F; }
     .p-chat__bar { display: flex; gap: 10px; max-width: 640px; margin: 12px auto 0; width: 100%; }
-    .p-chat__bar textarea { flex: 1; resize: none; height: 56px; border: 2px solid rgba(27,73,101,0.35); background: #fff; text-align: left; border-radius: 10px; padding: 16px; font-family: 'Noto Sans JP',sans-serif; font-size: 16px; font-weight: 500; color: #0A121A; outline: none; transition: border-color 200ms; box-shadow: 0 2px 8px rgba(27,73,101,0.08); }
+    .p-chat__bar textarea { flex: 1; resize: none; min-height: 56px; max-height: 160px; border: 2px solid rgba(27,73,101,0.35); background: #fff; text-align: left; border-radius: 10px; padding: 16px; font-family: 'Noto Sans JP',sans-serif; font-size: 16px; font-weight: 500; color: #0A121A; outline: none; transition: border-color 200ms; box-shadow: 0 2px 8px rgba(27,73,101,0.08); }
     .p-chat__bar textarea:focus { border-color: #1B4965; }
     .p-chat__bar textarea::placeholder { color: rgba(47,62,70,0.50); font-weight: 400; }
     .p-chat__bar button { width: 56px; height: 56px; border-radius: 12px; border: none; background: #1B4965; color: #fff; cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: background 200ms; box-shadow: 0 4px 12px rgba(27,73,101,0.25); }
@@ -162,7 +162,7 @@
       .m-input-area.hidden { display: none !important; }
       #m-chat-messages { height: 200px; padding: 10px 8px; margin-bottom: 8px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
       .m-input-row { display: flex; gap: 8px; align-items: center; }
-      .m-input-row textarea { flex: 1; resize: none; height: 56px; border: 2px solid rgba(27,73,101,0.35); background: #fff; border-radius: 10px; padding: 16px 14px; font-family: 'Noto Sans JP',sans-serif; font-size: 16px; font-weight: 500; color: #0A121A; outline: none; box-shadow: 0 2px 8px rgba(27,73,101,0.08); }
+      .m-input-row textarea { flex: 1; resize: none; min-height: 56px; max-height: 160px; border: 2px solid rgba(27,73,101,0.35); background: #fff; border-radius: 10px; padding: 16px 14px; font-family: 'Noto Sans JP',sans-serif; font-size: 16px; font-weight: 500; color: #0A121A; outline: none; box-shadow: 0 2px 8px rgba(27,73,101,0.08); }
       .m-input-area textarea::placeholder { color: rgba(47,62,70,0.50); font-size: 15px; font-weight: 400; }
       .m-voice-btn { width: 48px; height: 48px; border-radius: 50%; border: 1.5px solid rgba(27,73,101,0.40); background: rgba(255,255,255,0.95); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 200ms, border-color 200ms; box-shadow: 0 2px 8px rgba(27,73,101,0.12); }
       .m-voice-btn svg { width: 22px; height: 22px; stroke: #1B4965; }
@@ -422,6 +422,7 @@
         if (!chatInput || !chatForm) return;
         chatInput.value = text;
         ta.value = '';
+        ta.dispatchEvent(new Event('input')); // 高さを初期値へ戻す（chat.js の自動リサイズに反映）
         chatForm.dispatchEvent(new Event('submit', { cancelable: true }));
       }
 
@@ -509,6 +510,7 @@
         var text = mInp.value.trim();
         if (!text) return;
         chatInput.value = text; mInp.value = '';
+        mInp.dispatchEvent(new Event('input')); // 高さを初期値へ戻す（chat.js の自動リサイズに反映）
         chatForm.dispatchEvent(new Event('submit', { cancelable: true }));
       }
       sendBtn.addEventListener('click', submitFromMobile);
