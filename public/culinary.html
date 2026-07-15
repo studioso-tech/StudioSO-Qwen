@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="consultation/i18n.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -51,7 +52,7 @@
         <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-text/70 hover:text-so-accent transition-colors">Travel</a>
         <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-accent font-medium border-b border-so-accent/40 pb-0.5">Culinary</a>
         <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-text/70 hover:text-so-accent transition-colors">About</a>
-        <a href="contact.html"  class="nav-cta ml-1 border border-so-accent/35 bg-so-accent/10 backdrop-blur-sm text-so-accent font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:text-white hover:border-so-accent transition-all duration-300">相談する →</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-so-accent/35 bg-so-accent/10 backdrop-blur-sm text-so-accent font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:text-white hover:border-so-accent transition-all duration-300" data-en="Consult Us →">相談する →</a>
       </div>
       <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
         <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
@@ -64,7 +65,7 @@
         <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Travel Design</a>
         <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-accent font-medium border-b border-so-accent/08">Culinary Lab</a>
         <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">About</a>
-        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]" data-en="Contact us →">まずは相談する →</a>
       </div>
     </div>
   </nav>
@@ -75,21 +76,21 @@
     <div class="absolute inset-0 opacity-8" style="background:repeating-linear-gradient(45deg,transparent,transparent 30px,rgba(27,73,101,0.15) 30px,rgba(27,73,101,0.15) 31px)"></div>
 
     <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-5 px-6 text-center">
-      <p class="font-so-sans text-xs tracking-[0.4em] uppercase text-so-accent font-semibold">Culinary Lab / 食の科学</p>
-      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-so-accent sm:text-5xl lg:text-6xl leading-tight">
+      <p class="font-so-sans text-xs tracking-[0.4em] uppercase text-so-accent font-semibold" data-en="Culinary Lab / The Science of Food">Culinary Lab / 食の科学</p>
+      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-so-accent sm:text-5xl lg:text-6xl leading-tight" data-en-html="Science and sensibility<br />make food richer.">
         科学と感性で、<br />食をもっと豊かに。
       </h1>
-      <p class="font-so-logo italic text-lg font-medium text-so-accent sm:text-xl">
+      <p class="font-so-logo italic text-lg font-medium text-so-accent sm:text-xl" data-en="— Everyday suteki, starting at the table —">
         〜 日常のステキを、食卓から 〜
       </p>
-      <p class="font-so-sans text-base leading-loose text-so-text sm:text-lg max-w-xl font-medium">
+      <p class="font-so-sans text-base leading-loose text-so-text sm:text-lg max-w-xl font-medium" data-en-html="&quot;Why that cooking method?&quot; — We combine scientific approaches to cooking,<br class='hidden sm:block' />including molecular gastronomy, with sensibility honed over many years,<br class='hidden sm:block' />to research and share ways of eating that restore body and mind.">
         「なぜその調理法なのか？」——分子ガストロノミーをはじめとする<br class="hidden sm:block" />
         料理の科学的アプローチと長年培った感性を掛け合わせ、<br class="hidden sm:block" />
         心身を整える「食の在り方」を研究・発信します。
       </p>
       <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 mt-2">
-        <a href="#plans" class="bg-so-accent text-white px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">サービス・料金を見る →</a>
-        <a href="contact.html" class="border border-so-accent/40 px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-accent/05 transition-all duration-300">レシピ開発のご相談</a>
+        <a href="#plans" class="bg-so-accent text-white px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300" data-en="View services &amp; pricing →">サービス・料金を見る →</a>
+        <a href="contact.html" class="border border-so-accent/40 px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-accent/05 transition-all duration-300" data-en="Consult about recipe development">レシピ開発のご相談</a>
       </div>
     </div>
     <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-35">
@@ -103,8 +104,8 @@
     <div class="mx-auto max-w-6xl">
       <div class="mb-14 text-center fade-in">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Approach</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">科学的アプローチ</h2>
-        <p class="mt-4 mx-auto max-w-xl font-so-sans text-sm leading-loose text-so-text/58 sm:text-base">
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="A Scientific Approach">科学的アプローチ</h2>
+        <p class="mt-4 mx-auto max-w-xl font-so-sans text-sm leading-loose text-so-text/58 sm:text-base" data-en="This is no mere recipe collection. With approaches grounded in science, we unravel the &quot;why&quot; of cooking.">
           単なるレシピ集ではありません。科学的根拠に基づいたアプローチで、料理の「なぜ」を解き明かします。
         </p>
       </div>
@@ -113,28 +114,28 @@
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5 fade-in">
         <div class="bg-so-accent p-6 text-center">
           <p class="font-so-logo text-3xl text-white/20 mb-3">🧬</p>
-          <p class="font-so-logo text-sm tracking-wide text-white mb-2">発酵科学</p>
-          <p class="font-so-sans text-xs text-white/50 leading-relaxed">米麹・乳酸菌を活用した発酵調味料・保存食の開発</p>
+          <p class="font-so-logo text-sm tracking-wide text-white mb-2" data-en="Fermentation science">発酵科学</p>
+          <p class="font-so-sans text-xs text-white/50 leading-relaxed" data-en="Developing fermented seasonings and preserved foods using rice koji and lactic-acid bacteria">米麹・乳酸菌を活用した発酵調味料・保存食の開発</p>
         </div>
         <div class="bg-white border border-so-accent/12 p-6 text-center">
           <p class="font-so-logo text-3xl text-so-accent/20 mb-3">💧</p>
-          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2">保水技術</p>
-          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed">糖・塩麹によるタンパク質の熱変性抑制でジューシーに仕上げる</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2" data-en="Moisture retention">保水技術</p>
+          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed" data-en="Juicier results by curbing heat denaturation of proteins with sugar and shio-koji">糖・塩麹によるタンパク質の熱変性抑制でジューシーに仕上げる</p>
         </div>
         <div class="bg-white border border-so-accent/12 p-6 text-center">
           <p class="font-so-logo text-3xl text-so-accent/20 mb-3">🌿</p>
-          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2">スパイス活用</p>
-          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed">抗酸化・抗菌作用など科学的根拠に基づく薬味・香辛料の使い方</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2" data-en="Spice mastery">スパイス活用</p>
+          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed" data-en="Using condiments and spices on scientific grounds — antioxidant and antibacterial effects and more">抗酸化・抗菌作用など科学的根拠に基づく薬味・香辛料の使い方</p>
         </div>
         <div class="bg-white border border-so-accent/12 p-6 text-center">
           <p class="font-so-logo text-3xl text-so-accent/20 mb-3">🔥</p>
-          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2">調理物理学</p>
-          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed">熱源への接触面積・加熱ムラを防ぐ肉の下処理など</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2" data-en="Cooking physics">調理物理学</p>
+          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed" data-en="Contact area with the heat source, meat preparation that prevents uneven cooking, and more">熱源への接触面積・加熱ムラを防ぐ肉の下処理など</p>
         </div>
         <div class="bg-so-sage/60 border border-so-accent/12 p-6 text-center">
           <p class="font-so-logo text-3xl text-so-accent/20 mb-3">🌸</p>
-          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2">食の季節学</p>
-          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed">二十四節気に沿った旬の食材と身体への作用</p>
+          <p class="font-so-logo text-sm tracking-wide text-so-accent mb-2" data-en="Seasonal food studies">食の季節学</p>
+          <p class="font-so-sans text-xs text-so-text/52 leading-relaxed" data-en="Seasonal ingredients along the 24 solar terms and their effects on the body">二十四節気に沿った旬の食材と身体への作用</p>
         </div>
       </div>
     </div>
@@ -145,59 +146,59 @@
     <div class="mx-auto max-w-6xl">
       <div class="mb-12 text-center fade-in">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Recipe Library</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">レシピ実績（100点以上）</h2>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="Recipe Track Record (100+ recipes)">レシピ実績（100点以上）</h2>
       </div>
 
       <!-- Web=横3列 / Mobile=縦1列 -->
       <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 fade-in">
         <div class="recipe-card bg-white/75 p-6 backdrop-blur-sm">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3">発酵・米麹シリーズ</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3" data-en="Fermentation &amp; rice-koji series">発酵・米麹シリーズ</p>
           <div class="space-y-1.5">
-            <p class="font-so-sans text-xs text-so-text/62">玉ねぎ麹・にんにく麹・レモン麹・カレー麹</p>
-            <p class="font-so-sans text-xs text-so-text/62">きのこ麹・生姜麹・ゆず麹</p>
-            <p class="font-so-sans text-xs text-so-text/62">豆板醤・発酵ケチャップ</p>
-            <p class="font-so-sans text-xs text-so-text/45 mt-2">みょうが甘酢漬け・ヨーグルト味噌漬け 他</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Onion koji, garlic koji, lemon koji, curry koji">玉ねぎ麹・にんにく麹・レモン麹・カレー麹</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Mushroom koji, ginger koji, yuzu koji">きのこ麹・生姜麹・ゆず麹</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Doubanjiang, fermented ketchup">豆板醤・発酵ケチャップ</p>
+            <p class="font-so-sans text-xs text-so-text/45 mt-2" data-en="Sweet-vinegar myoga pickles, yogurt-miso pickles, and more">みょうが甘酢漬け・ヨーグルト味噌漬け 他</p>
           </div>
         </div>
         <div class="recipe-card bg-white/75 p-6 backdrop-blur-sm" style="transition-delay:.06s">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3">ゆず・わさびシリーズ</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3" data-en="Yuzu &amp; wasabi series">ゆず・わさびシリーズ</p>
           <div class="space-y-1.5">
-            <p class="font-so-sans text-xs text-so-text/62">ゆずポン酢・塩ポン酢・柚子白菜</p>
-            <p class="font-so-sans text-xs text-so-text/62">白菜・大根・小松菜のワサビ漬け</p>
-            <p class="font-so-sans text-xs text-so-text/62">きゅうりの無限わさび漬け</p>
-            <p class="font-so-sans text-xs text-so-text/45 mt-2">大根田舎漬け・白キムチ 他</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Yuzu ponzu, salt ponzu, yuzu napa cabbage">ゆずポン酢・塩ポン酢・柚子白菜</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Wasabi pickles of napa cabbage, daikon, and komatsuna">白菜・大根・小松菜のワサビ漬け</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Endless wasabi-pickled cucumbers">きゅうりの無限わさび漬け</p>
+            <p class="font-so-sans text-xs text-so-text/45 mt-2" data-en="Country-style daikon pickles, white kimchi, and more">大根田舎漬け・白キムチ 他</p>
           </div>
         </div>
         <div class="recipe-card bg-white/75 p-6 backdrop-blur-sm" style="transition-delay:.12s">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3">調理科学系</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3" data-en="Cooking-science series">調理科学系</p>
           <div class="space-y-1.5">
-            <p class="font-so-sans text-xs text-so-text/62">骨付鳥：保水技術＋二段階ニンニク香り付け</p>
-            <p class="font-so-sans text-xs text-so-text/62">豚のミルフィーユグリル：重ね焼きで均一加熱</p>
-            <p class="font-so-sans text-xs text-so-text/62">鶏むね肉：塩麹で劇的に柔らかく</p>
-            <p class="font-so-sans text-xs text-so-text/45 mt-2">スタミナ生姜焼き弁当 他</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Bone-in chicken: moisture retention plus two-stage garlic aroma">骨付鳥：保水技術＋二段階ニンニク香り付け</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Pork mille-feuille grill: layered grilling for even heat">豚のミルフィーユグリル：重ね焼きで均一加熱</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Chicken breast: dramatically tender with shio-koji">鶏むね肉：塩麹で劇的に柔らかく</p>
+            <p class="font-so-sans text-xs text-so-text/45 mt-2" data-en="Stamina ginger-pork bento, and more">スタミナ生姜焼き弁当 他</p>
           </div>
         </div>
         <div class="recipe-card bg-white/75 p-6 backdrop-blur-sm" style="transition-delay:.18s">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3">常備菜・保存食</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3" data-en="Staples &amp; preserved foods">常備菜・保存食</p>
           <div class="space-y-1.5">
-            <p class="font-so-sans text-xs text-so-text/62">無添加アーモンドフィッシュ（日本酒で旨味）</p>
-            <p class="font-so-sans text-xs text-so-text/62">自家製白だし・野菜たっぷり味噌ポトフ</p>
-            <p class="font-so-sans text-xs text-so-text/62">がんもどき・曾祖母から伝わるごぼう煮物</p>
-            <p class="font-so-sans text-xs text-so-text/45 mt-2">大葉ちくわ3種・竹輪の磯辺揚げ 他</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Additive-free almond fish (umami from sake)">無添加アーモンドフィッシュ（日本酒で旨味）</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Homemade shiro-dashi, vegetable-rich miso pot-au-feu">自家製白だし・野菜たっぷり味噌ポトフ</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Ganmodoki, and a burdock simmer passed down from my great-grandmother">がんもどき・曾祖母から伝わるごぼう煮物</p>
+            <p class="font-so-sans text-xs text-so-text/45 mt-2" data-en="Three shiso-chikuwa variations, chikuwa isobe-age, and more">大葉ちくわ3種・竹輪の磯辺揚げ 他</p>
           </div>
         </div>
         <div class="recipe-card bg-white/75 p-6 backdrop-blur-sm" style="transition-delay:.24s">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3">季節・旬の料理</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45 border-b border-so-accent/08 pb-3" data-en="Seasonal cooking">季節・旬の料理</p>
           <div class="space-y-1.5">
-            <p class="font-so-sans text-xs text-so-text/62">二十四節気に沿った季節の移ろいを感じる料理</p>
-            <p class="font-so-sans text-xs text-so-text/62">ホタルイカと春野菜のスパゲティ</p>
-            <p class="font-so-sans text-xs text-so-text/62">実山椒と葉（最古のスパイス）・五味薬味</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Dishes that trace the turning seasons along the 24 solar terms">二十四節気に沿った季節の移ろいを感じる料理</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Firefly squid and spring-vegetable spaghetti">ホタルイカと春野菜のスパゲティ</p>
+            <p class="font-so-sans text-xs text-so-text/62" data-en="Sansho berries and leaves (the oldest spice), five-flavor condiments">実山椒と葉（最古のスパイス）・五味薬味</p>
           </div>
         </div>
         <div class="recipe-card bg-so-accent p-6" style="transition-delay:.30s">
-          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35 border-b border-white/10 pb-3">公開予定</p>
-          <p class="font-so-logo text-base text-white mb-3">レシピライブラリ</p>
-          <p class="font-so-sans text-xs text-white/52 leading-loose">100点以上のレシピをHP上で閲覧・取得できる環境を整備予定。どなたでも気軽にアクセス可能に。</p>
+          <p class="mb-3 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35 border-b border-white/10 pb-3" data-en="Coming soon">公開予定</p>
+          <p class="font-so-logo text-base text-white mb-3" data-en="Recipe Library">レシピライブラリ</p>
+          <p class="font-so-sans text-xs text-white/52 leading-loose" data-en="We plan to make 100+ recipes browsable and downloadable on this site — open and easy for everyone to access.">100点以上のレシピをHP上で閲覧・取得できる環境を整備予定。どなたでも気軽にアクセス可能に。</p>
           <p class="mt-4 font-so-sans text-[10px] tracking-[0.15em] text-so-sky/45">Coming Soon</p>
         </div>
       </div>
@@ -211,40 +212,40 @@
 
       <div class="mb-12 text-center fade-in">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Services & Pricing</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">サービス・料金</h2>
-        <p class="mt-4 font-so-sans text-xs text-so-accent/70">HP上のAIアバターとのチャット相談は無料です</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="Services &amp; Pricing">サービス・料金</h2>
+        <p class="mt-4 font-so-sans text-xs text-so-accent/70" data-en="Chat consultations with the AI avatar on this site are free">HP上のAIアバターとのチャット相談は無料です</p>
       </div>
 
       <!-- サービスカード: Web=2列 / Mobile=1列 -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 mb-10 fade-in">
         <div class="border border-so-accent/12 bg-white p-6">
-          <p class="font-so-logo text-base text-so-accent mb-1">レシピ開発</p>
-          <p class="font-so-logo text-2xl text-so-accent mb-1">¥50,000<span class="font-so-sans text-xs text-so-text/38">〜 / 1案</span></p>
-          <p class="font-so-sans text-xs text-so-text/55 leading-loose mt-3">科学的根拠に基づいた、健康で美味しいオリジナルレシピの開発</p>
+          <p class="font-so-logo text-base text-so-accent mb-1" data-en="Recipe Development">レシピ開発</p>
+          <p class="font-so-logo text-2xl text-so-accent mb-1">¥50,000<span class="font-so-sans text-xs text-so-text/38" data-en="+ / recipe">〜 / 1案</span></p>
+          <p class="font-so-sans text-xs text-so-text/55 leading-loose mt-3" data-en="Original recipes, healthy and delicious, developed on scientific grounds">科学的根拠に基づいた、健康で美味しいオリジナルレシピの開発</p>
         </div>
         <div class="border border-so-accent/12 bg-white p-6">
-          <p class="font-so-logo text-base text-so-accent mb-1">料理科学コラム</p>
-          <p class="font-so-sans text-xs text-so-accent/50 mb-3">別途お見積もり</p>
-          <p class="font-so-sans text-xs text-so-text/55 leading-loose">分子ガストロノミーをやさしく解説するブログ記事・動画制作</p>
+          <p class="font-so-logo text-base text-so-accent mb-1" data-en="Culinary-Science Columns">料理科学コラム</p>
+          <p class="font-so-sans text-xs text-so-accent/50 mb-3" data-en="Quoted separately">別途お見積もり</p>
+          <p class="font-so-sans text-xs text-so-text/55 leading-loose" data-en="Blog articles and videos that explain molecular gastronomy in plain language">分子ガストロノミーをやさしく解説するブログ記事・動画制作</p>
         </div>
         <div class="border border-so-accent/12 bg-so-sage/30 p-6">
-          <p class="font-so-logo text-base text-so-accent mb-1">AI料理相談チャット</p>
-          <p class="font-so-sans text-xs text-so-accent/50 mb-3">稼働中（無料）</p>
-          <p class="font-so-sans text-xs text-so-text/55 leading-loose"><a href="index.html" class="underline decoration-so-accent/30 hover:text-so-accent">トップページの総合受付</a>から、AIアバターに料理のご相談をいただけます（Qwen Cloud使用）</p>
+          <p class="font-so-logo text-base text-so-accent mb-1" data-en="AI Cooking-Consultation Chat">AI料理相談チャット</p>
+          <p class="font-so-sans text-xs text-so-accent/50 mb-3" data-en="Live now (free)">稼働中（無料）</p>
+          <p class="font-so-sans text-xs text-so-text/55 leading-loose" data-en-html="From the <a href='index.html' class='underline decoration-so-accent/30 hover:text-so-accent'>General Reception on the top page</a>, you can consult our AI avatar about cooking (powered by Qwen Cloud)"><a href="index.html" class="underline decoration-so-accent/30 hover:text-so-accent">トップページの総合受付</a>から、AIアバターに料理のご相談をいただけます（Qwen Cloud使用）</p>
         </div>
       </div>
 
       <!-- CTA -->
       <div class="fade-in text-center">
-        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl">食の探求を、一緒に。</h3>
-        <p class="mb-8 font-so-sans text-sm text-so-text/55 leading-loose">
+        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl" data-en="Let's explore food together.">食の探求を、一緒に。</h3>
+        <p class="mb-8 font-so-sans text-sm text-so-text/55 leading-loose" data-en-html="Recipe development requests, collaborations, workshop inquiries —<br />please feel free to get in touch.">
           レシピ開発のご依頼・コラボレーション・ワークショップのご相談など、<br />
           お気軽にお問い合わせください。
         </p>
-        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
+        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300" data-en="Consult about recipe development →">
           レシピ開発のご相談 →
         </a>
-        <p class="mt-3 font-so-sans text-xs text-so-text/38 tracking-[0.08em]">レシピ開発 ¥50,000〜</p>
+        <p class="mt-3 font-so-sans text-xs text-so-text/38 tracking-[0.08em]" data-en="Recipe development ¥50,000+">レシピ開発 ¥50,000〜</p>
       </div>
     </div>
   </section>
@@ -255,15 +256,15 @@
       <p class="mb-6 text-center font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/48 fade-in">Other Services</p>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 fade-in">
         <a href="index.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">🏠</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Top</p><p class="font-so-sans text-[9px] text-so-text/42">トップページ</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">🏠</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Top</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="Top page">トップページ</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
         <a href="ai.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">🤖</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42">AIコンサルティング</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">🤖</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="AI Consulting">AIコンサルティング</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
         <a href="travel.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">✈️</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p><p class="font-so-sans text-[9px] text-so-text/42">旅行プランニング</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">✈️</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="Travel Planning">旅行プランニング</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
       </div>

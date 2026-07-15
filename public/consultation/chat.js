@@ -14,9 +14,21 @@ let analysisResult = null;
 let currentSystemPrompt = '';
 let hearingComplete = false;
 
+// 現在の表示言語（i18n.js が未読込のページでも安全に'ja'へフォールバック）
+function lang() {
+  return (window.SO_I18N && window.SO_I18N.getLang()) || 'ja';
+}
+function isEn() {
+  return lang() === 'en';
+}
+
 export function initChat(key) {
   apiKey = key;
-  currentSystemPrompt = buildChatSystemPrompt();
+  currentSystemPrompt = buildChatSystemPrompt('', lang());
+  // 言語が切り替わったら、AI応答の言語指示も追随させる
+  document.addEventListener('so-lang-change', () => {
+    currentSystemPrompt = buildChatSystemPrompt(analysisResult?.dictionaryText || '', lang());
+  });
   bindEvents();
   showWelcome();
 }
@@ -98,7 +110,7 @@ async function handleSend() {
     if (typeof window.avatarSpeak === 'function') window.avatarSpeak(reply);
     appendMessage('ai', reply);
   } catch (err) {
-    appendError(err.message || 'エラーが発生しました。');
+    appendError(err.message || (isEn() ? 'An error occurred.' : 'エラーが発生しました。'));
   } finally {
     // 入力欄は返信テキストが届いた時点ですぐ再開する。確信度チェック（下記）は
     // Thinking Modeでさらに10秒前後かかるため、それを待たせると入力欄が
@@ -136,10 +148,10 @@ async function handleSend() {
 
 async function runAnalysis({ forceSummary = false } = {}) {
   try {
-    analysisResult = await analyzeConversation(messages, apiKey, { forceSummary });
+    analysisResult = await analyzeConversation(messages, apiKey, { forceSummary, lang: lang() });
 
     // ローカル翻訳辞書でシステムプロンプト更新
-    currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText);
+    currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText, lang());
 
     if (forceSummary) {
       // /api/summary の呼び出しが失敗すると summaryMessage は null のまま返ってくる
@@ -148,8 +160,15 @@ async function runAnalysis({ forceSummary = false } = {}) {
       // 要約文の生成成否に関わらず、ボタン操作自体は必ず完了させる。
       if (!analysisResult.summaryMessage) {
         console.warn('要約生成に失敗したため、簡易フォールバック要約で完了処理を続行します。');
+        // カンニングシート（管理人向け）は常に日本語のため、日本語フォールバックを必ず用意する
         analysisResult.summaryMessage = buildFallbackSummary(analysisResult);
-        showVoiceToast('要約の自動生成に失敗しました。簡易内容でご相談を受け付けています。', 4500);
+        showVoiceToast(isEn()
+          ? 'Automatic summary generation failed. Your consultation has been recorded with a simplified summary.'
+          : '要約の自動生成に失敗しました。簡易内容でご相談を受け付けています。', 4500);
+      }
+      // English選択時の画面表示・読み上げ用の英語要約（生成失敗時は英語フォールバック）
+      if (isEn() && !analysisResult.summaryMessageEn) {
+        analysisResult.summaryMessageEn = buildFallbackSummaryEn(analysisResult);
       }
 
       appendSummaryBubble(analysisResult);
@@ -158,7 +177,7 @@ async function runAnalysis({ forceSummary = false } = {}) {
       // ここだけ無音だと一貫性がないため）。markHearingComplete が先に
       // soHearingComplete を立てているので、読み上げ後にNudgeは再武装されない。
       if (typeof window.avatarSpeak === 'function') {
-        window.avatarSpeak(analysisResult.summaryMessage);
+        window.avatarSpeak(displaySummaryText(analysisResult));
       }
       notifyAdmin(analysisResult);
     }
@@ -170,7 +189,9 @@ async function runAnalysis({ forceSummary = false } = {}) {
       // classifyConversation/analyzeConversation自体が例外を投げた最悪のケースでも、
       // ヒヤリングは必ず終了させ、Nudgeループを止める。
       markHearingComplete();
-      showVoiceToast('通信エラーが発生しましたが、ご相談は受け付けました。担当者よりご連絡いたします。', 4500);
+      showVoiceToast(isEn()
+        ? 'A network error occurred, but your consultation has been received. Our staff will contact you.'
+        : '通信エラーが発生しましたが、ご相談は受け付けました。担当者よりご連絡いたします。', 4500);
     }
   }
 }
@@ -180,6 +201,19 @@ function buildFallbackSummary(analysis) {
   const concern = analysis.mainConcern || 'いただいたお話の内容';
   const industry = analysis.industryLabel ? `${analysis.industryLabel}の` : '';
   return `${industry}ご相談として、${concern}について承りました。詳細は担当者が改めてお伺いいたします。`;
+}
+
+// English選択時の画面表示・読み上げ用フォールバック要約文
+function buildFallbackSummaryEn(analysis) {
+  const concern = analysis.mainConcern ? ` regarding "${analysis.mainConcern}"` : '';
+  return `We have received your consultation${concern}. Our staff will follow up with you for the details.`;
+}
+
+// 画面表示・読み上げに使う要約（EN選択時は英語版を優先。シート用の日本語要約とは別）
+function displaySummaryText(analysis) {
+  return isEn()
+    ? (analysis.summaryMessageEn || analysis.summaryMessage)
+    : analysis.summaryMessage;
 }
 
 // ── 準備シート作成ボタン（ハイブリッド完了フロー） ──────────────────────
@@ -198,7 +232,7 @@ function showCreateSheetButton() {
 function suggestCreateSheet() {
   getCreateSheetButtons().forEach(btn => {
     btn.classList.add('suggest');
-    btn.textContent = 'そろそろ相談を終えられますか？ →';
+    btn.textContent = isEn() ? 'Ready to finish the consultation? →' : 'そろそろ相談を終えられますか？ →';
   });
 }
 
@@ -206,7 +240,7 @@ function unsuggestCreateSheet() {
   if (hearingComplete) return;
   getCreateSheetButtons().forEach(btn => {
     btn.classList.remove('suggest');
-    btn.textContent = '相談を終える';
+    btn.textContent = isEn() ? 'Finish consultation' : '相談を終える';
   });
 }
 
@@ -227,10 +261,14 @@ async function notifyAdmin(analysis) {
     const subject = `【至急対応】${missingContact ? '⚠️電話番号未取得／' : ''}アバターヒアリング完了：${analysis.categoryLabel}のご相談`;
     const text = generatePreparationSheetText(analysis, messages);
     await sendCheatSheetNotification(subject, text);
-    showVoiceToast('ご相談内容を担当者へお送りしました ✓', 3500, 'info');
+    showVoiceToast(isEn()
+      ? 'Your consultation has been sent to our staff ✓'
+      : 'ご相談内容を担当者へお送りしました ✓', 3500, 'info');
   } catch (e) {
     console.warn('管理人への自動通知に失敗:', e.message);
-    showVoiceToast('自動送信に失敗しました。「テキストをコピー」から手動で共有してください。', 4500);
+    showVoiceToast(isEn()
+      ? 'Automatic sending failed. Please use "テキストをコピー" (Copy text) to share it manually.'
+      : '自動送信に失敗しました。「テキストをコピー」から手動で共有してください。', 4500);
   }
 }
 
@@ -300,11 +338,11 @@ function appendSummaryBubble(analysis) {
 
   const bubbleHtml = `
     <div class="summary-header">
-      <span class="summary-badge">カテゴリ ${escHtml(analysis.category)}</span>
+      <span class="summary-badge">${isEn() ? 'Category' : 'カテゴリ'} ${escHtml(analysis.category)}</span>
       <span class="summary-meta">${escHtml(analysis.industryLabel)} / ${escHtml(analysis.levelLabel)}</span>
     </div>
-    <p>${escHtml(analysis.summaryMessage)}</p>
-    <button class="show-sheet-link" onclick="showPreparationSheet()">ご相談内容を確認する →</button>
+    <p>${escHtml(displaySummaryText(analysis))}</p>
+    <button class="show-sheet-link" onclick="showPreparationSheet()">${isEn() ? 'View your consultation details →' : 'ご相談内容を確認する →'}</button>
   `;
 
   // 既存の要約バブルがあれば新規追加せず内容だけ更新（会話継続で内容が育つ）
@@ -380,7 +418,9 @@ function showWelcome() {
   // 簡易版チャット窓口（contact.html等）だけ、この場で挨拶する。
   const isContactPage = window.location.pathname.includes('contact.html');
   if (isContactPage) {
-    const msg = 'こんにちは。Studio S.O の相談窓口です。\nどのようなことでもお気軽にお話しください。';
+    const msg = isEn()
+      ? 'Hello. This is the Studio S.O consultation desk.\nPlease feel free to talk about anything.'
+      : 'こんにちは。Studio S.O の相談窓口です。\nどのようなことでもお気軽にお話しください。';
     appendMessage('ai', msg);
     setTimeout(function() {
       try {
@@ -395,7 +435,9 @@ function showWelcome() {
 /* 管理人が折り返し連絡できるよう、会話の最初に一度だけご連絡先をお伺いする。
    （3〜4往復後の要約直前だと、途中で離脱した顧客の連絡先が一切取れないため） */
 function askForContactInfo() {
-  const msg = 'まず、担当者からご連絡できるよう、御社名・ご担当者様のお名前（個人のお客様はお名前のみで結構です）と、お電話番号を教えていただけますか。お電話番号は必須でお願いしております。メールアドレスもございましたら、合わせてお願いいたします。';
+  const msg = isEn()
+    ? 'First, so that our staff can get back to you, could you tell me your company name and the name of the person in charge (individual customers may simply give their name), along with your phone number? A phone number is required. If you have an email address, please share that as well.'
+    : 'まず、担当者からご連絡できるよう、御社名・ご担当者様のお名前（個人のお客様はお名前のみで結構です）と、お電話番号を教えていただけますか。お電話番号は必須でお願いしております。メールアドレスもございましたら、合わせてお願いいたします。';
   appendMessage('ai', msg);
   setTimeout(function() {
     try {
@@ -409,7 +451,9 @@ function askForContactInfo() {
 /* ヒヤリングの終わり方も、開始時点であらかじめ案内しておく。
    （終了ボタンの存在に気づかず、話し終えた後も迷わせてしまうのを防ぐため） */
 function explainHowToEnd() {
-  const msg = 'ご相談内容がひと通り伺えましたら、画面に「相談を終える」ボタンが表示されます。そちらを押していただくと、ここまでの内容を担当の者へお伝えして、ご相談は完了です。';
+  const msg = isEn()
+    ? 'Once I have heard the outline of your consultation, a "Finish consultation" button will appear on the screen. Press it, and I will pass everything on to our staff — that completes your consultation.'
+    : 'ご相談内容がひと通り伺えましたら、画面に「相談を終える」ボタンが表示されます。そちらを押していただくと、ここまでの内容を担当の者へお伝えして、ご相談は完了です。';
   appendMessage('ai', msg);
   setTimeout(function() {
     try {
@@ -536,7 +580,9 @@ export function startWelcomeGreeting() {
   ].filter(Boolean);
   containers.forEach(c => c.innerHTML = '');
 
-  const GREETING_STEPS = [
+  // English選択時は、ユーザー収録の英語音声（Cut_X_vol_E.wav）と英語字幕に差し替える。
+  // Cut_3（無音のタメ・頷き）は言語に依存しないため共通。
+  const GREETING_STEPS_JA = [
     {
       text: "こんにちは！毎日のお仕事お疲れ様です。スタジオ エスオーでの業務の改善や旅行・料理の相談をお伺いするコンサルタントです。",
       audio: "avatar/Cut_1_voice.wav"
@@ -562,6 +608,33 @@ export function startWelcomeGreeting() {
       audio: "avatar/Cut_6_voice.wav"
     }
   ];
+  const GREETING_STEPS_EN = [
+    {
+      text: "Hello! Thank you for your hard work every day. I am a consultant here to help you with business improvement, travel plans, and cooking at Studio So.",
+      audio: "avatar/Cut_1_vol_E.wav"
+    },
+    {
+      text: "Drawing on my extensive experience in handling various business, travel, and cooking consultations, I will do my absolute best to support your work, your exciting trips, and your cooking.",
+      audio: "avatar/Cut_2_vol_E.wav"
+    },
+    {
+      text: "", // 2秒の完全な沈黙（タメ）および頷き
+      audio: "avatar/Cut_3_voice.wav"
+    },
+    {
+      text: "Let’s dive into the details of your consultation. First, please let me know what you would like to do. After that, I will ask you a few questions.",
+      audio: "avatar/Cut_4_vol_E.wav"
+    },
+    {
+      text: "Please feel free to tell me what you want to achieve in your own words, just like you normally speak. Don't hesitate to share your current challenges, travel ideas, or cooking questions with me.",
+      audio: "avatar/Cut_5_vol_E.wav"
+    },
+    {
+      text: "The chat input area is now active. You can type using your keyboard, or click the voice button to speak to me directly.\nNow, let’s begin the consultation. Please go ahead and enter your input. I will guide you through it step-by-step.",
+      audio: "avatar/Cut_6_vol_E.wav"
+    }
+  ];
+  const GREETING_STEPS = isEn() ? GREETING_STEPS_EN : GREETING_STEPS_JA;
 
   let currentStep = 0;
   function playNextStep() {
@@ -655,7 +728,7 @@ function bindVoice(btn, input) {
   }
 
   const rec = new SpeechRecognition();
-  rec.lang = 'ja-JP';
+  rec.lang = isEn() ? 'en-US' : 'ja-JP';
   rec.interimResults = true;
   rec.continuous = true;
   rec.maxAlternatives = 1;
@@ -683,17 +756,22 @@ function bindVoice(btn, input) {
       return;
     }
     baseText = input ? input.value : '';
+    rec.lang = isEn() ? 'en-US' : 'ja-JP'; // クリック時点の選択言語で認識する
     try {
       rec.start();
     } catch (e) {
-      showVoiceToast('音声認識を開始できませんでした：' + (e.message || e.name));
+      showVoiceToast(isEn()
+        ? 'Could not start voice recognition: ' + (e.message || e.name)
+        : '音声認識を開始できませんでした：' + (e.message || e.name));
     }
   });
 
   rec.onstart = () => {
     isRecording = true;
     btn.classList.add('recording');
-    showVoiceToast('マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
+    showVoiceToast(isEn()
+      ? 'Please speak slowly and clearly into the microphone. When finished, press send or simply wait.'
+      : 'マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
     if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
     armSilenceTimer();
   };
@@ -728,6 +806,17 @@ function bindVoice(btn, input) {
 }
 
 function voiceErrorMessage(code) {
+  if (isEn()) {
+    switch (code) {
+      case 'no-speech':      return 'No speech was detected. Please press the microphone button and try again.';
+      case 'audio-capture':  return 'No microphone was found. Please check that a microphone is connected.';
+      case 'not-allowed':    return 'Microphone access is not allowed. Please enable microphone permission in your browser.';
+      case 'service-not-allowed': return 'The speech recognition service is unavailable.';
+      case 'network':        return 'Speech recognition failed due to a network error.';
+      case 'aborted':        return '';
+      default:               return 'Speech recognition error: ' + code;
+    }
+  }
   switch (code) {
     case 'no-speech':      return '音声が検出されませんでした。もう一度マイクを押して話しかけてください。';
     case 'audio-capture':  return 'マイクが見つかりません。マイクが接続されているか確認してください。';

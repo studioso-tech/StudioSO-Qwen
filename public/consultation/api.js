@@ -15,9 +15,14 @@ const ANTHROPIC_VERSION = '2023-06-01';
 // 互換性のため既存名も維持
 export const CLAUDE_MODEL = QWEN_MODEL;
 
-export function buildChatSystemPrompt(dictionaryText = '') {
+export function buildChatSystemPrompt(dictionaryText = '', lang = 'ja') {
   const dictSection = dictionaryText
     ? `\n\n【業界・カテゴリ別ローカル表現ガイド（要約提示時に使用）】\n${dictionaryText}`
+    : '';
+
+  // English選択時：応答言語だけを英語に切り替える（対話の哲学・ルールは共通）
+  const langSection = lang === 'en'
+    ? `\n\n【応答言語（最重要）】相手はWebサイトで「English」を選択しています。応答はすべて自然で丁寧な英語で行ってください。日本語は一切使わないでください。応答の長さは英語で3〜4文程度を目安にしてください。`
     : '';
 
   return `あなたはStudio S.O の統合相談窓口のアシスタントです。
@@ -87,7 +92,7 @@ export function buildChatSystemPrompt(dictionaryText = '') {
 ・カリナリーラボ：料理研究・レシピ開発・食を通じた体験の設計
 
 【初回相談のゴール】
-この対話を通じて、相手の「次の一手」が見えることが最低限の成果です。`;
+この対話を通じて、相手の「次の一手」が見えることが最低限の成果です。${langSection}`;
 }
 
 const CLASSIFICATION_SYSTEM_PROMPT = `あなたは会話分析の専門家です。
@@ -143,6 +148,8 @@ const CLASSIFICATION_SYSTEM_PROMPT = `あなたは会話分析の専門家です
 12. contact_phone: 会話の中で判明した電話番号（原文のまま）。判明していなければ空文字列 ""
 
 13. contact_email: 会話の中で判明したメールアドレス（原文のまま）。判明していなければ空文字列 ""
+
+【言語について】会話が英語で行われている場合でも、customer_profile・main_concern・recommended_approach・open_items は必ず日本語で書いてください（このJSONは日本語のカンニングシートに転記され、日本語話者の管理人が読みます）。contact_name / contact_person / contact_phone / contact_email は原文のまま記載してください。
 
 必ずJSON形式のみで返してください。説明文は不要です。
 customer_profile・main_concern・recommended_approach・open_itemsは、下記の例をそのまま使い回さず、必ず実際の会話内容に即して独自に書いてください（例はJSON構造を示すためだけのものです）。
@@ -202,7 +209,33 @@ export async function classifyConversation(messages, apiKey) {
   }
 }
 
-export async function generateSummaryMessage(analysis, messages, dictionaryText, apiKey) {
+export async function generateSummaryMessage(analysis, messages, dictionaryText, apiKey, lang = 'ja') {
+  if (lang === 'en') {
+    // English選択時の、ユーザー画面表示・読み上げ用の英語要約。
+    // カンニングシート用の日本語要約は別途 lang='ja' で生成される。
+    const summaryPromptEn = `You are the assistant of Studio S.O.
+Based on the conversation history, generate a closing summary message addressed to the user, in natural English.
+
+Rules:
+- Begin with a phrase like "So, to summarize your consultation:"
+- Keep it within about 80 words
+- Use plain everyday language; never use technical jargon (AI, DX, RAG, cloud, etc.)
+- This is the closing summary after the hearing; no further questions will follow.
+  Do not use phrases that imply more questions are coming.
+  Close by conveying that a staff member will take over and contact them.`;
+
+    const response = await fetchClaude(
+      {
+        model: CLAUDE_MODEL,
+        max_tokens: 256,
+        system: summaryPromptEn,
+        messages: [{ role: 'user', content: formatMessagesForAnalysis(messages) }],
+      },
+      apiKey
+    );
+    return stripMarkdown(response.content[0].text);
+  }
+
   const summaryPrompt = `あなたはStudio S.Oのアシスタントです。
 以下の分析結果と会話履歴をもとに、ユーザーへの要約メッセージを生成してください。
 

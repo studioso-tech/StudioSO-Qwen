@@ -19,6 +19,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
+  <script src="consultation/i18n.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -112,6 +113,21 @@
       font-size: 18px; letter-spacing: 0.05em; line-height: 1.75;
       color: #0D2233; white-space: nowrap;
     }
+
+    /* 言語切替（ヒーロー） */
+    .lang-toggle {
+      position: absolute; top: 92px; left: 50%; transform: translateX(-50%); z-index: 30;
+      display: flex; border: 1px solid rgba(27,73,101,0.30); border-radius: 999px;
+      overflow: hidden; background: rgba(255,255,255,0.72); backdrop-filter: blur(8px);
+    }
+    .so-lang-btn {
+      appearance: none; border: none; background: transparent; cursor: pointer;
+      font-family: 'Noto Sans JP',sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; color: #1B4965; padding: 7px 16px;
+      transition: background 200ms, color 200ms;
+    }
+    .so-lang-btn.on { background: #1B4965; color: #fff; }
+    @media (max-width: 639px) { .lang-toggle { top: 80px; } }
 
     /* タブ */
     .tabs-wrap { width: 100%; max-width: 620px; margin-top: 80px; }
@@ -421,7 +437,7 @@
         <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">Travel</a>
         <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">Culinary</a>
         <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors duration-300">About</a>
-        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300">相談する →</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300" data-en="Consult Us →">相談する →</a>
       </div>
       <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
         <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
@@ -434,7 +450,7 @@
         <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Travel Design</a>
         <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Culinary Lab</a>
         <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">About</a>
-        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]" data-en="Contact us →">まずは相談する →</a>
       </div>
     </div>
   </nav>
@@ -444,6 +460,12 @@
   <section id="hero">
     <div class="bg" role="img" aria-label="書斎の背景"></div>
     <div class="bg-grad"></div>
+
+    <!-- 言語切替（初期値は日本語） -->
+    <div class="lang-toggle" role="group" aria-label="Language">
+      <button type="button" class="so-lang-btn on" data-lang="ja" onclick="SO_I18N.setLang('ja')">日本語</button>
+      <button type="button" class="so-lang-btn" data-lang="en" onclick="SO_I18N.setLang('en')">English</button>
+    </div>
 
     <div class="content">
       <!-- ロゴ -->
@@ -474,16 +496,16 @@
 
       <!-- キャッチコピー -->
       <div class="hero-text">
-        <p class="hero__philosophy">ＡＩによって人間の感性を拡張し、<br>より豊かな日常を再定義する。</p>
+        <p class="hero__philosophy" data-en-html="Expanding human sensibility through AI,<br>redefining a richer everyday life.">ＡＩによって人間の感性を拡張し、<br>より豊かな日常を再定義する。</p>
       </div>
 
       <!-- 2項目タブ -->
       <div class="tabs-wrap">
         <div class="tabs__bar" role="tablist">
           <button class="tabs__btn" data-t="g" role="tab" aria-selected="false"
-                  onclick="switchTab('g')">総合受付</button>
+                  onclick="switchTab('g')" data-en="General Reception">総合受付</button>
           <button class="tabs__btn" data-t="e" role="tab" aria-selected="false"
-                  onclick="switchTab('e')">お急ぎの方</button>
+                  onclick="switchTab('e')" data-en="In a Hurry?">お急ぎの方</button>
         </div>
 
         <!-- タブ: 総合受付 -->
@@ -491,18 +513,18 @@
           <!-- モバイル: アバター招待 -->
           <div id="m-invite" class="m-invite hidden" onclick="openMobileInput()">
             <div class="m-avatar"><span class="m-avatar-initials">S.O</span></div>
-            <span class="m-avatar-label">ＡＩアシスタント</span>
+            <span class="m-avatar-label" data-en="AI Assistant">ＡＩアシスタント</span>
             <span class="m-hint">TAP TO CHAT</span>
           </div>
           <div id="m-input-area" class="m-input-area hidden">
             <div class="p-chat__msgs" id="m-chat-messages"></div>
             <div id="m-typing-indicator" class="msg msg--ai hidden">
               <span class="msg__av">S.O</span>
-              <div class="msg__tx"><em>入力中…</em></div>
+              <div class="msg__tx"><em data-en="Typing…">入力中…</em></div>
             </div>
-            <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
+            <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()" data-en="Finish consultation">相談を終える</button>
             <div class="m-input-row">
-              <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。"></textarea>
+              <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。" data-en-placeholder="Feel free to talk to me as you are."></textarea>
               <button id="m-voice-btn" class="m-voice-btn" type="button" aria-label="音声入力">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="2" width="6" height="11" rx="3"/>
@@ -521,11 +543,11 @@
             <div class="p-chat__msgs" id="chat-messages"></div>
             <div id="typing-indicator" class="msg msg--ai hidden">
               <span class="msg__av">S.O</span>
-              <div class="msg__tx"><em>入力中…</em></div>
+              <div class="msg__tx"><em data-en="Typing…">入力中…</em></div>
             </div>
-            <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()">相談を終える</button>
+            <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()" data-en="Finish consultation">相談を終える</button>
             <form id="chat-form" class="p-chat__bar">
-              <textarea id="chat-input" placeholder="ご相談内容をご自由にお書きください…" rows="1"></textarea>
+              <textarea id="chat-input" placeholder="ご相談内容をご自由にお書きください…" data-en-placeholder="Please write about your consultation freely…" rows="1"></textarea>
               <button type="button" id="voice-btn" aria-label="音声入力" title="音声で入力">
                 <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="2" width="6" height="11" rx="3"/>
@@ -541,19 +563,19 @@
             <!-- 分析パネル -->
             <div id="analysis-panel" class="analysis-panel hidden">
               <div>
-                <div class="analysis-item__label">カテゴリ</div>
+                <div class="analysis-item__label" data-en="Category">カテゴリ</div>
                 <div class="analysis-item__value" id="analysis-category">—</div>
               </div>
               <div>
-                <div class="analysis-item__label">業種</div>
+                <div class="analysis-item__label" data-en="Industry">業種</div>
                 <div class="analysis-item__value" id="analysis-industry">—</div>
               </div>
               <div>
-                <div class="analysis-item__label">習熟レベル</div>
+                <div class="analysis-item__label" data-en="Level">習熟レベル</div>
                 <div class="analysis-item__value" id="analysis-level">—</div>
               </div>
               <div>
-                <div class="analysis-item__label">主な悩み</div>
+                <div class="analysis-item__label" data-en="Main concern">主な悩み</div>
                 <div class="analysis-item__value" id="analysis-concern">—</div>
               </div>
               <div style="grid-column:1/-1;">
@@ -567,15 +589,15 @@
         <div id="pe" class="hide p-atc" role="tabpanel">
           <a href="ai.html" aria-label="ＡＩコンサルティングへ">
             <span class="ltr">Ａ</span>
-            <span class="ja">ＡＩコンサルティング</span>
+            <span class="ja" data-en="AI Consulting">ＡＩコンサルティング</span>
           </a>
           <a href="travel.html" aria-label="トラベルデザインへ">
             <span class="ltr">Ｔ</span>
-            <span class="ja">トラベルデザイン</span>
+            <span class="ja" data-en="Travel Design">トラベルデザイン</span>
           </a>
           <a href="culinary.html" aria-label="カリナリーラボ事業へ">
             <span class="ltr">Ｃ</span>
-            <span class="ja">カリナリーラボ事業</span>
+            <span class="ja" data-en="Culinary Lab">カリナリーラボ事業</span>
           </a>
         </div>
       </div>
@@ -591,8 +613,8 @@
   <section id="services" class="fade-in py-24 px-6">
     <div class="mx-auto max-w-6xl">
       <div class="text-center mb-14">
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">3つのアプローチで、<br class="sm:hidden" />日常を豊かに</h2>
-        <p class="mt-4 font-so-sans text-sm leading-loose text-so-text/68 max-w-xl mx-auto">
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en-html="Three approaches to<br class='sm:hidden' />enrich your everyday">3つのアプローチで、<br class="sm:hidden" />日常を豊かに</h2>
+        <p class="mt-4 font-so-sans text-sm leading-loose text-so-text/68 max-w-xl mx-auto" data-en-html="To be &quot;suteki&quot; is to have room to breathe.<br />AI makes your work smarter, travel enriches your perspective, and food restores body and mind.<br />Through these three approaches, I will update your everyday life.">
           「ステキ」とは、ゆとりがある状態のこと。<br />AIで業務をスマートに、旅で視野を豊かに、食で心身を整える。<br />私の3つのアプローチで、あなたの毎日をアップデートします。
         </p>
       </div>
@@ -600,35 +622,35 @@
         <div class="service-card bg-white p-8 shadow-sm">
           <div class="mb-5 flex h-11 w-11 items-center justify-center border border-so-accent/15 bg-so-sky/40 text-xl">🤖</div>
           <h3 class="mb-1 font-so-logo text-xl tracking-widest text-so-accent">AI Consulting</h3>
-          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42">ＡＩコンサルティング</p>
-          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68">最新テクノロジーと現場感覚を融合。ビジネスに「知的戦略」と「人間らしい余白」を。</p>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42" data-en="AI Consulting">ＡＩコンサルティング</p>
+          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68" data-en="Fusing the latest technology with on-the-ground insight — bringing intelligent strategy and human breathing room to your business.">最新テクノロジーと現場感覚を融合。ビジネスに「知的戦略」と「人間らしい余白」を。</p>
           <div class="mb-4">
-            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35">初回相談</p>
-            <p class="font-so-logo text-base text-so-accent">¥33,000 <span class="font-so-sans text-xs text-so-text/45">/ 60分</span></p>
+            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35" data-en="Initial consultation">初回相談</p>
+            <p class="font-so-logo text-base text-so-accent">¥33,000 <span class="font-so-sans text-xs text-so-text/45" data-en="/ 60 min">/ 60分</span></p>
           </div>
-          <a href="ai.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline">詳しく見る →</a>
+          <a href="ai.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline" data-en="Learn more →">詳しく見る →</a>
         </div>
         <div class="service-card bg-white p-8 shadow-sm">
           <div class="mb-5 flex h-11 w-11 items-center justify-center border border-so-accent/15 bg-so-sky/40 text-xl">✈️</div>
           <h3 class="mb-1 font-so-logo text-xl tracking-widest text-so-accent">Travel Design</h3>
-          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42">トラベルプランニング</p>
-          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68">「なぜそこへ行くのか」から始まる旅。心身の感性を拡張するオーダーメイドプランニング。</p>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42" data-en="Travel Planning">トラベルプランニング</p>
+          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68" data-en="Journeys that begin with &quot;why go there&quot; — bespoke planning that expands the senses of body and mind.">「なぜそこへ行くのか」から始まる旅。心身の感性を拡張するオーダーメイドプランニング。</p>
           <div class="mb-4">
-            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35">国内プランニング</p>
+            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35" data-en="Domestic planning">国内プランニング</p>
             <p class="font-so-logo text-base text-so-accent">¥30,000〜 <span class="font-so-sans text-xs text-so-text/45"></span></p>
           </div>
-          <a href="travel.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline">詳しく見る →</a>
+          <a href="travel.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline" data-en="Learn more →">詳しく見る →</a>
         </div>
         <div class="service-card bg-white p-8 shadow-sm">
           <div class="mb-5 flex h-11 w-11 items-center justify-center border border-so-accent/15 bg-so-sky/40 text-xl">🍳</div>
           <h3 class="mb-1 font-so-logo text-xl tracking-widest text-so-accent">Culinary Lab</h3>
-          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42">料理文化</p>
-          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68">分子ガストロノミーと感性の融合。科学的根拠に基づいた、100点以上のレシピ実績。</p>
+          <p class="mb-4 font-so-sans text-[10px] tracking-[0.15em] text-so-text/42" data-en="Culinary Culture">料理文化</p>
+          <p class="mb-6 font-so-sans text-sm leading-loose text-so-text/68" data-en="Molecular gastronomy meets sensibility — over 100 recipes built on scientific grounding.">分子ガストロノミーと感性の融合。科学的根拠に基づいた、100点以上のレシピ実績。</p>
           <div class="mb-4">
-            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35">レシピ開発</p>
+            <p class="mb-1 font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-text/35" data-en="Recipe development">レシピ開発</p>
             <p class="font-so-logo text-base text-so-accent">¥50,000〜 <span class="font-so-sans text-xs text-so-text/45"></span></p>
           </div>
-          <a href="culinary.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline">詳しく見る →</a>
+          <a href="culinary.html" class="mt-5 inline-block font-so-sans text-xs tracking-[0.15em] text-so-accent hover:underline" data-en="Learn more →">詳しく見る →</a>
         </div>
       </div>
     </div>
@@ -637,9 +659,9 @@
   <!-- Contact CTA -->
   <section class="fade-in py-20 px-6 bg-so-accent">
     <div class="mx-auto max-w-3xl text-center">
-      <h3 class="font-so-logo text-2xl font-light text-white sm:text-3xl">各事業の詳細をご覧のうえ、まずはお気軽にご相談ください</h3>
-      <a href="contact.html" class="mt-8 inline-block bg-white px-10 py-4 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-sky transition-all duration-300">まずは、お気軽にご相談ください →</a>
-      <p class="mt-3 font-so-sans text-xs text-white/60 tracking-[0.08em]">初回相談 ¥33,000 / 60分 ・継続契約時に全額充当</p>
+      <h3 class="font-so-logo text-2xl font-light text-white sm:text-3xl" data-en="Explore each of our services, then feel free to reach out for a consultation">各事業の詳細をご覧のうえ、まずはお気軽にご相談ください</h3>
+      <a href="contact.html" class="mt-8 inline-block bg-white px-10 py-4 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-sky transition-all duration-300" data-en="Start with a friendly consultation →">まずは、お気軽にご相談ください →</a>
+      <p class="mt-3 font-so-sans text-xs text-white/60 tracking-[0.08em]" data-en="Initial consultation ¥33,000 / 60 min — fully credited toward a continuing contract">初回相談 ¥33,000 / 60分 ・継続契約時に全額充当</p>
     </div>
   </section>
 
@@ -668,7 +690,7 @@
     <video id="avatar-video" muted playsinline preload="metadata"
            src="avatar/Phase1_Voice_Timeline_Full.mp4"></video>
   </div>
-  <div id="avatar-hint">🔊 クリックでご案内が始まります</div>
+  <div id="avatar-hint" data-en="🔊 Click to start the guided introduction">🔊 クリックでご案内が始まります</div>
 
   <script type="module">
     import { initChat } from './consultation/chat.js';
@@ -719,8 +741,8 @@
         if (typeof window.cancelWelcomeGreeting === 'function') {
           window.cancelWelcomeGreeting();
         }
-        if (typeof window.launchAvatar === 'function') {
-          document.removeEventListener('pointerdown', window.launchAvatar);
+        if (typeof window.__soRemoveLaunchListener === 'function') {
+          window.__soRemoveLaunchListener();
         }
         if (typeof window.markAvatarPlayed === 'function') window.markAvatarPlayed();
 
@@ -811,17 +833,23 @@
           return;
         }
         baseText = ta.value || '';
+        var isEnRec = window.SO_I18N && window.SO_I18N.getLang() === 'en';
+        rec.lang = isEnRec ? 'en-US' : 'ja-JP';
         try {
           rec.start();
         } catch (e) {
-          showMobileVoiceToast('音声認識を開始できませんでした：' + (e.message || e.name));
+          showMobileVoiceToast(isEnRec
+            ? 'Could not start voice recognition: ' + (e.message || e.name)
+            : '音声認識を開始できませんでした：' + (e.message || e.name));
         }
       });
 
       rec.onstart = function() {
         isRecording = true;
         btn.classList.add('recording');
-        showMobileVoiceToast('マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
+        showMobileVoiceToast(window.SO_I18N && window.SO_I18N.getLang() === 'en'
+          ? 'Please speak slowly and clearly into the microphone. When finished, press send or simply wait.'
+          : 'マイクに向かって、ゆっくりはっきりお話しください。話し終えたら送信ボタンを押すか、そのままお待ちください。', 3800, 'info');
         if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
         armSilenceTimer();
       };
@@ -960,8 +988,30 @@
         } catch (e) {}
         return null;
       }
+      /* English選択時用の英語女性ボイス優先選択 */
+      var __soEnVoiceCache = null;
+      function pickEnFemaleVoice() {
+        if (__soEnVoiceCache !== null) return __soEnVoiceCache;
+        try {
+          var voices = window.speechSynthesis.getVoices();
+          if (!voices || !voices.length) return null;
+          var priority = ['Samantha','Google US English','Aria','Jenny','Ava','Zira','Karen','Moira','Serena'];
+          var en = voices.filter(function(v){ return /^en(-|_)/i.test(v.lang) || v.lang === 'en'; });
+          for (var i = 0; i < priority.length; i++) {
+            var m = en.find(function(v){ return v.name.indexOf(priority[i]) >= 0; });
+            if (m) { __soEnVoiceCache = m; return m; }
+          }
+          var femaleHint = en.find(function(v){ return /female|woman|f\b/i.test(v.name); });
+          if (femaleHint) { __soEnVoiceCache = femaleHint; return femaleHint; }
+          if (en.length) { __soEnVoiceCache = en[0]; return en[0]; }
+        } catch (e) {}
+        return null;
+      }
       if (window.speechSynthesis && typeof window.speechSynthesis.addEventListener === 'function') {
-        window.speechSynthesis.addEventListener('voiceschanged', function() { __soVoiceCache = null; pickJpFemaleVoice(); });
+        window.speechSynthesis.addEventListener('voiceschanged', function() {
+          __soVoiceCache = null; __soEnVoiceCache = null;
+          pickJpFemaleVoice(); pickEnFemaleVoice();
+        });
       }
 
       /* 送信直後の受け止め（青リング） */
@@ -974,11 +1024,12 @@
         if (text && window.speechSynthesis && !window.__soTtsDisabled) {
           try {
             window.speechSynthesis.cancel();
+            var isEn = window.SO_I18N && window.SO_I18N.getLang() === 'en';
             var utter = new SpeechSynthesisUtterance(text);
-            utter.lang  = 'ja-JP';
+            utter.lang  = isEn ? 'en-US' : 'ja-JP';
             utter.rate  = 1.08;  /* 間延びしないよう、やや速めのテンポ */
             utter.pitch = 1.08;  /* 女性ボイス調。上げすぎると旧世代SAPI音声で機械的に聞こえるため抑えめに */
-            var v = pickJpFemaleVoice();
+            var v = isEn ? pickEnFemaleVoice() : pickJpFemaleVoice();
             if (v) utter.voice = v;
             if (typeof onEnd === 'function') {
               utter.onend = onEnd;
@@ -1001,15 +1052,25 @@
         'どんな些細なことでも大丈夫です。',
         '思い浮かんだキーワードだけでも構いません。'
       ];
+      var NUDGE_MESSAGES_EN = [
+        'Please feel free to share whatever is on your mind.',
+        'You can also use the microphone to speak instead of typing.',
+        'No concern is too small — anything is welcome.',
+        'Even a few keywords are enough to get us started.'
+      ];
       function showNudgeHint() {
-        var msg = '大体の目安で構いませんので、どのような業務か・旅行や料理のご相談かをお教えていただけますでしょうか？';
+        var isEnNudge = window.SO_I18N && window.SO_I18N.getLang() === 'en';
+        var msg = isEnNudge
+          ? 'A rough idea is fine — could you tell me what kind of work, travel, or cooking topic you would like to discuss?'
+          : '大体の目安で構いませんので、どのような業務か・旅行や料理のご相談かをお教えていただけますでしょうか？';
         var chatMessages = document.getElementById('chat-messages');
         var isStarted = chatMessages && chatMessages.children.length > 0;
 
         if (inHearingMode) {
           if (isStarted) {
             // すでに会話が進行中の場合は、初期問いかけではなく優しいヒントを出し分ける
-            msg = NUDGE_MESSAGES[Math.floor(Math.random() * NUDGE_MESSAGES.length)];
+            var pool = isEnNudge ? NUDGE_MESSAGES_EN : NUDGE_MESSAGES;
+            msg = pool[Math.floor(Math.random() * pool.length)];
           }
           // チャット画面内に追加する（右下の浮遊バルーンは出さない）
           if (typeof window.appendMessage === 'function') {
@@ -1028,10 +1089,15 @@
           void hint.offsetWidth;
           hint.style.animation = '';
         }
-        /* 15秒間入力がない場合のカスタム音声問いかけ（初回のみ案内音声を流す） */
+        /* 15秒間入力がない場合のカスタム音声問いかけ（初回のみ案内音声を流す）。
+           収録済みのCut_7は日本語のため、English選択時はTTSで英語の問いかけを行う */
         try {
-          if (!isStarted && typeof window.playAvatarAudioOnly === 'function') {
-            window.playAvatarAudioOnly('avatar/Cut_7_voice.wav');
+          if (!isStarted) {
+            if (isEnNudge) {
+              if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
+            } else if (typeof window.playAvatarAudioOnly === 'function') {
+              window.playAvatarAudioOnly('avatar/Cut_7_voice.wav');
+            }
           }
         } catch (e) {}
       }
@@ -1149,7 +1215,24 @@
       window.addEventListener('load', function() {
         setTimeout(function() { hint.classList.add('av-hint-show'); }, 600);
       });
-      document.addEventListener('pointerdown', launchAvatar, { once: true });
+      /* 言語切替（JP/EN）の操作クリックではアバターを起動しない。
+         起動前に言語を選んでから挨拶を始められるようにするため。 */
+      function onFirstPointer(e) {
+        if (e.target && e.target.closest && e.target.closest('.lang-toggle')) return;
+        document.removeEventListener('pointerdown', onFirstPointer);
+        launchAvatar();
+      }
+      document.addEventListener('pointerdown', onFirstPointer);
+      window.__soRemoveLaunchListener = function() {
+        document.removeEventListener('pointerdown', onFirstPointer);
+      };
+
+      /* 挨拶の再生途中で言語が切り替えられたら、新しい言語で挨拶をやり直す */
+      document.addEventListener('so-lang-change', function() {
+        if (played && !inHearingMode && typeof window.startWelcomeGreeting === 'function') {
+          window.startWelcomeGreeting();
+        }
+      });
 
       /* イントロ再生中に画面クリックしたらスキップ
          ただしタブ内クリックはタブ自身の switchTab を尊重するため除外 */

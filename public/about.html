@@ -12,6 +12,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <script src="consultation/i18n.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config={theme:{extend:{
@@ -47,7 +48,7 @@
         <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">Travel</a>
         <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-white/75 hover:text-so-accent transition-colors">Culinary</a>
         <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-white font-medium border-b border-white/40 pb-0.5">About</a>
-        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300">相談する →</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-white/35 bg-white/15 backdrop-blur-sm text-white font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:border-so-accent transition-all duration-300" data-en="Consult Us →">相談する →</a>
       </div>
       <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
         <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
@@ -60,7 +61,7 @@
         <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Travel Design</a>
         <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Culinary Lab</a>
         <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-accent font-medium border-b border-so-accent/08">About</a>
-        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]" data-en="Contact us →">まずは相談する →</a>
       </div>
     </div>
   </nav>
@@ -71,8 +72,8 @@
     <div class="absolute inset-0 bg-gradient-to-br from-so-accent/70 via-so-accent/50 to-so-sky/30 backdrop-blur-[1px]"></div>
     <div class="relative z-10 text-center px-6" style="text-shadow:0 2px 12px rgba(0,0,0,0.35), 0 1px 3px rgba(0,0,0,0.45);">
       <p class="mb-3 font-so-sans text-xs tracking-[0.4em] uppercase text-so-sky font-semibold">About</p>
-      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-white sm:text-5xl lg:text-6xl mb-4">津江 久幸</h1>
-      <p class="font-so-sans text-sm tracking-[0.3em] text-white font-medium mb-6">HISAYUKI TSUE · Studio S.O 代表</p>
+      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-white sm:text-5xl lg:text-6xl mb-4" data-en="Hisayuki Tsue">津江 久幸</h1>
+      <p class="font-so-sans text-sm tracking-[0.3em] text-white font-medium mb-6" data-en="HISAYUKI TSUE · Founder of Studio S.O">HISAYUKI TSUE · Studio S.O 代表</p>
       <div class="flex flex-wrap justify-center gap-2">
         <span class="font-so-sans text-[11px] tracking-[0.12em] px-3 py-1.5 border border-white/70 bg-white/15 backdrop-blur-sm text-white font-medium">AI Consultant / DX</span>
         <span class="font-so-sans text-[11px] tracking-[0.12em] px-3 py-1.5 border border-white/70 bg-white/15 backdrop-blur-sm text-white font-medium">Curated Travel Planner</span>
@@ -94,24 +95,24 @@
         <!-- 左: 本文 -->
         <div class="fade-in">
           <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Profile</p>
-          <h2 class="mb-8 font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">
+          <h2 class="mb-8 font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en-html="Knowing the front lines<br />makes proposals come alive.">
             現場を知るからこそ、<br />血の通った提案ができる。
           </h2>
           <div class="space-y-5 font-so-sans text-sm leading-loose text-so-text/70 sm:text-base">
-            <p>かつてDXという言葉すらなかった時代——。</p>
-            <p>
+            <p data-en="Back in an era before the word DX even existed —">かつてDXという言葉すらなかった時代——。</p>
+            <p data-en="At the Marifu Refinery of Koa Oil Co., Ltd. (now ENEOS), I worked as the user-side representative on the development and launch of the RIS (Refinery Information System), the core system of a massive refinery plant, in collaboration with Fujitsu and IT Engineering.">
               興亜石油株式会社（現・ENEOS）麻里布製油所にて、製油所という巨大プラントの基幹システム（RIS：Refinery Information System）の開発・運用立ち上げに、ユーザー代表として富士通・ITエンジニアリングと協働で取り組みました。
             </p>
-            <p>
+            <p data-en="RIS is not mere software. It is the refinery's nervous system — hardware, software, data, processes, and people working together organically. Building a system that elevates data into information, information into knowledge, and knowledge into practical wisdom on the shop floor — while balancing the grit of the field with the rigor of systems — is the experience at the very foundation of who I am.">
               RISとは、単なるソフトウェアではありません。ハード・ソフト・データ・プロセス・人間——5つの要素が有機的に連携して初めて機能する「製油所の神経系」です。現場の泥臭さとシステムの冷徹さを両立させながら、データを情報に、情報を知識に、知識を現場の知恵へと昇華させる仕組みを作り上げた経験が、私の根底にあります。
             </p>
-            <p>
+            <p data-en="Some fifteen years later, the latest generative AI has ushered in an era where the kind of optimization once possible only with large-scale systems can now reach individuals and small businesses. Because I know the front lines inside out, I can propose business improvements with real substance — never tool-first.">
               それから約15年。最新の生成AIは、かつて大規模システムでしか実現できなかった「最適化」を、個人や中小企業にも届けられる時代を作りました。現場を知り尽くしているからこそ、ツールありきではない、血の通った業務改善を提案できるのです。
             </p>
-            <p>
+            <p data-en="Combining the logical thinking honed through that career with a deep love of travel and food, I went independent around three pillars — AI consulting, travel planning, and culinary research — and founded Studio S.O.">
               そのキャリアで培った論理的思考と、旅・食への深い愛情を掛け合わせ、「AIコンサルティング」「旅行プランニング」「料理研究」という3つの軸で独立。Studio S.Oを立ち上げました。
             </p>
-            <p>
+            <p data-en="AI is a means, not an end. To realize what lies beyond it — a rich everyday life with room to breathe, what we call &quot;suteki&quot; — I think and build together with my clients.">
               AIは手段であり、目的ではありません。その先にある「ゆとりある豊かな日常＝ステキ」を実現するために、クライアントの皆さんと一緒に考え、一緒に作っていきます。
             </p>
           </div>
@@ -122,26 +123,26 @@
           <p class="mb-6 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Career</p>
           <div class="space-y-0 border border-so-accent/10">
             <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
-              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">前職</p>
-              <p class="font-so-logo text-base text-so-accent mb-1">興亜石油（現・ENEOS）</p>
-              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">麻里布製油所 · RIS（Refinery Information System）開発・運用立ち上げ（富士通・ITエンジニアリングと協働）</p>
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1" data-en="Previous role">前職</p>
+              <p class="font-so-logo text-base text-so-accent mb-1" data-en="Koa Oil (now ENEOS)">興亜石油（現・ENEOS）</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed" data-en="Marifu Refinery · Development and operational launch of RIS (Refinery Information System), in collaboration with Fujitsu and IT Engineering">麻里布製油所 · RIS（Refinery Information System）開発・運用立ち上げ（富士通・ITエンジニアリングと協働）</p>
             </div>
             <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
-              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">現在</p>
-              <p class="font-so-logo text-base text-so-accent mb-1">Studio S.O 代表</p>
-              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">AIコンサルタント / 旅行プランナー / 料理研究家</p>
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1" data-en="Present">現在</p>
+              <p class="font-so-logo text-base text-so-accent mb-1" data-en="Founder of Studio S.O">Studio S.O 代表</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed" data-en="AI consultant / Travel planner / Culinary researcher">AIコンサルタント / 旅行プランナー / 料理研究家</p>
             </div>
             <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
-              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">拠点</p>
-              <p class="font-so-logo text-base text-so-accent mb-1">山口県岩国市</p>
-              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">名所：錦帯橋 · オンライン対応：全国・海外</p>
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1" data-en="Base">拠点</p>
+              <p class="font-so-logo text-base text-so-accent mb-1" data-en="Iwakuni, Yamaguchi, Japan">山口県岩国市</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed" data-en="Landmark: Kintaikyo Bridge · Online consultations: nationwide and overseas">名所：錦帯橋 · オンライン対応：全国・海外</p>
             </div>
             <div class="px-6 py-5 border-b border-so-accent/08 bg-white">
-              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1">得意領域</p>
-              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed">生成AI導入支援・業務自動化・DX戦略・発酵料理・オーダーメイド旅行</p>
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-1" data-en="Specialties">得意領域</p>
+              <p class="font-so-sans text-xs text-so-text/58 leading-relaxed" data-en="Generative-AI adoption support · business automation · DX strategy · fermented cuisine · bespoke travel">生成AI導入支援・業務自動化・DX戦略・発酵料理・オーダーメイド旅行</p>
             </div>
             <div class="px-6 py-5 bg-white">
-              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-2">使用技術</p>
+              <p class="font-so-sans text-[9px] tracking-[0.2em] uppercase text-so-accent/45 mb-2" data-en="Technologies">使用技術</p>
               <div class="flex flex-wrap gap-1.5">
                 <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Google Cloud</span>
                 <span class="font-so-sans text-[9px] tracking-[0.08em] px-2 py-1 bg-so-sky/40 text-so-accent/70">Firebase</span>
@@ -163,7 +164,7 @@
     <div class="mx-auto max-w-4xl">
       <div class="fade-in text-center mb-12">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-sky/35">Brand Story</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-white sm:text-4xl">「Studio S.O」という名前の秘密</h2>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-white sm:text-4xl" data-en="The secret behind the name &quot;Studio S.O&quot;">「Studio S.O」という名前の秘密</h2>
       </div>
 
       <!-- Web=左右 / Mobile=縦積み -->
@@ -171,20 +172,20 @@
         <div>
           <div class="space-y-6">
             <div class="border-l-2 border-white/15 pl-6">
-              <p class="font-so-logo text-lg text-white mb-3">杖 → ステッキ → ステキ</p>
-              <p class="font-so-sans text-sm text-white/55 leading-loose">
+              <p class="font-so-logo text-lg text-white mb-3" data-en="Tsue → Stick → Suteki">杖 → ステッキ → ステキ</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose" data-en="My family name &quot;Tsue&quot; sounds the same as the Japanese word for a walking stick. A stick is a &quot;sutekki&quot; — and &quot;sutekki&quot; leads to &quot;suteki&quot;, the Japanese word for wonderful.">
                 私の苗字「津江（Tsue）」は、「杖（つえ）」と同じ読みです。杖は「ステッキ」、そして「ステッキ」は「ステキ」へ。
               </p>
             </div>
             <div class="border-l-2 border-white/15 pl-6">
-              <p class="font-so-logo text-lg text-white mb-3">おじさんの中の王子</p>
-              <p class="font-so-sans text-sm text-white/55 leading-loose">
+              <p class="font-so-logo text-lg text-white mb-3" data-en="The prince within the ojisan">おじさんの中の王子</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose" data-en="And within every &quot;ojisan&quot; (middle-aged gentleman) sleeps an &quot;ouji&quot; — a prince. S.O stands for Suteki Oojisan, making Studio S.O &quot;the studio of the wonderful prince&quot;.">
                 さらに、おじさんの中に眠る「王子（おうじ）」。S.O とは、Suteki Oojisan の頭文字。そして Studio S.O は、「ステキな王子のスタジオ」です。
               </p>
             </div>
             <div class="border-l-2 border-white/15 pl-6">
-              <p class="font-so-logo text-lg text-white mb-3">AIという現代の杖</p>
-              <p class="font-so-sans text-sm text-white/55 leading-loose">
+              <p class="font-so-logo text-lg text-white mb-3" data-en="AI, the walking stick of our time">AIという現代の杖</p>
+              <p class="font-so-sans text-sm text-white/55 leading-loose" data-en="With AI as the walking stick of our time, we set out to make the world more wonderful — that is the wish woven into this name.">
                 AIという現代の杖を手に、世界をもっとステキに変えていく——そんな想いをこの名前に込めました。
               </p>
             </div>
@@ -195,7 +196,7 @@
           <blockquote class="text-center">
             <div class="relative inline-block">
               <span class="pointer-events-none select-none absolute -top-8 -left-4 font-so-logo text-[100px] leading-none text-white/[0.04]">"</span>
-              <p class="font-so-logo italic text-xl font-light leading-relaxed text-white/70 sm:text-2xl">
+              <p class="font-so-logo italic text-xl font-light leading-relaxed text-white/70 sm:text-2xl" data-en-html="&quot;Trading the cane for a walking stick,<br />changing the world into something wonderful.<br />And always, in my heart,<br />the curiosity of a prince.&quot;">
                 「杖をステッキに持ち替えて、<br />世界を素敵に変えていく。<br />心にはいつも王子様のような<br />好奇心を。」
               </p>
             </div>
@@ -218,26 +219,26 @@
   <section class="bg-so-sky/28 px-6 py-16">
     <div class="mx-auto max-w-4xl">
       <div class="text-center mb-10 fade-in">
-        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl">あなたの「ステキ」を一緒に考えます。</h3>
-        <p class="mb-6 font-so-sans text-sm text-so-text/55 leading-loose">
+        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl" data-en="Let's think about your &quot;suteki&quot; together.">あなたの「ステキ」を一緒に考えます。</h3>
+        <p class="mb-6 font-so-sans text-sm text-so-text/55 leading-loose" data-en="AI, travel, or food — feel free to consult us about any of them.">
           AI・旅・食、いずれのご相談もお気軽にどうぞ。
         </p>
-        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
+        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300" data-en="Contact us →">
           お問い合わせする →
         </a>
       </div>
 
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 fade-in">
         <a href="ai.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ａ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42">AIコンサルティング</p></div></div>
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ａ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="AI Consulting">AIコンサルティング</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
         <a href="travel.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｔ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p><p class="font-so-sans text-[9px] text-so-text/42">旅行プランニング</p></div></div>
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｔ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Travel Design</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="Travel Planning">旅行プランニング</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
         <a href="culinary.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｃ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p><p class="font-so-sans text-[9px] text-so-text/42">料理研究</p></div></div>
+          <div class="flex items-center gap-3"><span class="font-so-logo text-base font-semibold text-so-accent">Ｃ</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p><p class="font-so-sans text-[9px] text-so-text/42" data-en="Culinary Research">料理研究</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all">→</span>
         </a>
       </div>

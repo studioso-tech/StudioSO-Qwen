@@ -59,7 +59,7 @@ function quickEstimateCategory(text) {
   return first[1] > 0 ? first[0] : CATEGORIES.AI_CONSULTING;
 }
 
-export async function analyzeConversation(messages, apiKey, { forceSummary = false } = {}) {
+export async function analyzeConversation(messages, apiKey, { forceSummary = false, lang = 'ja' } = {}) {
   const text = getConversationText(messages);
   const quickCategory = quickEstimateCategory(text);
   const quickIndustry = quickEstimateIndustry(text);
@@ -77,17 +77,35 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
 
   const dictText = dictionaryToPromptText(industry);
 
+  // カンニングシート（管理人向け）は言語設定に関わらず常に日本語のため、
+  // summaryMessage（日本語）は必ず生成する。English選択時は、画面表示・
+  // 読み上げ用の英語要約（summaryMessageEn）を追加で生成する。
   let summaryMessage = null;
+  let summaryMessageEn = null;
   if (forceSummary) {
     try {
       summaryMessage = await generateSummaryMessage(
         { category, industry, level, main_concern: classification?.main_concern || '' },
         messages,
         dictText,
-        apiKey
+        apiKey,
+        'ja'
       );
     } catch (e) {
       console.warn('要約生成失敗:', e.message);
+    }
+    if (lang === 'en') {
+      try {
+        summaryMessageEn = await generateSummaryMessage(
+          { category, industry, level, main_concern: classification?.main_concern || '' },
+          messages,
+          dictText,
+          apiKey,
+          'en'
+        );
+      } catch (e) {
+        console.warn('英語要約生成失敗:', e.message);
+      }
     }
   }
 
@@ -109,6 +127,7 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     contactPhone:       classification?.contact_phone || '',
     contactEmail:       classification?.contact_email || '',
     summaryMessage,
+    summaryMessageEn,
     dictionaryText:     dictText,
   };
 }

@@ -18,6 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
 
+  <script src="consultation/i18n.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -72,7 +73,7 @@
         <a href="travel.html"   class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-accent font-medium border-b border-so-accent/40 pb-0.5">Travel</a>
         <a href="culinary.html" class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-text/70 hover:text-so-accent transition-colors duration-300">Culinary</a>
         <a href="about.html"    class="nav-link font-so-sans text-xs tracking-[0.14em] text-so-text/70 hover:text-so-accent transition-colors duration-300">About</a>
-        <a href="contact.html"  class="nav-cta ml-1 border border-so-accent/35 bg-so-accent/10 backdrop-blur-sm text-so-accent font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:text-white hover:border-so-accent transition-all duration-300">相談する →</a>
+        <a href="contact.html"  class="nav-cta ml-1 border border-so-accent/35 bg-so-accent/10 backdrop-blur-sm text-so-accent font-so-sans text-xs tracking-[0.15em] px-5 py-2.5 hover:bg-so-accent hover:text-white hover:border-so-accent transition-all duration-300" data-en="Consult Us →">相談する →</a>
       </div>
       <button id="hamburger" class="md:hidden flex flex-col gap-[5px] p-2" aria-label="メニュー">
         <span class="ham-line"></span><span class="ham-line"></span><span class="ham-line"></span>
@@ -85,7 +86,7 @@
         <a href="travel.html"   class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-accent font-medium border-b border-so-accent/08">Travel Design</a>
         <a href="culinary.html" class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">Culinary Lab</a>
         <a href="about.html"    class="mob-link py-3.5 font-so-sans text-sm tracking-[0.12em] text-so-text border-b border-so-accent/08">About</a>
-        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]">まずは相談する →</a>
+        <a href="contact.html"  class="mob-link mt-3 bg-so-accent text-white text-center py-4 font-so-sans text-sm tracking-[0.15em]" data-en="Contact us →">まずは相談する →</a>
       </div>
     </div>
   </nav>
@@ -98,31 +99,31 @@
     <div class="absolute inset-0 opacity-10" style="background:repeating-linear-gradient(135deg,transparent,transparent 40px,rgba(27,73,101,0.3) 40px,rgba(27,73,101,0.3) 41px)"></div>
 
     <div class="relative z-10 flex w-full max-w-4xl flex-col items-center gap-5 px-6 text-center">
-      <p class="font-so-sans text-xs tracking-[0.4em] uppercase text-so-accent font-semibold">Travel Design / 旅の設計</p>
+      <p class="font-so-sans text-xs tracking-[0.4em] uppercase text-so-accent font-semibold" data-en="Travel Design">Travel Design / 旅の設計</p>
 
-      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-so-accent sm:text-5xl lg:text-6xl leading-tight">
+      <h1 class="font-so-logo text-4xl font-normal tracking-wide text-so-accent sm:text-5xl lg:text-6xl leading-tight" data-en-html="Intellectual curiosity<br />makes travel run deeper.">
         知的好奇心が、<br />旅をもっと深くする。
       </h1>
 
-      <p class="font-so-logo italic text-lg font-medium text-so-accent sm:text-xl">
+      <p class="font-so-logo italic text-lg font-medium text-so-accent sm:text-xl" data-en="— Designing the suteki of experience, just for you —">
         〜 体験のステキを、あなたのために設計する 〜
       </p>
 
-      <p class="font-so-sans text-base leading-loose text-so-text sm:text-lg max-w-xl font-medium">
+      <p class="font-so-sans text-base leading-loose text-so-text sm:text-lg max-w-xl font-medium" data-en-html="A journey is not complete simply by going.<br />Starting from &quot;why go there&quot; — how to choose your inn, how to savor the food,<br class='hidden sm:block' />how to step into the local culture — we design journeys that enrich your life.">
         旅は、ただ行くだけでは完成しません。<br />
         「なぜそこへ行くか」から始まり、宿の選び方、食の楽しみ方、<br class="hidden sm:block" />
         土地の文化への入り方まで——人生が豊かになる旅を設計します。
       </p>
 
-      <p class="font-so-sans text-xs tracking-[0.15em] text-so-accent font-semibold border-2 border-so-accent/60 bg-white/60 backdrop-blur-sm px-4 py-2">
+      <p class="font-so-sans text-xs tracking-[0.15em] text-so-accent font-semibold border-2 border-so-accent/60 bg-white/60 backdrop-blur-sm px-4 py-2" data-en="Any departure point · Domestic and international journeys welcome">
         出発地はどこからでも対応 · 国内 / 海外 どちらも承ります
       </p>
 
       <div class="flex flex-col gap-3 sm:flex-row sm:gap-4 mt-2">
         <a href="#plans" class="bg-so-accent text-white px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
-          料金・プランを見る →
+          <span data-en="View pricing &amp; plans →">料金・プランを見る →</span>
         </a>
-        <a href="contact.html" class="border border-so-accent/40 px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-accent/05 transition-all duration-300">
+        <a href="contact.html" class="border border-so-accent/40 px-8 py-3.5 font-so-sans text-sm tracking-[0.15em] text-so-accent hover:bg-so-accent/05 transition-all duration-300" data-en="Consult about your journey">
           旅のご相談をする
         </a>
       </div>
@@ -141,7 +142,7 @@
 
       <div class="mb-14 text-center fade-in">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Flow</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">ご依頼からプラン完成までの流れ</h2>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="From request to finished plan">ご依頼からプラン完成までの流れ</h2>
       </div>
 
       <!-- Web=横4ステップ / Mobile=縦4ステップ -->
@@ -149,29 +150,29 @@
         <div class="relative flex sm:flex-col items-start sm:items-center gap-4 sm:gap-0 p-6 sm:p-8 sm:text-center border-b sm:border-b-0 sm:border-r border-so-accent/08 last:border-0">
           <div class="flex-shrink-0 flex h-12 w-12 items-center justify-center bg-so-accent text-white font-so-logo text-xl">01</div>
           <div class="sm:mt-5">
-            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2">ヒアリング</p>
-            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed">出発地・目的地・日程・人数・コンセプト・予算など、旅のご希望をお聞きします</p>
+            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2" data-en="Hearing">ヒアリング</p>
+            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed" data-en="We listen to your wishes — departure point, destination, dates, party size, concept, and budget">出発地・目的地・日程・人数・コンセプト・予算など、旅のご希望をお聞きします</p>
           </div>
         </div>
         <div class="relative flex sm:flex-col items-start sm:items-center gap-4 sm:gap-0 p-6 sm:p-8 sm:text-center border-b sm:border-b-0 sm:border-r border-so-accent/08 last:border-0">
           <div class="flex-shrink-0 flex h-12 w-12 items-center justify-center bg-so-sky/60 border border-so-accent/20 text-so-accent font-so-logo text-xl">02</div>
           <div class="sm:mt-5">
-            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2">コンセプト提案</p>
-            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed">旅のテーマ・時期・予算感をご提案。なぜその時期が最適かの理由も提示します</p>
+            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2" data-en="Concept proposal">コンセプト提案</p>
+            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed" data-en="We propose the theme, season, and budget range — including why that timing is ideal">旅のテーマ・時期・予算感をご提案。なぜその時期が最適かの理由も提示します</p>
           </div>
         </div>
         <div class="relative flex sm:flex-col items-start sm:items-center gap-4 sm:gap-0 p-6 sm:p-8 sm:text-center border-b sm:border-b-0 sm:border-r border-so-accent/08 last:border-0">
           <div class="flex-shrink-0 flex h-12 w-12 items-center justify-center bg-so-sky/60 border border-so-accent/20 text-so-accent font-so-logo text-xl">03</div>
           <div class="sm:mt-5">
-            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2">プラン作成</p>
-            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed">詳細タイムスケジュール・宿候補・食事案・観光スポット・お土産候補を作成</p>
+            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2" data-en="Plan creation">プラン作成</p>
+            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed" data-en="Detailed timetable, inn candidates, dining ideas, sights, and souvenir suggestions">詳細タイムスケジュール・宿候補・食事案・観光スポット・お土産候補を作成</p>
           </div>
         </div>
         <div class="relative flex sm:flex-col items-start sm:items-center gap-4 sm:gap-0 p-6 sm:p-8 sm:text-center border-so-accent/08">
           <div class="flex-shrink-0 flex h-12 w-12 items-center justify-center bg-so-sage/80 border border-so-accent/20 text-so-accent font-so-logo text-xl">04</div>
           <div class="sm:mt-5">
-            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2">調整・確定</p>
-            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed">ご要望を反映して最終プランを確定。豆知識・留意点も合わせてご提供</p>
+            <p class="font-so-logo text-base tracking-wide text-so-accent mb-2" data-en="Refine &amp; finalize">調整・確定</p>
+            <p class="font-so-sans text-xs text-so-text/55 leading-relaxed" data-en="We reflect your feedback and finalize the plan — with local tips and points to note">ご要望を反映して最終プランを確定。豆知識・留意点も合わせてご提供</p>
           </div>
         </div>
       </div>
@@ -179,15 +180,15 @@
       <!-- プランのアウトプット -->
       <div class="mt-12 fade-in border border-so-accent/10 bg-so-sky/12 p-8">
         <p class="mb-5 font-so-sans text-xs tracking-[0.25em] uppercase text-so-accent/52">Output</p>
-        <p class="mb-5 font-so-logo text-xl text-so-accent">プランのアウトプットイメージ</p>
+        <p class="mb-5 font-so-logo text-xl text-so-accent" data-en="What your plan will include">プランのアウトプットイメージ</p>
         <!-- Web=2列 / Mobile=1列 -->
         <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">旅のコンセプトと時期の選定理由</p></div>
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">詳細タイムスケジュール（日ごとの行動計画）</p></div>
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">宿泊地ごとに3件以内の宿の候補と選定理由</p></div>
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">お勧め食事・地酒・観光スポット</p></div>
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">お土産候補（複数提示）</p></div>
-          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed">予算概算（交通・宿泊・食費・土産の内訳）</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="The journey's concept and why we chose the season">旅のコンセプトと時期の選定理由</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="Detailed timetable (day-by-day itinerary)">詳細タイムスケジュール（日ごとの行動計画）</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="Up to three inn candidates per stop, with reasons">宿泊地ごとに3件以内の宿の候補と選定理由</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="Recommended dining, local sake, and sights">お勧め食事・地酒・観光スポット</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="Souvenir suggestions (several options)">お土産候補（複数提示）</p></div>
+          <div class="flex items-start gap-2"><span class="text-so-accent/40 mt-0.5 flex-shrink-0">—</span><p class="font-so-sans text-sm text-so-text/65 leading-relaxed" data-en="Budget estimate (transport, lodging, meals, souvenirs)">予算概算（交通・宿泊・食費・土産の内訳）</p></div>
         </div>
       </div>
     </div>
@@ -197,59 +198,59 @@
   <section class="bg-so-sage/20 px-6 py-20 lg:py-24">
     <div class="mx-auto max-w-6xl">
       <div class="mb-12 text-center fade-in">
-        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">実績</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">プラン実績（一部）</h2>
-        <p class="mt-3 font-so-logo italic text-base text-so-accent/50">「連泊重視・暮らすように旅する」がStudio S.Oのスタイル</p>
+        <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52" data-en="Track record">実績</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="Past plans (a selection)">プラン実績（一部）</h2>
+        <p class="mt-3 font-so-logo italic text-base text-so-accent/50" data-en="Longer stays, traveling as if you lived there — that is the Studio S.O style">「連泊重視・暮らすように旅する」がStudio S.Oのスタイル</p>
       </div>
 
       <!-- Web=横3列 / Mobile=縦1列 -->
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 fade-in">
         <div class="area-card bg-white/70 p-6 backdrop-blur-sm">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">九州（大分・熊本）</p>
-          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug">由布院・黒川温泉・やまなみハイウェイ<br />錦秋の湯籠もりプラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="Kyushu (Oita &amp; Kumamoto)">九州（大分・熊本）</p>
+          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug" data-en-html="Yufuin, Kurokawa Onsen &amp; the Yamanami Highway<br />Autumn hot-spring retreat plan">由布院・黒川温泉・やまなみハイウェイ<br />錦秋の湯籠もりプラン</h3>
           <div class="flex items-center gap-2 border-t border-so-accent/08 pt-3">
-            <span class="font-so-sans text-[10px] text-so-text/40">滞在日数</span>
-            <span class="font-so-logo text-sm text-so-accent">6泊7日</span>
+            <span class="font-so-sans text-[10px] text-so-text/40" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-so-accent" data-en="7 days / 6 nights">6泊7日</span>
           </div>
         </div>
         <div class="area-card bg-white/70 p-6 backdrop-blur-sm" style="transition-delay:.06s">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">西九州（長崎・佐世保）</p>
-          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug">雲仙・長崎・佐世保・平戸<br />歴史と島めぐりプラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="West Kyushu (Nagasaki &amp; Sasebo)">西九州（長崎・佐世保）</p>
+          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug" data-en-html="Unzen, Nagasaki, Sasebo &amp; Hirado<br />History and island-hopping plan">雲仙・長崎・佐世保・平戸<br />歴史と島めぐりプラン</h3>
           <div class="flex items-center gap-2 border-t border-so-accent/08 pt-3">
-            <span class="font-so-sans text-[10px] text-so-text/40">滞在日数</span>
-            <span class="font-so-logo text-sm text-so-accent">4泊5日</span>
+            <span class="font-so-sans text-[10px] text-so-text/40" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-so-accent" data-en="5 days / 4 nights">4泊5日</span>
           </div>
         </div>
         <div class="area-card bg-white/70 p-6 backdrop-blur-sm" style="transition-delay:.12s">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">北陸・関西</p>
-          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug">京都・福井・金沢・富山・下呂<br />カニ×紅葉×立山プラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="Hokuriku &amp; Kansai">北陸・関西</p>
+          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug" data-en-html="Kyoto, Fukui, Kanazawa, Toyama &amp; Gero<br />Crab × autumn leaves × Mt. Tateyama plan">京都・福井・金沢・富山・下呂<br />カニ×紅葉×立山プラン</h3>
           <div class="flex items-center gap-2 border-t border-so-accent/08 pt-3">
-            <span class="font-so-sans text-[10px] text-so-text/40">滞在日数</span>
-            <span class="font-so-logo text-sm text-so-accent">8泊9日</span>
+            <span class="font-so-sans text-[10px] text-so-text/40" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-so-accent" data-en="9 days / 8 nights">8泊9日</span>
           </div>
         </div>
         <div class="area-card bg-white/70 p-6 backdrop-blur-sm" style="transition-delay:.18s">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">山陰（島根）</p>
-          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug">足立美術館・玉造温泉<br />日本一の庭園と名湯プラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="San'in (Shimane)">山陰（島根）</p>
+          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug" data-en-html="Adachi Museum of Art &amp; Tamatsukuri Onsen<br />Japan's finest garden and celebrated waters plan">足立美術館・玉造温泉<br />日本一の庭園と名湯プラン</h3>
           <div class="flex items-center gap-2 border-t border-so-accent/08 pt-3">
-            <span class="font-so-sans text-[10px] text-so-text/40">滞在日数</span>
-            <span class="font-so-logo text-sm text-so-accent">2泊3日</span>
+            <span class="font-so-sans text-[10px] text-so-text/40" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-so-accent" data-en="3 days / 2 nights">2泊3日</span>
           </div>
         </div>
         <div class="area-card bg-white/70 p-6 backdrop-blur-sm" style="transition-delay:.24s">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">福山・鞆の浦</p>
-          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug">瀬戸内・歴史情緒の旅プラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="Fukuyama &amp; Tomonoura">福山・鞆の浦</p>
+          <h3 class="mb-3 font-so-logo text-base text-so-accent leading-snug" data-en="Setouchi historic-charm journey plan">瀬戸内・歴史情緒の旅プラン</h3>
           <div class="flex items-center gap-2 border-t border-so-accent/08 pt-3">
-            <span class="font-so-sans text-[10px] text-so-text/40">滞在日数</span>
-            <span class="font-so-logo text-sm text-so-accent">1泊2日〜</span>
+            <span class="font-so-sans text-[10px] text-so-text/40" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-so-accent" data-en="2 days / 1 night+">1泊2日〜</span>
           </div>
         </div>
         <div class="area-card bg-so-accent p-6" style="transition-delay:.30s">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35">海外（ヨーロッパ）</p>
-          <h3 class="mb-3 font-so-logo text-base text-white leading-snug">英・仏・西・独・伊・ギリシャ<br />6カ国周遊プラン</h3>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35" data-en="Overseas (Europe)">海外（ヨーロッパ）</p>
+          <h3 class="mb-3 font-so-logo text-base text-white leading-snug" data-en-html="UK, France, Spain, Germany, Italy &amp; Greece<br />Six-country grand tour plan">英・仏・西・独・伊・ギリシャ<br />6カ国周遊プラン</h3>
           <div class="flex items-center gap-2 border-t border-white/15 pt-3">
-            <span class="font-so-sans text-[10px] text-so-sky/35">滞在日数</span>
-            <span class="font-so-logo text-sm text-white">43日間</span>
+            <span class="font-so-sans text-[10px] text-so-sky/35" data-en="Duration">滞在日数</span>
+            <span class="font-so-logo text-sm text-white" data-en="43 days">43日間</span>
           </div>
         </div>
       </div>
@@ -263,32 +264,32 @@
 
       <div class="mb-12 text-center fade-in">
         <p class="mb-3 font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/52">Pricing</p>
-        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl">料金プラン</h2>
-        <p class="mt-4 font-so-sans text-xs text-so-accent/70">HP上のAIアバターとのチャット相談は無料です</p>
+        <h2 class="font-so-logo text-3xl font-light tracking-wide text-so-accent sm:text-4xl" data-en="Pricing Plans">料金プラン</h2>
+        <p class="mt-4 font-so-sans text-xs text-so-accent/70" data-en="Chat consultations with the AI avatar on this site are free">HP上のAIアバターとのチャット相談は無料です</p>
       </div>
 
       <!-- 料金カード: Web=横2列 / Mobile=縦2列 -->
       <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 mb-8 fade-in">
         <div class="border border-so-accent/15 p-8 bg-white">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45">国内</p>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-accent/45" data-en="Domestic">国内</p>
           <p class="font-so-logo text-3xl text-so-accent mb-2">¥30,000<span class="font-so-sans text-sm text-so-text/40">〜</span></p>
-          <p class="font-so-sans text-xs text-so-text/45 mb-5">/ 1件（手配代行含まず）</p>
-          <p class="font-so-sans text-sm text-so-text/65 leading-loose">
+          <p class="font-so-sans text-xs text-so-text/45 mb-5" data-en="/ plan (booking service not included)">/ 1件（手配代行含まず）</p>
+          <p class="font-so-sans text-sm text-so-text/65 leading-loose" data-en="Bespoke planning for journeys within Japan. Any departure point — we serve you from anywhere in the country.">
             国内旅行のオーダーメイドプランニング。出発地不問、全国どこからでも対応します。
           </p>
         </div>
         <div class="border border-so-accent bg-so-accent p-8">
-          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35">海外</p>
+          <p class="mb-1 font-so-sans text-[9px] tracking-[0.25em] uppercase text-so-sky/35" data-en="International">海外</p>
           <p class="font-so-logo text-3xl text-white mb-2">¥50,000<span class="font-so-sans text-sm text-white/40">〜</span></p>
-          <p class="font-so-sans text-xs text-so-sky/35 mb-5">/ 1件（手配代行含まず）</p>
-          <p class="font-so-sans text-sm text-white/60 leading-loose">
+          <p class="font-so-sans text-xs text-so-sky/35 mb-5" data-en="/ plan (booking service not included)">/ 1件（手配代行含まず）</p>
+          <p class="font-so-sans text-sm text-white/60 leading-loose" data-en="Bespoke planning for overseas journeys — with a track record of long stays such as 43 days across Europe.">
             海外旅行のオーダーメイドプランニング。ヨーロッパ43日間など長期滞在の実績あり。
           </p>
         </div>
       </div>
 
       <div class="fade-in mb-12 border-l-2 border-so-accent/22 pl-5 bg-so-sky/18 py-4 pr-5">
-        <p class="font-so-sans text-sm text-so-text/62 leading-loose">
+        <p class="font-so-sans text-sm text-so-text/62 leading-loose" data-en="* The planning fee is compensation for expertise. We take no agency-style margins whatsoever, which lets us propose what is genuinely best for you.">
           ※ プランニング料は「知見への対価」です。旅行代理店のようなマージンは一切受け取らないため、クライアントにとって本当に最適な提案が可能です。
         </p>
       </div>
@@ -296,42 +297,42 @@
       <!-- ヒアリング項目 -->
       <div class="fade-in mb-12">
         <p class="mb-5 font-so-sans text-xs tracking-[0.3em] uppercase text-so-accent/52">Hearing Items</p>
-        <h3 class="mb-6 font-so-logo text-xl text-so-accent">ご依頼時にお知らせください</h3>
+        <h3 class="mb-6 font-so-logo text-xl text-so-accent" data-en="Please tell us when you make a request">ご依頼時にお知らせください</h3>
         <!-- Web=2列 / Mobile=1列 -->
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div class="flex items-start gap-3 bg-white border border-so-accent/08 px-5 py-4">
             <span class="text-so-accent/30 font-so-logo text-lg mt-0.5 flex-shrink-0">—</span>
             <div>
-              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5">出発地</p>
-              <p class="font-so-sans text-xs text-so-text/48">例：広島市内、東京など</p>
+              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5" data-en="Departure point">出発地</p>
+              <p class="font-so-sans text-xs text-so-text/48" data-en="e.g. Hiroshima city, Tokyo">例：広島市内、東京など</p>
             </div>
           </div>
           <div class="flex items-start gap-3 bg-white border border-so-accent/08 px-5 py-4">
             <span class="text-so-accent/30 font-so-logo text-lg mt-0.5 flex-shrink-0">—</span>
             <div>
-              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5">目的地</p>
-              <p class="font-so-sans text-xs text-so-text/48">例：由布院、京都、北陸など</p>
+              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5" data-en="Destination">目的地</p>
+              <p class="font-so-sans text-xs text-so-text/48" data-en="e.g. Yufuin, Kyoto, Hokuriku">例：由布院、京都、北陸など</p>
             </div>
           </div>
           <div class="flex items-start gap-3 bg-white border border-so-accent/08 px-5 py-4">
             <span class="text-so-accent/30 font-so-logo text-lg mt-0.5 flex-shrink-0">—</span>
             <div>
-              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5">日程・人数・関係</p>
-              <p class="font-so-sans text-xs text-so-text/48">例：3泊4日・夫婦2名</p>
+              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5" data-en="Dates, party size &amp; relationship">日程・人数・関係</p>
+              <p class="font-so-sans text-xs text-so-text/48" data-en="e.g. 4 days / 3 nights, married couple">例：3泊4日・夫婦2名</p>
             </div>
           </div>
           <div class="flex items-start gap-3 bg-white border border-so-accent/08 px-5 py-4">
             <span class="text-so-accent/30 font-so-logo text-lg mt-0.5 flex-shrink-0">—</span>
             <div>
-              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5">旅のコンセプト</p>
-              <p class="font-so-sans text-xs text-so-text/48">例：温泉でゆっくり、食を楽しむ</p>
+              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5" data-en="Journey concept">旅のコンセプト</p>
+              <p class="font-so-sans text-xs text-so-text/48" data-en="e.g. relaxing hot springs, enjoying the food">例：温泉でゆっくり、食を楽しむ</p>
             </div>
           </div>
           <div class="flex items-start gap-3 bg-white border border-so-accent/08 px-5 py-4 sm:col-span-2">
             <span class="text-so-accent/30 font-so-logo text-lg mt-0.5 flex-shrink-0">—</span>
             <div>
-              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5">予算感</p>
-              <p class="font-so-sans text-xs text-so-text/48">交通費・宿泊費・食費・お土産などの総予算（概算でOK）</p>
+              <p class="font-so-sans text-xs font-medium text-so-text mb-0.5" data-en="Budget range">予算感</p>
+              <p class="font-so-sans text-xs text-so-text/48" data-en="Total budget for transport, lodging, meals, souvenirs, etc. (a rough figure is fine)">交通費・宿泊費・食費・お土産などの総予算（概算でOK）</p>
             </div>
           </div>
         </div>
@@ -339,15 +340,15 @@
 
       <!-- CTA -->
       <div class="fade-in text-center">
-        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl">まずは、旅のご相談から。</h3>
-        <p class="mb-8 font-so-sans text-sm text-so-text/55 leading-loose">
+        <h3 class="mb-3 font-so-logo text-2xl font-light text-so-accent sm:text-3xl" data-en="Start by talking about your journey.">まずは、旅のご相談から。</h3>
+        <p class="mb-8 font-so-sans text-sm text-so-text/55 leading-loose" data-en-html="It is fine if your idea of the trip is still vague.<br />Let's craft &quot;your own travel story&quot; together.">
           どんな旅にしたいか、まだ漠然としていても大丈夫です。<br />
           一緒に「あなただけの旅のストーリー」を作りましょう。
         </p>
-        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300">
+        <a href="contact.html" class="inline-block bg-so-accent px-10 py-4 font-so-sans text-sm tracking-[0.2em] text-white hover:bg-so-accent/80 hover:-translate-y-0.5 transition-all duration-300" data-en="Consult about your journey →">
           旅のご相談をする →
         </a>
-        <p class="mt-3 font-so-sans text-xs text-so-text/38 tracking-[0.08em]">国内 ¥30,000〜 / 海外 ¥50,000〜（手配代行含まず）</p>
+        <p class="mt-3 font-so-sans text-xs text-so-text/38 tracking-[0.08em]" data-en="Domestic ¥30,000+ / International ¥50,000+ (booking service not included)">国内 ¥30,000〜 / 海外 ¥50,000〜（手配代行含まず）</p>
       </div>
     </div>
   </section>
@@ -359,15 +360,15 @@
       <p class="mb-6 text-center font-so-sans text-xs tracking-[0.35em] uppercase text-so-accent/48 fade-in">Other Services</p>
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4 fade-in">
         <a href="index.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">🏠</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Top</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">トップページ</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">🏠</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Top</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]" data-en="Top page">トップページ</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
         </a>
         <a href="ai.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">🤖</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">AIコンサルティング</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">🤖</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">AI Consulting</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]" data-en="AI Consulting">AIコンサルティング</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
         </a>
         <a href="culinary.html" class="group flex items-center justify-between gap-3 bg-white/72 px-5 py-4 backdrop-blur-sm border border-so-accent/10 hover:border-so-accent/38 hover:bg-white transition-all duration-300">
-          <div class="flex items-center gap-3"><span class="text-base">🍳</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]">料理研究</p></div></div>
+          <div class="flex items-center gap-3"><span class="text-base">🍳</span><div><p class="font-so-logo text-sm tracking-widest text-so-accent">Culinary Lab</p><p class="font-so-sans text-[9px] text-so-text/42 tracking-[0.1em]" data-en="Culinary Research">料理研究</p></div></div>
           <span class="font-so-sans text-xs text-so-accent/42 group-hover:text-so-accent group-hover:translate-x-1 transition-all duration-300">→</span>
         </a>
       </div>
