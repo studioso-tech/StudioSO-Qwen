@@ -68,12 +68,12 @@
   * **日本語訳**:
     > 「料理の話をすれば、また表情を変えます──レシピそのものではなく、言葉にしにくい『再現したい味』を追いかけます。同じエージェント、同じQwen-Maxの推論エンジンが、数字になるものとならないものを、同じように扱います。」
 
-### 3. 連絡先の先取りと相談の終え方（70秒〜85秒）— Impact 25% ＋ Technical Depth 30%
-* **表示画面**: ヒヤリング開始直後、AIが連絡先（お電話番号は必須・Eメールは任意）を最初にお伺いする場面 → 確信度が上がり「相談を終える」ボタンが出現 → クリック → 「ご相談内容の確認」画面
+### 3. 連絡先フォームの先取りと相談の終え方（70秒〜85秒）— Impact 25% ＋ Technical Depth 30%
+* **表示画面**: ヒヤリング開始直後に連絡先フォームが表示される場面（郵便番号を入力すると住所が自動補完される瞬間を含める）→ 記入完了→対話が始まり、AIが連絡先を一切聞き返さない → readinessが上がり「相談を終える」ボタンが出現 → クリック → 「ご相談内容の確認」画面
 * **英語スクリプト**:
-  > "Before anything else, the agent asks how to reach you back — phone required, email optional — so even a customer who leaves mid-conversation is never a lost lead. Once Qwen-Max's own confidence score crosses eighty percent, 'End the consultation' appears — the system deciding for itself when it has enough, not the customer guessing."
+  > "Before anything else, a short form captures how to reach you back — postal code auto-fills the address — and injects it as known context, so the agent never asks for your name or number again, and even a customer who leaves mid-conversation is never a lost lead. Once Qwen-Max's own readiness score crosses eighty percent, 'End the consultation' appears — the system deciding for itself when it has heard enough, not the customer guessing."
 * **日本語訳**:
-  > 「何よりも先に、AIは折り返しの連絡先をお伺いします──お電話番号は必須、Eメールは任意。途中で離脱した顧客でも、機会損失にはなりません。Qwen-Max自身の確信度スコアが80%を超えると『相談を終える』ボタンが出現します──顧客が推測するのではなく、システム自身が『十分な情報が揃った』と判断する仕組みです。」
+  > 「何よりも先に、短いフォームで折り返しの連絡先をお預かりします──郵便番号を入れれば住所は自動補完。その情報は既知の文脈としてAIに注入されるので、会話の途中でお名前や電話番号を聞き返すことは二度とありません。途中で離脱した顧客でも、機会損失にはなりません。Qwen-Max自身のreadiness（聞き取りの深まり）スコアが80%を超えると『相談を終える』ボタンが出現します──顧客が推測するのではなく、システム自身が『十分に聞けた』と判断する仕組みです。」
 
 ### 4. 自動配信の瞬間（85秒〜100秒）— Technical Depth 30% ＋ Innovation 30%（動画のクライマックス）
 * **表示画面**: 「ご相談内容の確認」が完成する瞬間 → （カット）→ 受信箱に実際のメールが届いている画面
@@ -115,9 +115,15 @@
    - テイクB：「妻と京都へ行きたいのですが、何から決めればいいか分かりません」→ AI応答1〜2往復
    - テイクC：「米麹を使った発酵レシピを知りたいです」→ AI応答1〜2往復
 3. **編集で②A/B/Cを短く繋ぎ、ナレーションを被せる**（各18秒前後）。②A開始前後に「哲学を、現場の比喩に変える。」のようなテロップを1〜2秒だけ挟み、ローカル翻訳戦略への言及とする。
-4. **連絡先確認〜確信度到達→相談を終える (70s〜85s)**: いずれか1テイク（推奨：カリナリーラボ）で、ヒヤリング開始直後の連絡先確認シーンと、`confidence >= 0.8`で「相談を終える」ボタンが出現→クリック→「ご相談内容の確認」表示までを撮影。
+4. **連絡先フォーム〜readiness到達→相談を終える (70s〜85s)**: いずれか1テイク（推奨：カリナリーラボ）で、ヒヤリング開始直後の連絡先フォーム記入シーン（郵便番号→住所の自動補完を見せる）と、`readiness >= 0.8`で「相談を終える」ボタンが出現→クリック→「ご相談内容の確認」表示までを撮影。シートに住所（🏠行）が載っていることも一瞬映すと良い。
 5. **【最重要】実際にメールが届く画面 (85s〜100s)**: 別ウィンドウ／別タブで受信箱（`studioso@sutekioojisan-so.com`）を開いておき、シート生成の直後にメールが届く様子を画面に残す。件名に「⚠️電話番号未取得」が付かない（＝連絡先取得済み）ことも見せられると尚良い。
 6. **アーキテクチャ図の提示 (100s〜113s)**: `docs/architecture.png`とAlibaba Cloud証明画像を表示しながらナレーション。
+
+---
+
+## 💡 追加の見せ場候補（任意・グローバル審査員向け）
+* ヒーロー画面の **日本語/English トグル**を数秒だけ見せる（切替→英語アバター挨拶の冒頭1〜2秒）。海外審査員が「自分でも試せる」と分かる強いフックになる。入れる場合はシーン1の直後（12秒前後）に2〜4秒のカットで挿入し、ナレーション例:
+  > "And yes — flip one toggle, and the entire experience, avatar voice included, runs in English. Try it yourself."
 
 ---
 

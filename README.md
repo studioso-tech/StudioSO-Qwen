@@ -6,7 +6,9 @@ handoff brief for a human — end to end, powered by Alibaba Cloud Qwen-Max.**
 Built for the *Global AI Hackathon Series with Qwen Cloud* — track: **Autopilot Agent**
 (end-to-end business workflow automation with human oversight).
 
-- Live demo: https://studioso-qwen.web.app
+- Live demo: https://studioso-qwen.web.app — **fully bilingual**: use the 日本語 / English
+  toggle on the hero screen to try the whole experience (avatar greeting with recorded
+  English voice, dialogue, UI) in English
 - Architecture diagram: [`docs/architecture.png`](docs/architecture.png)
 - Proof of Alibaba Cloud usage: [`docs/alibaba_cloud_proof.png`](docs/alibaba_cloud_proof.png) · [`cloudflare-worker/README.md`](cloudflare-worker/README.md)
 
@@ -24,19 +26,31 @@ What a human admin actually needs isn't a transcript — it's a two-minute brief
 A single avatar handles three very different lines of business — AI/DX consulting,
 travel design, and a culinary R&D lab — through one conversational front door:
 
-1. **Listens without jargon.** The system prompt forbids AI/DX/culinary/travel
+1. **Captures contact details up front, without interrogating.** A short form
+   (name, phone, address with postal-code auto-fill, consultation genre) opens as
+   the hearing starts. The values are injected into the conversation as known
+   context, so the agent **never re-asks** for a name or phone number mid-dialogue —
+   and even a customer who drops out mid-conversation is never a lost lead.
+2. **Listens without jargon.** The system prompt forbids AI/DX/culinary/travel
    buzzwords outright and requires the model to mirror the customer's own
    vocabulary back to them, translated live through an industry-specific
    local-language dictionary (see *Innovation*, below).
-2. **Classifies as it goes.** Every turn is scored against a business category
-   (consulting / travel / culinary / mixed) and an industry, with a **confidence
-   score** the customer never sees but the UI acts on.
-3. **Waits for real signal before acting.** The "create handoff sheet" affordance
-   only turns proactive once confidence crosses **0.8** — the system's own
-   estimate that it has enough to be useful, not a fixed turn count.
-4. **Hands off automatically.** Once the customer confirms, Qwen-Max generates
+3. **Classifies as it goes.** Every turn is scored against a business category
+   (consulting / travel / culinary / mixed) and an industry, with **confidence and
+   readiness scores** the customer never sees but the UI acts on.
+4. **Waits for real signal before acting.** The "create handoff sheet" affordance
+   only turns proactive once the readiness score crosses **0.8** — the system's own
+   estimate that it has heard enough to be useful, not a fixed turn count — and the
+   agent itself proposes wrapping up once the hearing has genuinely converged.
+5. **Hands off automatically.** Once the customer confirms, Qwen-Max generates
    the brief and a Cloudflare Worker delivers it straight to the human admin's
    inbox — no copy-paste required, no dashboard to check.
+6. **Speaks the customer's language, literally.** The whole experience is bilingual:
+   a hero-screen toggle switches every page, the avatar greeting (recorded English
+   voice + lip-synced video), speech recognition, text-to-speech, and Qwen-Max's
+   dialogue between Japanese and English — while the handoff brief for the
+   Japanese-speaking admin **stays in Japanese** (a separate Japanese summary is
+   generated for the brief, an English one for the customer).
 
 ## Why "Autopilot Agent"
 
@@ -44,18 +58,21 @@ This is deliberately not a chatbot demo — it's a **trigger → AI → action**
 with a human as the last, decisive step:
 
 ```
+Customer fills the contact form (name / phone / address / genre)
+        │                            (injected as known context — the agent
+        ▼                             never asks for contact details again)
 Customer types/speaks
         │
         ▼
 Qwen-Max dialogue turn  ──┐  (persona: no jargon, listens first, asks one
         │                 │   grounded question at a time — see api.js)
         ▼                 │
-Qwen-Max classification  ─┘  (category + industry + confidence, logic.js)
+Qwen-Max classification  ─┘  (category + industry + confidence + readiness, logic.js)
         │
-        ▼ confidence >= 0.8, customer confirms
+        ▼ readiness >= 0.8, customer confirms
 Qwen-Max summarization       (structured brief: profile / conversation summary /
-        │                     advice-for-the-admin, output.js)
-        ▼
+        │                     advice-for-the-admin — always in Japanese for the
+        ▼                     admin, plus an English summary for EN customers)
 Cloudflare Worker  ──POST /notify──▶  Resend  ──▶  human admin's inbox
         │
         ▼
@@ -92,10 +109,18 @@ The frontend is organized into four layers, each independently testable:
 - **Graceful degradation.** If the Qwen-Max classification call fails or times out,
   `logic.js` falls back to a local keyword-scoring heuristic (`quickEstimateIndustry`)
   so the conversation never breaks — the agent is disposable, the conversation isn't.
-- **Confidence as a UI signal, not a black box.** `isConfidenceSuggestTiming` +
-  the 0.8 threshold gate *when the UI offers to act*, not just what it says —
-  this is the "human oversight" half of Autopilot Agent: the system proposes,
-  the customer still has to confirm, the admin still makes the call.
+- **Readiness as a UI signal, not a black box.** Classification returns two separate
+  scores: *confidence* (is the category right?) and *readiness* (has the hearing gone
+  deep enough to hand off?). The 0.8 readiness threshold gates *when the UI offers
+  to act*, not just what it says — this is the "human oversight" half of Autopilot
+  Agent: the system proposes, the customer still has to confirm, the admin still
+  makes the call.
+- **Bilingual by design, not by translation layer.** UI text switches via lightweight
+  `data-en` attributes (`consultation/i18n.js`); the dialogue language is a single
+  system-prompt directive; and the handoff pipeline generates *two* summaries in EN
+  mode — English for the customer-facing bubble and read-aloud, Japanese for the
+  admin's brief — so the admin's workflow never changes no matter what language the
+  customer speaks.
 - **Secrets never reach the browser.** Both the DashScope proxy and the notify
   endpoint live behind the same Cloudflare Worker; the admin's email address,
   the Resend API key, and the notify shared-secret are Worker secrets, never
@@ -109,8 +134,10 @@ The frontend is organized into four layers, each independently testable:
   translates the frontend's request format to DashScope's OpenAI-compatible API,
   and separately handles the confidence-gated admin-notify email via Resend
 - **Frontend:** vanilla HTML/CSS/JS, no framework, no build step — Firebase Hosting
-- **Speech:** browser `SpeechRecognition` for voice input, local pre-recorded
-  avatar video/audio for the greeting sequence
+- **Speech:** browser `SpeechRecognition` for voice input and `speechSynthesis`
+  for read-aloud — both follow the selected language (ja-JP / en-US); the greeting
+  sequence uses locally recorded avatar video + voice in both Japanese and English
+- **Address assist:** postal-code → address auto-fill on the contact form (zipcloud)
 
 ## Setup
 
