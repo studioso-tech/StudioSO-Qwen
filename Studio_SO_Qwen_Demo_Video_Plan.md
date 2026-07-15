@@ -36,6 +36,9 @@
   > "A missed first contact costs a small business its next client. But a solo consultant can't staff three different front desks — one for business advice, one for travel, one for food. Studio S.O is one AI agent that does all three."
 * **日本語訳**:
   > 「見逃した最初の問い合わせは、中小企業にとって次の顧客を失うことを意味します。しかし個人事業主は、経営相談・旅行相談・料理相談それぞれに窓口を置くことはできません。Studio S.Oは、その3つすべてに対応する、たった1つのAIエージェントです。」
+* **（任意）Impact強化の追加ナレーション案**: 冒頭または結びに1文加えると「実在の事業で稼働中」であることが伝わり、Impact 25%の説得力が増します。
+  > "This isn't a concept: it's the live intake desk of a real consultancy founding in regional Japan — built on 25 years of enterprise-systems experience, now democratized for small businesses."
+  > 「これはコンセプトではありません。地方日本で創業する実在のコンサルティング事業の、現役の相談窓口です──四半世紀の基幹システム実装経験を、中小企業のために民主化したものです。」
 
 ### 2. 【核心】数字にならない悩みにも答える、1エージェント・3業種（12秒〜70秒）— Innovation 30%
 これが今回のシナリオで最も見せたい部分です。業務の悩みは時間・コストといった数字に落とし込みやすい一方、旅への憧れや料理へのこだわりは本質的に数値化できません。**同じアバター・同じチャットUI**のまま、この「数字になるもの」と「数字にならないもの」の両方に、AIが表面的な相槌ではなく踏み込んだ答えを出せることを、3つの短い対話を並べて見せます。編集では3つの対話を素早くカット割りし、ナレーションで繋ぎます。

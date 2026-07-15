@@ -21,6 +21,37 @@ form, or bury a non-technical small-business owner in jargon they didn't ask for
 What a human admin actually needs isn't a transcript — it's a two-minute brief:
 *who is this, what do they need, and what should I say when I call them back?*
 
+## The business behind it — this is a live sales channel, not a demo
+
+Studio S.O is a real one-person consultancy being founded in Iwakuni, Yamaguchi
+(regional Japan), and this agent is **pillar #3 of its actual go-to-market plan**
+("an AI-driven intake desk that lowers the psychological barrier and qualifies
+leads") — deployed and answering real visitors today.
+
+- **The founder spent 25+ years building refinery information systems** (RIS at
+  Koa Oil, now ENEOS) — the origin of the product's core metaphor: an information
+  system is an *organizational nervous system* of five elements (hardware, software,
+  data, process, people), of which AI is only one. The consultancy's mission is to
+  **democratize that nervous system** for small regional businesses that could never
+  afford enterprise systems.
+- **The jargon ban is the business strategy, not a UX nicety.** The target customers —
+  factory owners, bakers, restaurant operators in regional Japan — are precisely the
+  people alienated by "AI/DX/DIKW" language. The *local-translation* layer (a
+  craftsman's 勘/intuition becomes a "recipe"; AI becomes a walking stick, not a
+  magic wand) exists because breaking that psychological barrier is what wins these
+  clients at all.
+- **The three business lines are structural, not decorative.** Travel design and the
+  culinary lab are B2C *proving labs*: they demonstrate — publicly — that the same
+  agent can structure unquantifiable, sensory needs (a journey's "soul", a taste to
+  recreate), and that know-how flows back into the B2B consulting offer (e.g. a
+  bakery's demand forecasting). One agent serving all three lines through one front
+  door is the company's shop window for exactly that claim.
+- **The handoff brief maps to real money.** A qualified lead becomes a ¥33,000
+  initial assessment, then ¥500,000+ implementation projects and ¥100,000+/month
+  advisory. A missed or badly-handled first contact is a lost client — which is why
+  the pipeline obsesses over contact capture, readiness gating, and a brief the
+  admin can act on in under a minute.
+
 ## What it does
 
 A single avatar handles three very different lines of business — AI/DX consulting,
