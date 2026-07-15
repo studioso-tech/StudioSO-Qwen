@@ -257,7 +257,7 @@
         </div>
         <button type="button" id="m-create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()" data-en="Finish consultation">相談を終える</button>
         <div class="m-input-row">
-          <textarea id="m-inp" placeholder="そのまま、お気軽にお話しください。" data-en-placeholder="Feel free to talk to me as you are."></textarea>
+          <textarea id="m-inp" inputmode="text" placeholder="そのまま、お気軽にお話しください。" data-en-placeholder="Feel free to talk to me as you are."></textarea>
           <button id="m-voice-btn" class="m-voice-btn" type="button" aria-label="音声入力">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="11" rx="3"/>
@@ -281,7 +281,7 @@
         </div>
         <button type="button" id="create-sheet-btn" class="create-sheet-btn hidden" onclick="onCreateSheetClick()" data-en="Finish consultation">相談を終える</button>
         <form id="chat-form" class="p-chat__bar">
-          <textarea id="chat-input" placeholder="ご相談内容をご自由にお書きください…" data-en-placeholder="Please write about your consultation freely…" rows="1"></textarea>
+          <textarea id="chat-input" inputmode="text" placeholder="ご相談内容をご自由にお書きください…" data-en-placeholder="Please write about your consultation freely…" rows="1"></textarea>
           <button type="button" id="voice-btn" aria-label="音声入力" title="音声で入力">
             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="2" width="6" height="11" rx="3"/>
@@ -355,6 +355,66 @@
         <button id="sheet-copy-btn" onclick="copySheetToClipboard()">テキストをコピー</button>
         <button onclick="closeSheetModal()">閉じる</button>
       </div>
+    </div>
+  </div>
+
+
+  <!-- 連絡先入力フォームモーダル（本番HPと同仕様＋日英対応） -->
+  <div id="contact-form-modal" class="fixed inset-0 z-[9000] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden" role="dialog" aria-label="ご連絡先のご記入">
+    <div class="bg-white text-so-text p-6 md:p-8 rounded-2xl w-[92%] max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl border border-so-accent/10">
+      <h3 class="font-so-logo text-lg md:text-xl font-bold text-so-accent tracking-wider mb-2 text-center" data-en="Before We Begin">ご相談の前に</h3>
+      <p class="font-so-sans text-xs text-so-text/60 mb-6 text-center" data-en="To move into the details, please fill in your contact information and the topic of your consultation.">より具体的なお話へ進むため、ご連絡先とご相談内容をご記入ください。</p>
+
+      <form id="contact-form" class="space-y-4 font-so-sans text-sm" onsubmit="submitContactForm(event)">
+        <div>
+          <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-company" data-en="Company / trade name">御社名・屋号</label>
+          <input type="text" id="form-company" inputmode="text" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="（法人の場合のみご記入ください）" data-en-placeholder="(Corporate customers only)" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-name"><span data-en="Your name">ご担当者名・お名前</span> <span class="text-[#F07040]" data-en="*Required">*必須</span></label>
+          <input type="text" id="form-name" required autocomplete="name" inputmode="text" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="山田 太郎" data-en-placeholder="Taro Yamada" />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-phone"><span data-en="Phone number">お電話番号</span> <span class="text-[#F07040]" data-en="*Required">*必須</span></label>
+            <input type="tel" id="form-phone" required inputmode="numeric" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="090-1234-5678" />
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-email" data-en="Email address">メールアドレス</label>
+            <input type="email" id="form-email" inputmode="email" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="yamada@example.com" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4">
+          <div class="col-span-1">
+            <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-zip" data-en="Postal code">郵便番号</label>
+            <input type="text" id="form-zip" autocomplete="postal-code" inputmode="numeric" pattern="\d{3}-?\d{4}" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="100-0014" />
+          </div>
+          <div class="col-span-2">
+            <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-address"><span data-en="Address">ご住所</span> <span class="text-[#F07040]" data-en="*Required">*必須</span></label>
+            <input type="text" id="form-address" required autocomplete="street-address" inputmode="text" class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors" placeholder="東京都渋谷区宇田川町1-1" data-en-placeholder="1-1 Udagawa-cho, Shibuya-ku, Tokyo" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-so-text/70 mb-1" for="form-category"><span data-en="Consultation genre">ご相談のジャンル</span> <span class="text-[#F07040]" data-en="*Required">*必須</span></label>
+          <select id="form-category" required class="w-full px-4 py-2.5 rounded-lg border border-so-accent/20 bg-[#FAFBFC] focus:border-so-accent focus:bg-white outline-none transition-colors cursor-pointer">
+            <option value="" disabled selected data-en="Please select">選択してください</option>
+            <option value="A" data-en="AI Consulting (business efficiency &amp; digitalization)">ＡＩコンサルティング (業務効率化・デジタル化の相談)</option>
+            <option value="T" data-en="Travel Design (travel &amp; experiences)">トラベルデザイン (旅行・体験の相談)</option>
+            <option value="C" data-en="Culinary Lab (cooking, food &amp; recipes)">カリナリーラボ (料理・食・レシピの相談)</option>
+            <option value="M" data-en="Mixed / Other (multiple or other topics)">複合 / その他 (複数の相談、その他)</option>
+          </select>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="w-full py-3 bg-so-accent hover:bg-so-accent/90 text-white font-semibold rounded-lg shadow-md transition-colors duration-200" data-en="Complete and start the consultation">
+            記入完了し、相談をはじめる
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -554,6 +614,18 @@
 
       corner.style.display = 'block';
       corner.classList.add('av-corner-in');
+
+      /* 動画コンテナに埋め込まれた古い字幕トラックが、ブラウザの
+         アクセシビリティ機能で勝手に表示されないよう強制無効化する */
+      function disableEmbeddedTextTracks() {
+        try {
+          for (var i = 0; i < vid.textTracks.length; i++) {
+            vid.textTracks[i].mode = 'disabled';
+          }
+        } catch (e) {}
+      }
+      vid.addEventListener('loadedmetadata', disableEmbeddedTextTracks);
+      disableEmbeddedTextTracks();
 
       /* 静止フレームの用意：一瞬再生して pause */
       vid.loop = false; vid.muted = true; vid.src = IDLE_SRC;

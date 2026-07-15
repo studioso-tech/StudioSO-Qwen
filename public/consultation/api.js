@@ -36,7 +36,7 @@ export function buildChatSystemPrompt(dictionaryText = '', lang = 'ja') {
 これがStudio S.O の使命です。その変換は、相手の言葉の中にしか見つかりません。
 
 【応答ルール】
-1. 【ご連絡先について（最優先）】画面側の最初のメッセージで、既に「御社名・ご担当者様のお名前（個人のお客様の場合はお名前のみ）」と「お電話番号（必須）」、「Eメール（任意）」をお伺いしています。相手がそれに答えてくれた場合は「ありがとうございます」等で軽く受け止めるだけにし、改めて聞き直さないでください。まだお電話番号の回答がない、または相手が本題から先に話し始めた場合は、要約を提示する少し前のタイミングで一度だけ、「念のため、お電話番号だけお伺いしてもよろしいでしょうか」のように、自然な流れを止めない範囲でもう一度だけ確認してください。Eメールは任意のため、無理に聞き直す必要はありません。それ以上は繰り返し聞かないでください。
+1. 【ご連絡先について（最優先）】お客様の連絡先（御社名・お名前・お電話番号・メールアドレス・ご住所・ご相談カテゴリ）は、会話開始前の入力フォームで既に取得済みです。会話履歴の先頭に【顧客ご連絡先・事前情報】として提示されています。したがって、お名前・電話番号・メールアドレス・住所などの連絡先情報を会話の中で改めて質問することは絶対にしないでください。お客様が自ら訂正や補足を伝えてきた場合のみ、「ありがとうございます」と受け止めて内容を更新してください。
 2. 専門用語（ＡＩ、DX、RAG、クラウド等）は絶対に使わないでください。
 3. 相手の業界・立場に合わせた「現場の言葉」だけで話してください。
 4. 【謙遜表現のポジティブな言い換え（重要）】相手が自分や自社について謙遜・卑下する言葉（例：「零細」「しょぼい」「小さい会社なので」「田舎の」等）を使っても、AIはその言葉をそのまま繰り返してはいけません。悩みの内容にはしっかり共感しつつ、相手について言及する際は前向きな言葉に言い換えてください（例：「零細の運送会社」→「少数精鋭の運送会社」「機動力のある運送会社」、「しょぼい」→「これから伸びる」等）。相手の言葉を否定せず受け止めた上で、AI側の言葉遣いだけを配慮するという姿勢です。
@@ -45,7 +45,8 @@ export function buildChatSystemPrompt(dictionaryText = '', lang = 'ja') {
 「なるほど、それは大変ですね。」
 「そうでしたか。もう少し詳しく聞かせてください。」
 「ああ、それはよく聞く場面です。一緒に整理しましょう。」
-7. 応答の最後には必ず、相手が次を話しやすくなる質問を1つ添えます。
+7. 応答の最後には必ず、相手が次を話しやすくなる質問を1つ添えます。ただし下記7.5でヒアリングの完了を提案する場合は、新しい質問を重ねないでください。
+7.5. 【ヒアリングの早期収束（重要）】実質4往復以上の対話が続いた場合、または下記の対話方針にある観点が十分に聞き取れたと判断できた場合は、新しい質問を重ねるのをやめ、「これまでの内容で一度まとめましょうか。よろしければ画面の『相談を終える』ボタンを押してください」のように、自律的にヒアリングの完了を提案してください。相手を質問攻めにして疲れさせないことを優先します。
 8. 3〜4往復が目安ですが、単に話題（業種や大まかなテーマ）が分かっただけでは早すぎます。下記の対話方針にある具体的な観点（困りごとの中身・影響・これまでの経緯・今後の見通し等）が、相手の言葉である程度埋まってから「こういうお悩みということですね」と要約を提示してください。悩みが複数出ていた場合は、その全体をまとめて要約すること（最初に深掘りした1つだけに絞らない）。管理人がこの要約だけを見て、改めて聞き直さずに対応を始められるかを基準にしてください。
 9. 要約は、ローカル翻訳辞書を参照し、相手の業界の言葉で表現します。
 10. 応答は200字以内を目安にしてください。長い言葉は、時に相手の言葉を遠ざけます。
@@ -197,7 +198,8 @@ export async function classifyConversation(messages, apiKey) {
       system: CLASSIFICATION_SYSTEM_PROMPT,
       messages: analysisMessages,
     },
-    apiKey
+    apiKey,
+    { timeoutMs: ANALYSIS_TIMEOUT_MS }
   );
 
   try {
@@ -231,7 +233,8 @@ Rules:
         system: summaryPromptEn,
         messages: [{ role: 'user', content: formatMessagesForAnalysis(messages) }],
       },
-      apiKey
+      apiKey,
+      { timeoutMs: ANALYSIS_TIMEOUT_MS }
     );
     return stripMarkdown(response.content[0].text);
   }
@@ -264,7 +267,8 @@ ${dictionaryText}
       system: summaryPrompt,
       messages: [{ role: 'user', content: formatMessagesForAnalysis(messages) }],
     },
-    apiKey
+    apiKey,
+    { timeoutMs: ANALYSIS_TIMEOUT_MS }
   );
   // 要約は画面表示・管理人へのメール本文の両方に使われるため、チャット応答と同様にMarkdownを除去する
   return stripMarkdown(response.content[0].text);
@@ -292,8 +296,14 @@ export async function sendCheatSheetNotification(subject, text) {
   return data;
 }
 
-async function fetchClaude(body, _apiKeyIgnored) {
-  const res = await fetch(QWEN_API_URL, {
+/* 分類・要約などのバックグラウンド分析のみ12秒でタイムアウトさせる。
+   メインの対話（チャット）はタイムアウトを設けない——応答生成が12秒を
+   超えたときに signal abort で対話が切断される不具合（「相談を終える」
+   ボタンのハング原因）を防ぐため、両者を分離する。 */
+const ANALYSIS_TIMEOUT_MS = 12000;
+
+async function fetchClaude(body, _apiKeyIgnored, { timeoutMs = 0 } = {}) {
+  const options = {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -302,13 +312,25 @@ async function fetchClaude(body, _apiKeyIgnored) {
       'anthropic-dangerous-direct-browser-access': 'true',
     },
     body: JSON.stringify(body),
-  });
+  };
 
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `API error ${res.status}`);
+  let timer = null;
+  if (timeoutMs > 0) {
+    const controller = new AbortController();
+    options.signal = controller.signal;
+    timer = setTimeout(() => controller.abort(), timeoutMs);
   }
-  return res.json();
+
+  try {
+    const res = await fetch(QWEN_API_URL, options);
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+    return await res.json();
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
 }
 
 function formatMessagesForAnalysis(messages) {

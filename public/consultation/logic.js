@@ -71,7 +71,8 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     console.warn('分類API呼び出し失敗、キーワード推定値を使用:', e.message);
   }
 
-  const category = classification?.category || quickCategory;
+  // 相談カテゴリは、フォームでお客様自身が選んだ値を最優先する
+  const category = window.contactInfo?.category || classification?.category || quickCategory;
   const industry  = classification?.industry  || quickIndustry;
   const level     = classification?.level ?? 0;
 
@@ -122,10 +123,12 @@ export async function analyzeConversation(messages, apiKey, { forceSummary = fal
     readiness:          classification?.readiness ?? 0,
     recommendedApproach: classification?.recommended_approach || '',
     openItems:          classification?.open_items || '',
-    contactName:        classification?.contact_name || '',
-    contactPerson:      classification?.contact_person || '',
-    contactPhone:       classification?.contact_phone || '',
-    contactEmail:       classification?.contact_email || '',
+    // 連絡先は入力フォームの値を最優先（AIの会話抽出はフォールバック）
+    contactName:        window.contactInfo?.company || classification?.contact_name || '',
+    contactPerson:      window.contactInfo?.name || classification?.contact_person || '',
+    contactPhone:       window.contactInfo?.phone || classification?.contact_phone || '',
+    contactEmail:       window.contactInfo?.email || classification?.contact_email || '',
+    contactAddress:     (window.contactInfo?.zip ? '〒' + window.contactInfo.zip + ' ' : '') + (window.contactInfo?.address || ''),
     summaryMessage,
     summaryMessageEn,
     dictionaryText:     dictText,

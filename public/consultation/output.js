@@ -57,6 +57,7 @@ export function generatePreparationSheet(analysis, messages) {
     <p style="color:#2F3E46;font-weight:700;">${escapeHtml(nameDisplay)}</p>
     <p style="color:${hasPhone ? '#166534' : '#b91c1c'};font-weight:700;margin-top:2px;">📞 ${hasPhone ? escapeHtml(analysis.contactPhone) : '⚠️ 未取得（必須）：電話番号を別途ご確認ください'}</p>
     ${analysis.contactEmail ? `<p style="color:#2F3E46;margin-top:2px;">✉️ ${escapeHtml(analysis.contactEmail)}</p>` : ''}
+    ${analysis.contactAddress ? `<p style="color:#2F3E46;margin-top:2px;">🏠 ${escapeHtml(analysis.contactAddress)}</p>` : ''}
   </div>
   <div style="padding:14px 20px;border-bottom:1px solid #E0F2F7;">
     <p style="font-size:11px;color:#9ca3af;letter-spacing:0.1em;margin-bottom:4px;">顧客のプロファイル</p>
@@ -119,7 +120,7 @@ export function generatePreparationSheetText(analysis, messages) {
 
 ■ ご連絡先：
 ${nameLine}
-電話　　：${phoneLine}${emailLine}
+電話　　：${phoneLine}${emailLine}${analysis.contactAddress ? `\n住所　　：${analysis.contactAddress}` : ''}
 
 ■ 顧客のプロファイル：
 ${analysis.customerProfile || analysis.mainConcern || '（分析中）'}

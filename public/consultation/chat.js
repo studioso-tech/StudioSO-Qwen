@@ -22,6 +22,133 @@ function isEn() {
   return lang() === 'en';
 }
 
+// ── 連絡先入力フォーム（本番HPと同仕様） ─────────────────────────────
+
+window.contactInfo = null;
+
+window.submitContactForm = function (event) {
+  event.preventDefault();
+  const company = document.getElementById('form-company').value.trim();
+  const name = document.getElementById('form-name').value.trim();
+  const phone = document.getElementById('form-phone').value.trim();
+  const email = document.getElementById('form-email').value.trim();
+  const zip = document.getElementById('form-zip') ? document.getElementById('form-zip').value.trim() : '';
+  const address = document.getElementById('form-address').value.trim();
+  const category = document.getElementById('form-category').value;
+
+  window.contactInfo = { company, name, phone, email, zip, address, category };
+
+  const modal = document.getElementById('contact-form-modal');
+  if (modal) modal.classList.add('hidden');
+
+  // フォーム表示中に止めていたNudge（無操作の促し）を再開する
+  if (typeof window.avatarArmNudge === 'function') window.avatarArmNudge();
+
+  startConsultationChat();
+};
+
+function startConsultationChat() {
+  const info = window.contactInfo;
+  if (!info) return;
+
+  let welcomeMsg = '';
+  if (isEn()) {
+    if (info.category === 'A') {
+      welcomeMsg = `Thank you, ${info.name}. So this is an AI consulting inquiry — what kind of inefficiency or challenge in your work would you like digital help with?`;
+    } else if (info.category === 'T') {
+      welcomeMsg = `Thank you, ${info.name}. So this is a travel design inquiry — what kind of journey or destination do you have in mind?`;
+    } else if (info.category === 'C') {
+      welcomeMsg = `Thank you, ${info.name}. So this is a Culinary Lab inquiry — new menu development, a taste you want to recreate, or another food experience you are hoping for?`;
+    } else {
+      welcomeMsg = `Thank you, ${info.name}. This is the Studio S.O general consultation desk — please feel free to tell me about your inquiry just as it is.`;
+    }
+  } else {
+    if (info.category === 'A') {
+      welcomeMsg = `${info.name}様、ご記入ありがとうございます。ＡＩコンサルティングのご相談ですね。どのような業務の非効率や課題をデジタルでお助けしましょうか？`;
+    } else if (info.category === 'T') {
+      welcomeMsg = `${info.name}様、ご記入ありがとうございます。トラベルデザインのご相談ですね。どのような旅の時間や、行ってみたい場所をイメージされていますか？`;
+    } else if (info.category === 'C') {
+      welcomeMsg = `${info.name}様、ご記入ありがとうございます。カリナリーラボのご相談ですね。新しいメニュー開発や、再現したい味など、どんな食体験をご希望でしょうか？`;
+    } else {
+      welcomeMsg = `${info.name}様、ご記入ありがとうございます。Studio S.O の統合窓口です。どのようなご相談内容か、そのままお気軽にお話しください。`;
+    }
+  }
+
+  // AIに既知情報として連絡先コンテキストを注入し、再質問を防ぐ。
+  // （この事前情報はカンニングシート・分類にも使われるため常に日本語で送る）
+  messages.push({
+    role: 'user',
+    content: `【顧客ご連絡先・事前情報】\n御社名: ${info.company || '未記入'}\nお名前: ${info.name}\nお電話番号: ${info.phone}\nメールアドレス: ${info.email || '未記入'}\nご住所: ${info.zip ? '〒' + info.zip + ' ' : ''}${info.address || '未記入'}\nご相談カテゴリ: ${info.category}`,
+  });
+  messages.push({
+    role: 'assistant',
+    content: welcomeMsg,
+  });
+
+  appendMessage('ai', welcomeMsg);
+
+  setTimeout(function () {
+    try {
+      if (typeof window.avatarNod === 'function') window.avatarNod();
+      if (typeof window.avatarSpeak === 'function') window.avatarSpeak(welcomeMsg);
+    } catch (e) {}
+  }, 200);
+
+  setTimeout(explainHowToEnd, 200 + estimateSpeechMs(welcomeMsg));
+}
+
+// 郵便番号⇄住所の双方向自動補完（無料API・失敗時は静かに手入力へフォールバック）
+function bindAddressAutofill() {
+  const zipInput = document.getElementById('form-zip');
+  const addrInput = document.getElementById('form-address');
+  if (!zipInput || !addrInput) return;
+
+  // 郵便番号 → 住所（7桁入力時に発火）
+  zipInput.addEventListener('input', async () => {
+    const zip = zipInput.value.replace(/[^0-9]/g, '');
+    if (zip.length === 7) {
+      try {
+        const res = await fetch(`https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.results && data.results[0]) {
+            const item = data.results[0];
+            addrInput.value = item.address1 + item.address2 + item.address3;
+            // フォーカスを住所入力欄へ移動し、残りの番地を入力しやすくする
+            addrInput.focus();
+          }
+        }
+      } catch (e) {
+        console.warn('郵便番号からの住所検索に失敗しました:', e);
+      }
+    }
+  });
+
+  // 住所 → 郵便番号（フォーカスが外れた際に逆引き。手入力済みなら上書きしない）
+  addrInput.addEventListener('blur', async () => {
+    const addr = addrInput.value.trim();
+    if (zipInput.value.trim() !== '') return;
+    if (addr.length < 5) return; // 短すぎる住所は検索しない
+    try {
+      // 外部APIが無応答でもフォーム操作を妨げないよう5秒で打ち切る
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch(`https://api.excelapi.org/post/zipcode?address=${encodeURIComponent(addr)}`, { signal: controller.signal });
+      clearTimeout(timer);
+      if (res.ok) {
+        const zipText = (await res.text()).trim();
+        if (/^\d{7}$/.test(zipText)) {
+          zipInput.value = zipText.slice(0, 3) + '-' + zipText.slice(3);
+        } else if (/^\d{3}-\d{4}$/.test(zipText)) {
+          zipInput.value = zipText;
+        }
+      }
+    } catch (e) {
+      console.warn('住所からの郵便番号逆引きに失敗しました:', e);
+    }
+  });
+}
+
 export function initChat(key) {
   apiKey = key;
   currentSystemPrompt = buildChatSystemPrompt('', lang());
@@ -49,6 +176,9 @@ function bindEvents() {
     }
   });
   if (voiceBtn) bindVoice(voiceBtn, input);
+
+  // 連絡先フォームの郵便番号⇄住所 自動補完
+  bindAddressAutofill();
 
   // 複数行入力時に一番上の行が隠れないよう、内容に合わせて高さを自動調整する
   // （PC版・モバイル版とも高さ固定のCSSのままだと、ブラウザがカーソル位置を
@@ -432,12 +562,16 @@ function showWelcome() {
   }
 }
 
-/* 管理人が折り返し連絡できるよう、会話の最初に一度だけご連絡先をお伺いする。
-   （3〜4往復後の要約直前だと、途中で離脱した顧客の連絡先が一切取れないため） */
+/* ヒアリング開始時に連絡先入力フォームを表示する（本番HPと同仕様）。
+   会話で聞き取る方式から、フォームで確実に取得する方式へ変更。
+   途中で離脱した顧客の連絡先も、フォーム完了時点で確保できる。 */
 function askForContactInfo() {
+  // フォーム記入済み（言語切替などで再度呼ばれた場合）は再表示しない
+  if (window.contactInfo) return;
+
   const msg = isEn()
-    ? 'First, so that our staff can get back to you, could you tell me your company name and the name of the person in charge (individual customers may simply give their name), along with your phone number? A phone number is required. If you have an email address, please share that as well.'
-    : 'まず、担当者からご連絡できるよう、御社名・ご担当者様のお名前（個人のお客様はお名前のみで結構です）と、お電話番号を教えていただけますか。お電話番号は必須でお願いしております。メールアドレスもございましたら、合わせてお願いいたします。';
+    ? 'First, could you fill in this contact form with your name, address, and the topic of your consultation?'
+    : 'まずはじめに、こちらのご連絡先フォームに、お名前やご住所、ご相談のジャンルをご記入いただけますか。';
   appendMessage('ai', msg);
   setTimeout(function() {
     try {
@@ -445,7 +579,12 @@ function askForContactInfo() {
       if (typeof window.avatarSpeak === 'function') window.avatarSpeak(msg);
     } catch (e) {}
   }, 200);
-  setTimeout(explainHowToEnd, 200 + estimateSpeechMs(msg));
+
+  // フォーム記入中はNudge（無操作の促し）が重ならないよう一時停止する
+  if (typeof window.avatarDisarmNudge === 'function') window.avatarDisarmNudge();
+
+  const modal = document.getElementById('contact-form-modal');
+  if (modal) modal.classList.remove('hidden');
 }
 
 /* ヒヤリングの終わり方も、開始時点であらかじめ案内しておく。
@@ -540,35 +679,9 @@ window.playAvatarAudioOnly = playAvatarAudioOnly;
 
 let welcomeGreetingCanceled = false;
 
-// 挨拶の音声に合わせて画面下部に字幕を表示する。
-// （音を出せない環境や聴覚に不安のある方には、挨拶の約60秒が無音の
-//   静止画面に見えてしまうため。チャット欄はまだ「稼働前」という演出を
-//   保つため、チャットバブルではなく独立した字幕オーバーレイにする）
-function showGreetingSubtitle(text) {
-  let el = document.getElementById('greeting-subtitle');
-  if (!text) {
-    if (el) el.style.display = 'none';
-    return;
-  }
-  if (!el) {
-    el = document.createElement('div');
-    el.id = 'greeting-subtitle';
-    el.style.cssText =
-      'position:fixed;left:50%;bottom:88px;transform:translateX(-50%);' +
-      'max-width:min(640px,88vw);background:rgba(255,255,255,0.94);color:#2F3E46;' +
-      'padding:12px 20px;border-radius:12px;font-family:"Noto Sans JP",sans-serif;' +
-      'font-size:14px;line-height:1.8;box-shadow:0 8px 28px rgba(27,73,101,0.18);' +
-      'z-index:8500;text-align:center;letter-spacing:0.02em;white-space:pre-wrap;';
-    document.body.appendChild(el);
-  }
-  el.textContent = text;
-  el.style.display = 'block';
-}
-
-function hideGreetingSubtitle() {
-  const el = document.getElementById('greeting-subtitle');
-  if (el) el.remove();
-}
+// 挨拶時の字幕オーバーレイ（#greeting-subtitle）は本番HP側の改修に合わせて撤廃。
+// アバターの口パクと音声のみで挨拶するクリーンなデザインに統一する。
+// English選択時のセリフは英語収録音声（Cut_X_vol_E.wav）が担う。
 
 // 総合受付（トップページ）用の6ステップ挨拶シークエンス（ローカル音声ファイル連動）
 export function startWelcomeGreeting() {
@@ -640,7 +753,6 @@ export function startWelcomeGreeting() {
   function playNextStep() {
     if (welcomeGreetingCanceled) return;
     if (currentStep >= GREETING_STEPS.length) {
-      hideGreetingSubtitle();
       // 挨拶終了後にヒヤリング入力を促す状態にする
       if (typeof window.skipAvatar === 'function') {
         window.skipAvatar();
@@ -648,7 +760,6 @@ export function startWelcomeGreeting() {
       return;
     }
     const step = GREETING_STEPS[currentStep];
-    showGreetingSubtitle(step.text); // 音声と同時に字幕を表示（無音のタメでは非表示）
     playAvatarAudio(step.audio, function() {
       if (welcomeGreetingCanceled) return;
       currentStep++;
@@ -660,7 +771,6 @@ export function startWelcomeGreeting() {
 window.startWelcomeGreeting = startWelcomeGreeting;
 window.cancelWelcomeGreeting = function() {
   welcomeGreetingCanceled = true;
-  hideGreetingSubtitle();
   if (window.avatarAudio) {
     try { window.avatarAudio.pause(); } catch(e) {}
   }
