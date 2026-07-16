@@ -21,12 +21,25 @@ form, or bury a non-technical small-business owner in jargon they didn't ask for
 What a human admin actually needs isn't a transcript — it's a two-minute brief:
 *who is this, what do they need, and what should I say when I call them back?*
 
-## The business behind it — this is a live sales channel, not a demo
+## The business behind it — "The Intelligent Atelier"
 
 Studio S.O is a real one-person consultancy being founded in Iwakuni, Yamaguchi
-(regional Japan), and this agent is **pillar #3 of its actual go-to-market plan**
-("an AI-driven intake desk that lowers the psychological barrier and qualifies
-leads") — deployed and answering real visitors today.
+(regional Japan) under the concept **"The Intelligent Atelier"** — AI consulting
+(B2B) as the revenue core, with travel design and a culinary lab as B2C *proving
+labs* that feed sensory-data structuring know-how back into the B2B offer. This
+agent is **pillar #3 of that actual go-to-market plan** ("an AI-driven intake desk
+that lowers the psychological barrier and qualifies leads") — deployed and
+answering real visitors today, not a concept demo.
+
+The value the whole business sells is **"room to breathe" (時間の余白) and a
+redefinition of the everyday**: not tool adoption for its own sake, but removing
+the gravel-road grind of daily operations so an owner gets time back — and with
+it, the bandwidth to expand their own sensibility and redefine a richer daily
+life. That philosophy is stated outright on the site's hero screen ("AIによって
+人間の感性を拡張し、より豊かな日常を再定義する。" — *Expanding human sensibility
+through AI, redefining a richer everyday life*), and this agent is the mechanism
+that buys back that time: it does the tedious first-contact triage so the
+founder's own hours go toward the work only a human can do.
 
 - **The founder spent 25+ years building refinery information systems** (RIS at
   Koa Oil, now ENEOS) — the origin of the product's core metaphor: an information
