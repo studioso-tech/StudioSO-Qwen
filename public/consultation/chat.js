@@ -166,7 +166,7 @@ export function initChat(key) {
   currentSystemPrompt = buildChatSystemPrompt('', lang());
   // 言語が切り替わったら、AI応答の言語指示も追随させる
   document.addEventListener('so-lang-change', () => {
-    currentSystemPrompt = buildChatSystemPrompt(analysisResult?.dictionaryText || '', lang());
+    currentSystemPrompt = buildChatSystemPrompt(analysisResult?.dictionaryText || '', lang(), analysisResult?.readiness ?? null);
   });
   bindEvents();
   showWelcome();
@@ -292,8 +292,9 @@ async function runAnalysis({ forceSummary = false } = {}) {
   try {
     analysisResult = await analyzeConversation(messages, apiKey, { forceSummary, lang: lang() });
 
-    // ローカル翻訳辞書でシステムプロンプト更新
-    currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText, lang());
+    // ローカル翻訳辞書と、ボタンの表示条件と同じreadiness値でシステムプロンプト更新
+    // （AIの「そろそろ終えましょう」提案と、実際のボタンのハイライトを同期させるため）
+    currentSystemPrompt = buildChatSystemPrompt(analysisResult.dictionaryText, lang(), analysisResult.readiness ?? null);
 
     if (forceSummary) {
       // /api/summary の呼び出しが失敗すると summaryMessage は null のまま返ってくる
