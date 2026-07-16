@@ -103,6 +103,18 @@ function bindAddressAutofill() {
   const addrInput = document.getElementById('form-address');
   if (!zipInput || !addrInput) return;
 
+  // ブラウザ標準の「指定されている形式で入力してください」だと原因が伝わらないため、
+  // 具体的な文言に差し替える（郵便番号が入力されており、かつ形式に合わない時のみ表示）
+  zipInput.addEventListener('input', () => {
+    if (zipInput.value.trim() !== '' && zipInput.validity.patternMismatch) {
+      zipInput.setCustomValidity(isEn()
+        ? 'Please enter the postal code as 3 digits + 4 digits, e.g. 100-0014 (hyphen optional).'
+        : '郵便番号は「100-0014」のように3桁＋4桁で入力してください（ハイフンは省略可）。');
+    } else {
+      zipInput.setCustomValidity('');
+    }
+  });
+
   // 郵便番号 → 住所（7桁入力時に発火）
   zipInput.addEventListener('input', async () => {
     const zip = zipInput.value.replace(/[^0-9]/g, '');
